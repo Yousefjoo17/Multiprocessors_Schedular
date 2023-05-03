@@ -3,6 +3,9 @@
 #include"process.h"
 #include<iostream>
 #include"Schedular.h"
+
+class Schedular;
+
  class  baseProcessor {
 
 protected:

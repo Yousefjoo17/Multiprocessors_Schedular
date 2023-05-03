@@ -5,7 +5,6 @@ using namespace std;
 
 processorFCFS::processorFCFS(Schedular*ptr):baseProcessor(ptr)
 {
-
 }
 
 void processorFCFS::add2RDY(process* p)
