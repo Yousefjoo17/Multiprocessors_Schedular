@@ -8,7 +8,7 @@ processorSJF::processorSJF(Schedular* s) : baseProcessor(s)
 
 void processorSJF::add2RDY(process* p)
 {
-	RDY_SJF.enqueue(p);
+	RDY_SJF.enqueue(p,p->get_CT());
 }
 
 process* processorSJF::getfromRDY()
