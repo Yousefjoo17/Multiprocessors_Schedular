@@ -40,7 +40,7 @@ public:
 
 	void setpriority(int p)
 	{
-		priority = 1/p; // modified now after discussion bet. MS and YA 
+		priority = -1*p; // modified now after discussion bet. MS and YA 
 	}
 	int getpriority()
 	{
