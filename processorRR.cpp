@@ -28,8 +28,8 @@ process* processorRR::getfromRUN()
 	return RUN;
 }
 
-void processorFCFS::Schedular_Algo()
+/*void processorFCFS::Schedular_Algo()
 {
 
-}
+}*/
 
