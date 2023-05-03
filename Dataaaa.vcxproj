@@ -132,8 +132,13 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="ListADT.h" />
     <ClInclude Include="node.h" />
+    <ClInclude Include="prioritynode.h" />
+    <ClInclude Include="priorityQueue.h" />
+    <ClInclude Include="priorityQueueADT.h" />
     <ClInclude Include="process.h" />
     <ClInclude Include="processorFCFS.h" />
+    <ClInclude Include="processorRR.h" />
+    <ClInclude Include="processorSJF.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="QueueFCFS.h" />
@@ -145,6 +150,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="processorFCFS.cpp" />
+    <ClCompile Include="processorRR.cpp" />
+    <ClCompile Include="processorSJF.cpp" />
     <ClCompile Include="Schedular.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

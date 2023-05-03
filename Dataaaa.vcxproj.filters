@@ -48,10 +48,19 @@
     <ClInclude Include="QueueFCFS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="processorRR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="processorSJF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="processorRR.h">
+    <ClInclude Include="prioritynode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="priorityQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="priorityQueueADT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,10 +83,10 @@
     <ClCompile Include="InOut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="processorSJF.cpp">
+    <ClCompile Include="processorRR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="processorRR.cpp">
+    <ClCompile Include="processorSJF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
