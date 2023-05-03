@@ -14,7 +14,7 @@ class processorRR:public baseProcessor
     
 public:
 
-	processorFCFS(Schedular* p);
+	processorRR(Schedular* p);
 	void add2RDY(process*);
 	process* getfromRDY();
 	void add2RUN(process*);

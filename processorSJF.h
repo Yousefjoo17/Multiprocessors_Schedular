@@ -14,7 +14,6 @@ class processorSJF :public baseProcessor
 
 public:
 	processorSJF(Schedular* s);
-	processorFCFS(Schedular* p);
 	void add2RDY(process*);
 	process* getfromRDY();
 	void add2RUN(process*);
