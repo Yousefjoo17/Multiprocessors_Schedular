@@ -194,6 +194,14 @@ void Schedular::NEW_RDY()
 	}
 }
 
+void Schedular::P_Completion(process*p)
+{
+	if(p->get_CT_EX() ==p->get_CT())
+	TRM.enqueue(p);
+	
+	
+}
+
 int Schedular::ShortestQueue()
 {
 	int min = 0;
@@ -205,6 +213,12 @@ int Schedular::ShortestQueue()
 	}
 	return min;
 }
+bool Schedular::BLK2RUN(process* pr) {
+	if (BLK.is_empty()) { return false; }
+	Processors[ShortestQueue()]->set_Run_pointer(pr);
+
+}
+
 
 
 

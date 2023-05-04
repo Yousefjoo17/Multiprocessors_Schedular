@@ -5,8 +5,4 @@
 #include"baseProcessor.h"
 class baseProcessor;
 class Schedular;
-
-
-
-
 #endif

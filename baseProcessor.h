@@ -40,6 +40,8 @@ public:
 	virtual process* getfromRUN()=0;
 	int get_finishedTime();
     virtual void Schedular_Algo() = 0;
+
+	void set_Run_pointer(process* p);
 	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
 	{
 		os << p->PID;
