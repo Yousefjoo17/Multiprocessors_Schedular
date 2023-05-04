@@ -37,7 +37,7 @@ public:
 	int get_n_current();
 	process* get_Child();
 	bool get_Is_Child();
-
+	void inc_CT_EX();
 	void set_RT(int);
 	void set_CT_EX(int);
 	void set_TT(int);

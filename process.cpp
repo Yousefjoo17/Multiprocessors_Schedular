@@ -69,6 +69,11 @@ bool process::get_Is_Child() {
 	return Is_Child;
 }
 
+void process::inc_CT_EX()
+{
+	CT_EX++;
+}
+
 void process::set_RT(int x) {
 	RT = x - AT;
 }
