@@ -58,13 +58,6 @@ void Schedular::simulate()
 		}
 }
 
-
-
-
-
-
-
-
 /*********************************************************************************/
 // setters 
 
@@ -190,6 +183,27 @@ int Schedular::get_RUN_count() {
 int Schedular::get_timestep()
 {
 	return time_step;
+}
+
+void Schedular::NEW_RDY()
+{
+	// make sure that that the NEW isn't empty and also the arrival time of the first one equals to the time step
+	while (!NEW.is_empty() && NEW.peek()->get_AT() == time_step) {
+		int m = ShortestQueue(); // return the place of the proccesor which has the shortest queue
+		Processors[m]->add2RDY(NEW.dequeue()); // move from NEW to be added in The Ready 
+	}
+}
+
+int Schedular::ShortestQueue()
+{
+	int min = 0;
+	for (int i = 0; i < get_processors_counter() - 1; i++) {
+		min = Processors[0]->get_finishedTime(); // set the first proccessor in array is the shortest 
+		if (min > Processors[i]->get_finishedTime()) {
+			min = i; // get the place of the processor that has tha shortest queue
+		}
+	}
+	return min;
 }
 
 
