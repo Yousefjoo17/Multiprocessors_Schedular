@@ -48,6 +48,7 @@ public:
  {
 
 	 QueueFCFS RDY_FCFS; //RDY list for FCFS processor
+	 Queue Sig
  public:
 
 	 processorFCFS(Schedular*p);
