@@ -9,7 +9,7 @@ class UI {
 	Schedular* the_scheduler;
 public:
 	UI(Schedular*);
-	void display(  baseProcessor**, Queue<process*>& BLK, Queue <process*>& TRM, int numDisplay );
+	void display(baseProcessor**, Queue<process*>& BLK, Queue <process*>& TRM, int numDisplay );
 	~UI();
 
 };
