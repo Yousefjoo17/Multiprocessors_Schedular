@@ -85,6 +85,6 @@ public:
 	int get_total_TRT();
 	int get_BLK_count();
 	int get_RUN_count();
-
+	int get_timestep();
 
 };
