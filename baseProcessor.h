@@ -34,6 +34,8 @@ public:
 	void set_pload();
 	void set_putil();
 	int get_PID();
+	void set_finishTime(int x);
+	int get_finishedTime();
     virtual void Schedular_Algo() = 0;
 	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
 	{
