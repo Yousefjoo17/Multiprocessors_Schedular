@@ -32,3 +32,20 @@ void processorFCFS::Schedular_Algo()
 
 }
 
+void processorFCFS::KillSig()
+{
+	int curr = S_ptr->get_timestep();
+	if (curr != next_kill)
+		return;
+	int id = SigKill.peek();
+	if (RUN->get_PID() == id) {
+
+
+	}
+
+
+
+
+
+}
+

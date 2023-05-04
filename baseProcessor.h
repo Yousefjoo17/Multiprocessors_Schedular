@@ -53,15 +53,18 @@ public:
  class processorFCFS : public baseProcessor
  {
 
-	 QueueFCFS RDY_FCFS; //RDY list for FCFS 
+	 QueueFCFS RDY_FCFS; //RDY list for FCFS
+	 static Queue<int> SigKill;
+	 static int next_kill;
  public:
 
-	 processorFCFS(Schedular*p);
+	 processorFCFS(Schedular*);
 	 void add2RDY(process*);
 	 process* getfromRDY();
 	 void add2RUN(process*);
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
+	 void KillSig();	
 
 	 //void killprocess(int id);
 	 //void forkprocess()
