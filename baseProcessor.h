@@ -34,6 +34,10 @@ public:
 	void set_pload();
 	void set_putil();
 	int get_PID();
+	virtual void add2RDY(process*);
+	virtual process* getfromRDY();
+	virtual void RDY2RUN(process*);
+	virtual process* getfromRUN();
     virtual void Schedular_Algo() = 0;
 	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
 	{
@@ -47,8 +51,7 @@ public:
  class processorFCFS : public baseProcessor
  {
 
-	 QueueFCFS RDY_FCFS; //RDY list for FCFS processor
-	 Queue Sig
+	 QueueFCFS RDY_FCFS; //RDY list for FCFS 
  public:
 
 	 processorFCFS(Schedular*p);
@@ -73,7 +76,7 @@ public:
 	 processorRR(Schedular* p);
 	 void add2RDY(process*);
 	 process* getfromRDY();
-	 void add2RUN(process*);
+	 void RDY2RUN(process*);
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
 	// virtual void Schedular_Algo();
