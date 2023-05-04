@@ -18,7 +18,7 @@ private:
 	int IO_current; //The IO needed to be done 
 	process* Child;
 	bool Is_Child;
-
+	bool Is_First_Time;
 public:
 	process(int, int, int, int, Queue<int>&);
 	process(bool, process*&, int, int);
@@ -36,9 +36,11 @@ public:
 	int get_IO_D();
 	int get_n_total();
 	int get_n_current();
+	bool is_first_time();
 	process* get_Child();
 	bool get_Is_Child();
 	void inc_CT_EX();
+	void set_first_time(bool);
 	void set_RT(int);
 	void set_CT_EX(int);
 	void set_TT(int);

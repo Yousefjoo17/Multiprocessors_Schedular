@@ -31,6 +31,7 @@ void processorSJF::Schedular_Algo()
 {
 	if (!RUN&&!RDY_SJF.is_empty()){
 		RUN = RDY_SJF.dequeue();
+		if
 		RUN->set_RT(S_ptr->get_timestep());
 	}
 	if(!RUN&&RDY_SJF.is_empty()) {
@@ -58,9 +59,10 @@ void processorSJF::Schedular_Algo()
 
 			}
 		}
-
-		RUN->inc_CT_EX();
-		finish_time--;
+		if (RUN) {
+			RUN->inc_CT_EX();
+			finish_time--;
+		}
 	}
 
 }

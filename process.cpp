@@ -11,7 +11,7 @@ process::process(int a, int p, int c, int n, Queue<int>& queue) {
 	Child = nullptr;
 	Is_Child = false;
 	CT_EX = 0;
-
+	Is_First_Time = true;
 }
 process::process(bool x, process*& parent, int current_t, int p) {
 	AT = current_t;
@@ -23,6 +23,7 @@ process::process(bool x, process*& parent, int current_t, int p) {
 	Is_Child = x;
 	CT_EX = 0;
 	parent->set_Child(this);
+	Is_First_Time = true;
 
 }
 int process::get_PID() {
@@ -68,6 +69,10 @@ int process::get_n_total() {
 int process::get_n_current() {
 	return IO_current;
 }
+bool process::is_first_time()
+{
+	return Is_First_Time;
+}
 process* process::get_Child() {
 	return Child;
 }
@@ -78,6 +83,11 @@ bool process::get_Is_Child() {
 void process::inc_CT_EX()
 {
 	CT_EX++;
+}
+
+void process::set_first_time(bool x)
+{
+	Is_First_Time = x;
 }
 
 void process::set_RT(int x) {
