@@ -2,7 +2,9 @@
 #include<iostream>
 #include"baseProcessor.h"
 using namespace std;
-
+Queue<int> q;
+Queue<int> processorFCFS::SigKill = q;
+int processorFCFS::next_kill = 0;
 processorFCFS::processorFCFS(Schedular*ptr):baseProcessor(ptr)
 {
 }
@@ -34,6 +36,12 @@ void processorFCFS::RDY2RUN()
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
 	}
+}
+
+void processorFCFS::set_sig(Queue<int>& q)
+{
+	SigKill = q;
+	next_kill = SigKill.dequeue();
 }
 
 void processorFCFS::Schedular_Algo()
@@ -78,14 +86,18 @@ void processorFCFS::KillSig()
 	if (curr != next_kill)
 		return;
 	int id = SigKill.peek();
-	if (RUN->get_PID() == id) {
-
-
+	if (RUN->get_PID() == id) 
+	{
+		// calll move to TRM;
+		id = SigKill.dequeue();
+		next_kill = SigKill.dequeue();
 	}
-
-
-
-
-
+	process* ptr= RDY_FCFS.remove_id(id);
+	if(ptr)
+	{	
+		//call move to TRM;
+		id = SigKill.dequeue();
+		next_kill = SigKill.dequeue();
+	}
 }
 

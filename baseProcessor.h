@@ -63,7 +63,7 @@ public:
 	 void add2RUN(process*);
 	 process* getfromRUN();
 	 void RDY2RUN();
-
+	 static void set_sig(Queue<int>&);
 	 virtual void Schedular_Algo();
 	 void KillSig();	
 
