@@ -21,8 +21,9 @@ int main() {
 	s.add2NEW(p1);
 	s.add2NEW(p2);
 	s.add2NEW(p3);
-	cout << s.getfromNEW()->get_PID();
-	cout << s.getfromNEW()->get_PID();
-	cout << s.getfromNEW()->get_PID();
+	cout << p1 <<endl;
+	cout << s.getfromNEW();
+	cout << s.getfromNEW();
+	cout << s.getfromNEW();
 	/***************************************/
 }

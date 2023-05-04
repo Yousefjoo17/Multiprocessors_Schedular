@@ -6,19 +6,20 @@
 #include"Schedular.h"
 #include"priorityQueue.h"
 
+using namespace std;
 class Schedular;
 
- class  baseProcessor {
+class  baseProcessor {
 
 protected:
-	Schedular *S_ptr; //a pointer to schedualr
+	Schedular* S_ptr; //a pointer to schedualr
 	int PID;
 	process* RUN;  //RUN state
 	int num_processes; //existing in RDY list
 	int finish_time; //the time required to finish all processes in the RDY state
 	int total_busy_time;  //total time the processor is running
 	int total_idle_time;   //total time the processor isn't running
-	int total_turnaround_time;
+	int total_turnaround_time; //
 	/*total(summation) turn around time of all processes in the processor
 	in ready,running,block*/
 	bool is_busy;  //is the processor running a process ?
@@ -33,6 +34,11 @@ public:
 	void set_pload();
 	void set_putil();
    // virtual void Schedular_Algo() = 0;
+	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
+	{
+		os << p->PID;
+		return os;
+	}
 
 };
 
@@ -84,3 +90,5 @@ public:
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
  };
+
+
