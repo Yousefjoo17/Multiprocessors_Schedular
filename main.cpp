@@ -24,6 +24,5 @@ int main() {
 	cout << s.getfromNEW()->get_PID();
 	cout << s.getfromNEW()->get_PID();
 	cout << s.getfromNEW()->get_PID();
-
 	/***************************************/
 }
