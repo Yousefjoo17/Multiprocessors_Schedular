@@ -33,7 +33,8 @@ public:
 	void set_busy_Idle();
 	void set_pload();
 	void set_putil();
-   // virtual void Schedular_Algo() = 0;
+	int get_PID();
+    virtual void Schedular_Algo() = 0;
 	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
 	{
 		os << p->PID;

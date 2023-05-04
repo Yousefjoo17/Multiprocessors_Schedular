@@ -18,6 +18,8 @@ int main() {
 	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);
 
 	Schedular s("input_file");
+	baseProcessor* proc = new processorSJF(&s);
+	cout << proc << endl;
 	s.add2NEW(p1);
 	s.add2NEW(p2);
 	s.add2NEW(p3);
