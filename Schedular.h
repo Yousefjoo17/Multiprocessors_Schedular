@@ -90,5 +90,6 @@ public:
 
 	/*********************************/
 	void NEW_RDY();
+	void P_Completion(process*);
 	int ShortestQueue();
 };
