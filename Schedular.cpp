@@ -58,13 +58,6 @@ void Schedular::simulate()
 		}
 }
 
-
-
-
-
-
-
-
 /*********************************************************************************/
 // setters 
 
@@ -190,6 +183,25 @@ int Schedular::get_RUN_count() {
 int Schedular::get_timestep()
 {
 	return time_step;
+}
+
+void Schedular::NEW_RDY()
+{
+	int m = ShortestQueue();
+
+}
+
+int Schedular::ShortestQueue()
+{
+	int min = 0;
+	for (int i = 0; i < get_processors_counter() - 1; i++) {
+		min = Processors[0]->get_finishedTime();
+		if (min > Processors[i]->get_finishedTime()) {
+			min = i;
+		}
+
+	}
+	return min;
 }
 
 

@@ -87,4 +87,7 @@ public:
 	int get_RUN_count();
 	int get_timestep();
 
+	/*********************************/
+	void NEW_RDY();
+	int ShortestQueue();
 };
