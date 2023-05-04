@@ -42,6 +42,7 @@ public:
 	process* getfromNEW();
 	void add2BLK(process*);
 	process* getfromBLK();
+	bool BLK2RUN(process*);
 	void add2TRM(process*);
 	void simulate();
 

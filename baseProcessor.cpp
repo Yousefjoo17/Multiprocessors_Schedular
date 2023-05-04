@@ -21,7 +21,7 @@ baseProcessor::baseProcessor(Schedular*ptr)
 	set_putil();
 }
 
-
+void baseProcessor::set_Run_pointer(process* p) { RUN = p; }
 void baseProcessor::set_busy_Idle()
 {
 	if (num_processes == 0 && !RUN)

@@ -205,6 +205,12 @@ int Schedular::ShortestQueue()
 	}
 	return min;
 }
+bool Schedular::BLK2RUN(process* pr) {
+	if (BLK.is_empty()) { return false; }
+	Processors[ShortestQueue()]->set_Run_pointer(pr);
+
+}
+
 
 
 
