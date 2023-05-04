@@ -63,7 +63,7 @@ public:
  class processorRR :public baseProcessor
  {
 	 int time_slice;
-	 int time_Running; // a time for each process running to compare woth time_slice
+	 int time_Running; // a time for each process running to compare with time_slice
 	 Queue<process*> RDY_RR;  //RDY list
 
  public:

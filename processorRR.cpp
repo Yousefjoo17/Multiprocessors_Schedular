@@ -18,10 +18,10 @@ process* processorRR::getfromRDY()
 	return RDY_RR.dequeue();
 }
 
-void processorRR::add2RUN(process* p)
-{
-	RUN = p;
-}
+//void processorRR::add2RUN(process* p)
+//{
+	//RUN = p;
+//}
 
 process* processorRR::getfromRUN()
 {
