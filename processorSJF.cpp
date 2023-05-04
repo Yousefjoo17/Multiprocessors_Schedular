@@ -17,10 +17,13 @@ process* processorSJF::getfromRDY()
 	return RDY_SJF.dequeue();
 }
 
-/*void processorSJF::RDY2RUN(process* p)
+void processorSJF::RDY2RUN()
 {
-	RUN = p;
-}*/
+	RUN = RDY_SJF.dequeue();
+	if (RUN->is_first_time()) {
+		RUN->set_RT(S_ptr->get_timestep());
+	}
+}
 
 process* processorSJF::getfromRUN()
 {
@@ -30,10 +33,7 @@ process* processorSJF::getfromRUN()
 void processorSJF::Schedular_Algo()
 {
 	if (!RUN&&!RDY_SJF.is_empty()){
-		RUN = RDY_SJF.dequeue();
-		if (RUN->is_first_time()) {
-			RUN->set_RT(S_ptr->get_timestep());
-		}
+		RDY2RUN();
 	}
 	if(!RUN&&RDY_SJF.is_empty()) {
 		total_idle_time++;
@@ -46,8 +46,7 @@ void processorSJF::Schedular_Algo()
 			finish_time -= RUN->get_CT();
 			//go to BLK
 			if (!RDY_SJF.is_empty()) {
-				RUN = RDY_SJF.dequeue();
-				RUN->set_RT(S_ptr->get_timestep());
+				RDY2RUN();
 			}
 		}
 		if (RUN->get_CT_EX() == RUN->get_CT())
@@ -58,9 +57,7 @@ void processorSJF::Schedular_Algo()
 			// go to TRM
 			
 			if(!RDY_SJF.is_empty()) {
-				RUN = RDY_SJF.dequeue();
-				RUN->set_RT(S_ptr->get_timestep());
-
+				RDY2RUN();
 			}
 		}
 		if (RUN) {

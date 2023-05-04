@@ -88,7 +88,7 @@ public:
 	 processorSJF(Schedular* s);
 	 void add2RDY(process*);
 	 process* getfromRDY();
-	 void add2RUN(process*);
+	 void RDY2RUN();
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
  };
