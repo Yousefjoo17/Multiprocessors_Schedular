@@ -31,6 +31,7 @@ public:
 	int get_TT();
 	int get_TRT();
 	int get_WT();
+	int peek_IO_R();
 	int get_IO_R();
 	int get_IO_D();
 	int get_n_total();
