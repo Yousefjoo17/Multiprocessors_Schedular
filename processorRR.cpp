@@ -57,7 +57,7 @@ void processorRR::Schedular_Algo()
 			total_turnaround_time += RUN->get_TRT();
 			finish_time -= RUN->get_CT();
 			time_Running = 0;
-			//	// go to TRM
+			S_ptr->add2TRM(RUN);
 			if (!RDY_RR.is_empty()) {
 				RDY2RUN();
 			}

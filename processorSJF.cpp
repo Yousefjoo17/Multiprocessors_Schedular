@@ -55,7 +55,7 @@ void processorSJF::Schedular_Algo()
 			RUN->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += RUN->get_TRT();
 			finish_time -= RUN->get_CT();
-			// go to TRM
+			S_ptr->add2TRM(RUN);
 			
 			if(!RDY_SJF.is_empty()) {
 				RDY2RUN();
