@@ -199,6 +199,7 @@ void Schedular::P_Completion(process*p)
 	if(p->get_CT_EX() ==p->get_CT())
 	TRM.enqueue(p);
 	
+	
 }
 
 int Schedular::ShortestQueue()
