@@ -60,7 +60,7 @@ void processorSJF::Schedular_Algo()
 		}
 
 		RUN->inc_CT_EX();
-	
+		finish_time--;
 	}
 
 }
