@@ -49,6 +49,12 @@ int process::get_TRT() {
 int process::get_WT() {
 	return TRT - CT;
 }
+
+int process::peek_IO_R()
+{
+	return IO.peek();
+}
+
 int process::get_IO_R() {
 	return IO.dequeue();
 }

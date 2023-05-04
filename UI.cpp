@@ -14,9 +14,9 @@ UI::UI( Schedular* schedule) {
 	the_scheduler = schedule;
 }
 void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM, int numDisplay ) {
-
+	/*
 	cout << "Current Timestep:" << the_scheduler->get_total_processes();
-	/* the curent Timestep*/cout << endl;
+	cout << endl;//* the curent Timestep
 	baseProcessor** Processors = processors_arr;
 	int NF = the_scheduler->get_NF();
 	int NS = the_scheduler->get_NS();
@@ -64,7 +64,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 	int TRMC = the_scheduler->get_total_TRT();
 	TRM.print();
 	cout << "PRESS ANY KEY TO MOVE TO NEXT STEP !";
-	system("pause");
+	system("pause");*/
 	                                                  }
 //end of func of display
 UI::~UI(){};

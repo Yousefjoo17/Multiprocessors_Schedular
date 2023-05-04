@@ -1,6 +1,7 @@
 #pragma once
 #include"QueueFCFS.h"
 #include"process.h"
+#include"Queue.h"
 #include<iostream>
 #include"Schedular.h"
 #include"priorityQueue.h"
