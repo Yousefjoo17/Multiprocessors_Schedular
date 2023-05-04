@@ -187,6 +187,11 @@ int Schedular::get_RUN_count() {
 	return RUN_count;
 }
 
+int Schedular::get_timestep()
+{
+	return time_step;
+}
+
 
 
 

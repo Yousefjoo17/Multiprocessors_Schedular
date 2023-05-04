@@ -44,5 +44,10 @@ void baseProcessor::set_putil()
 		putil = 0;
 }
 
+int baseProcessor::get_PID()
+{
+	return PID;
+}
+
 
 

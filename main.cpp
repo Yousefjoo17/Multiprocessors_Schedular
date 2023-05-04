@@ -18,11 +18,14 @@ int main() {
 	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);
 
 	Schedular s("input_file");
+	baseProcessor* proc = new processorSJF(&s);
+	cout << proc << endl;
 	s.add2NEW(p1);
 	s.add2NEW(p2);
 	s.add2NEW(p3);
-	cout << s.getfromNEW()->get_PID();
-	cout << s.getfromNEW()->get_PID();
-	cout << s.getfromNEW()->get_PID();
+	cout << p1 <<endl;
+	cout << s.getfromNEW();
+	cout << s.getfromNEW();
+	cout << s.getfromNEW();
 	/***************************************/
 }
