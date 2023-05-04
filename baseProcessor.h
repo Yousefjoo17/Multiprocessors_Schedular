@@ -67,6 +67,7 @@ public:
 	 process* getfromRDY();
 	 void add2RUN(process*);
 	 process* getfromRUN();
+	 virtual void Schedular_Algo();
 	// virtual void Schedular_Algo();
 
 

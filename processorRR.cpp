@@ -28,8 +28,13 @@ process* processorRR::getfromRUN()
 	return RUN;
 }
 
-/*void processorFCFS::Schedular_Algo()
+void processorRR::Schedular_Algo()
 {
+	if (!RUN && !RDY_RR.is_empty()) {
+		RUN = RDY_RR.dequeue();
+	}
+	if (RUN->get_CT_EX() == RUN->get_CT())
 
-}*/
+
+}
 
