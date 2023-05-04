@@ -34,10 +34,10 @@ public:
 	void set_pload();
 	void set_putil();
 	int get_PID();
-	virtual void add2RDY(process*);
-	virtual process* getfromRDY();
-	virtual void RDY2RUN(process*);
-	virtual process* getfromRUN();
+	virtual void add2RDY(process*)=0;
+	virtual process* getfromRDY()=0;
+	virtual void RDY2RUN()=0;
+	virtual process* getfromRUN()=0;
 	int get_finishedTime();
     virtual void Schedular_Algo() = 0;
 	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
@@ -56,10 +56,12 @@ public:
  public:
 
 	 processorFCFS(Schedular*p);
-	 void add2RDY(process*);
-	 process* getfromRDY();
+	 virtual void add2RDY(process*);
+	 virtual  process* getfromRDY();
 	 void add2RUN(process*);
 	 process* getfromRUN();
+	 void RDY2RUN();
+
 	 virtual void Schedular_Algo();
 
 	 //void killprocess(int id);
