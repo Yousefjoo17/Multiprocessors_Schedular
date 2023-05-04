@@ -17,7 +17,7 @@ process* processorSJF::getfromRDY()
 	return RDY_SJF.dequeue();
 }
 
-/*void processorSJF::add2RUN(process* p)
+/*void processorSJF::RDY2RUN(process* p)
 {
 	RUN = p;
 }*/
@@ -31,8 +31,9 @@ void processorSJF::Schedular_Algo()
 {
 	if (!RUN&&!RDY_SJF.is_empty()){
 		RUN = RDY_SJF.dequeue();
-		if
-		RUN->set_RT(S_ptr->get_timestep());
+		if (RUN->is_first_time()) {
+			RUN->set_RT(S_ptr->get_timestep());
+		}
 	}
 	if(!RUN&&RDY_SJF.is_empty()) {
 		total_idle_time++;
@@ -41,6 +42,8 @@ void processorSJF::Schedular_Algo()
 		total_busy_time++;
 		if (RUN->peek_IO_R()==RUN->get_CT_EX())
 		{
+
+			finish_time -= RUN->get_CT();
 			//go to BLK
 			if (!RDY_SJF.is_empty()) {
 				RUN = RDY_SJF.dequeue();
@@ -51,6 +54,7 @@ void processorSJF::Schedular_Algo()
 		{	
 			RUN->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += RUN->get_TRT();
+			finish_time -= RUN->get_CT();
 			// go to TRM
 			
 			if(!RDY_SJF.is_empty()) {
@@ -61,7 +65,6 @@ void processorSJF::Schedular_Algo()
 		}
 		if (RUN) {
 			RUN->inc_CT_EX();
-			finish_time--;
 		}
 	}
 
