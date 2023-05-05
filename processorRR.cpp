@@ -44,52 +44,72 @@ void processorRR::Schedular_Algo()
 	}
 	if (RUN) {
 		total_busy_time++;
-		if (RUN->peek_IO_R() == RUN->get_CT_EX())
-		{
-			finish_time = finish_time - RUN->get_CT();
-			time_Running = 0;
-			// go to BLK
-			if (!RDY_RR.is_empty()) {
-				RDY2RUN();
-			}
-		}
-		if (RUN->get_CT_EX() == RUN->get_CT())
-		{
-			RUN->set_TT(S_ptr->get_timestep());
-			total_turnaround_time += RUN->get_TRT();
+		while (RUN->get_rem_CT() < rtf) {
 			finish_time -= RUN->get_CT();
 			time_Running = 0;
-			S_ptr->add2TRM(RUN);
-			if (!RDY_RR.is_empty()) {
+			S_ptr->migrate_RR2SJF(RUN);
+			RUN = nullptr;
+			if (!RDY_RR.is_empty())
+			{
 				RDY2RUN();
 			}
-		}
-		if (RUN) 
-		{
-			if (RUN->get_rem_CT() < rtf) {
-
-				//call migration 
-
+			else {
+				break;
 			}
-			if (time_Running == time_slice) 
+		}
+		if (RUN)
+		{
+			if (RUN->peek_IO_R() == RUN->get_CT_EX())
 			{
-				add2RDY(RUN);
-				RUN = nullptr;
-				if(!RDY_RR.is_empty()) 
-				{
+				finish_time -= RUN->get_CT();
+				time_Running = 0;
+				// go to BLK
+				if (!RDY_RR.is_empty()) {
 					RDY2RUN();
 				}
 			}
-			if(time_Running <time_slice)
+		}
+
+		if (RUN) {
+			if (RUN->get_CT_EX() == RUN->get_CT())
+			{
+				RUN->set_TT(S_ptr->get_timestep());
+				total_turnaround_time += RUN->get_TRT();
+				finish_time -= RUN->get_CT();
+				time_Running = 0;
+				S_ptr->add2TRM(RUN);
+				RUN = nullptr;
+				if (!RDY_RR.is_empty()) {
+					RDY2RUN();
+				}
+			}
+		}
+
+		if (RUN)
+		{
+			if (time_Running == time_slice)
+			{
+				add2RDY(RUN);
+				RUN = nullptr;
+				if (!RDY_RR.is_empty())
+				{
+					RDY2RUN();
+				}
+
+			}
+		}
+		if (RUN) {
+			if (time_Running < time_slice)
 			{
 				RUN->inc_CT_EX(); time_Running++;
-			
+
 			}
 		}
 	}
 }
 
-void processorRR::set_rtf(int x)
+
+void processorRR::set_static(int x)
 {
 	rtf = x;
 }

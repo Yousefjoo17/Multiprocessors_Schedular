@@ -57,6 +57,7 @@ public:
 	 QueueFCFS RDY_FCFS; //RDY list for FCFS
 	 static Queue<int> SigKill;
 	 static int next_kill;
+	 static int max_w;
  public:
 
 	 processorFCFS(Schedular*p);
@@ -65,7 +66,7 @@ public:
 	 void add2RUN(process*);
 	 process* getfromRUN();
 	 void RDY2RUN();
-	 static void set_sig(Queue<int>&);
+	 static void set_static(Queue<int>&,int);
 	 virtual void Schedular_Algo();
 	 void KillSig();	
 
@@ -89,7 +90,7 @@ public:
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
 	// virtual void Schedular_Algo();
-	 static void set_rtf(int);
+	 static void set_static(int);
 
  };
 

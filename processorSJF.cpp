@@ -50,15 +50,18 @@ void processorSJF::Schedular_Algo()
 				RDY2RUN();
 			}
 		}
-		if (RUN->get_CT_EX() == RUN->get_CT())
-		{	
-			RUN->set_TT(S_ptr->get_timestep());
-			total_turnaround_time += RUN->get_TRT();
-			finish_time -= RUN->get_CT();
-			S_ptr->add2TRM(RUN);
-			
-			if(!RDY_SJF.is_empty()) {
-				RDY2RUN();
+		if (RUN)
+		{
+			if (RUN->get_CT_EX() == RUN->get_CT())
+			{
+				RUN->set_TT(S_ptr->get_timestep());
+				total_turnaround_time += RUN->get_TRT();
+				finish_time -= RUN->get_CT();
+				S_ptr->add2TRM(RUN);
+
+				if (!RDY_SJF.is_empty()) {
+					RDY2RUN();
+				}
 			}
 		}
 		if (RUN) {

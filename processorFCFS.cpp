@@ -5,6 +5,8 @@ using namespace std;
 Queue<int> q;
 Queue<int> processorFCFS::SigKill = q;
 int processorFCFS::next_kill = 0;
+int processorFCFS::max_w = 0;
+
 processorFCFS::processorFCFS(Schedular*ptr):baseProcessor(ptr)
 {
 }
@@ -38,46 +40,67 @@ void processorFCFS::RDY2RUN()
 	}
 }
 
-void processorFCFS::set_sig(Queue<int>& q)
+void processorFCFS::set_static(Queue<int>& q,int w)
 {
 	SigKill = q;
 	next_kill = SigKill.dequeue();
+	max_w = w;
+
 }
 
 void processorFCFS::Schedular_Algo()
 {
-	if (!RUN &&!RDY_FCFS.is_empty()){
+	if (!RUN && !RDY_FCFS.is_empty()) {
 		RDY2RUN();
 	}
-	if(!RUN && RDY_FCFS.is_empty()) {
+	if (!RUN && RDY_FCFS.is_empty()) {
 		total_idle_time++;
 	}
 	if (RUN) {
 		total_busy_time++;
-		if (RUN->peek_IO_R()==RUN->get_CT_EX())
+		while (!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
+			finish_time -= RUN->get_CT();
+			S_ptr->migrate_FCFS2RR(RUN);
+			RUN = nullptr;
+			if (!RDY_FCFS.is_empty())
+			{
+				RDY2RUN();
+			}
+			else {
+				break;
+			}
+		}
+		if (RUN->peek_IO_R() == RUN->get_CT_EX())
 		{
 
 			finish_time -= RUN->get_CT();
 			//go to BLK
+			RUN = nullptr;
 			if (!RDY_FCFS.is_empty()) {
 				RDY2RUN();
 			}
 		}
-		if (RUN->get_CT_EX() == RUN->get_CT())
-		{	
-			RUN->set_TT(S_ptr->get_timestep());
-			total_turnaround_time += RUN->get_TRT();
-			finish_time -= RUN->get_CT();
-			S_ptr->add2TRM(RUN);
-			if(!RDY_FCFS.is_empty()) {
-				RDY2RUN();
+
+		if (RUN) {
+			if (RUN->get_CT_EX() == RUN->get_CT())
+			{
+				RUN->set_TT(S_ptr->get_timestep());
+				total_turnaround_time += RUN->get_TRT();
+				finish_time -= RUN->get_CT();
+				S_ptr->add2TRM(RUN);
+				RUN = nullptr;
+				if (!RDY_FCFS.is_empty()) {
+					RDY2RUN();
+				}
 			}
 		}
+		//forking
 		if (RUN) {
 			RUN->inc_CT_EX();
 		}
 	}
 }
+
 
 void processorFCFS::KillSig()
 {

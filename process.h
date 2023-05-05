@@ -37,6 +37,7 @@ public:
 	int get_n_total();
 	int get_n_current();	
 	int get_rem_CT();
+	int get_curr_WT(int);
 	bool is_first_time();
 	process* get_Child();
 	bool get_Is_Child();

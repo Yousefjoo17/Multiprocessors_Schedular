@@ -47,8 +47,8 @@ void Schedular::simulate()
 		InOut io;
 		io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
 		//UI user_interface(this);
-		processorFCFS::set_sig(SigKill);
-		processorRR::set_rtf(RTF);
+		processorFCFS::set_static(SigKill,MaxW);
+		processorRR::set_static(RTF);
 		for (int i = 0; i < NF; i++) {
 			Processors[i] = new processorFCFS(this);
 		}
@@ -58,6 +58,20 @@ void Schedular::simulate()
 		for (int i = NF + NS; i < NR + NS + NS; i++) {
 			Processors[i] = new processorRR(this);
 		}
+}
+
+void Schedular::migrate_RR2SJF(process* mig_p)
+{
+	int pro = ShortestQueue(NF,NF+NS);//get the shortest rdy queue of SJF processors
+	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a SJF processor
+
+}
+
+void Schedular::migrate_FCFS2RR(process* mig_p)
+{
+	int pro = ShortestQueue(NF+NS, NF+NS+NR);//get the shortest rdy queue of RR processors
+	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
+
 }
 
 /*********************************************************************************/
@@ -195,11 +209,7 @@ void Schedular::NEW_RDY()
 		Processors[m]->add2RDY(NEW.dequeue()); // move from NEW to be added in The Ready 
 	}
 }
-void migrate_RR_SJF() {
 
-
-
-}
 
 void Schedular::P_Completion(process*p)
 {
@@ -218,7 +228,8 @@ int Schedular::ShortestQueue()
 	}
 	return min;
 }
-int Schedular::ShortestQueue(int start, int finish)
+int Schedular::ShortestQueue(int start, int finish) 
+// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
 {
 	int min = 0;
 	for (int i = start; i < finish; i++) {

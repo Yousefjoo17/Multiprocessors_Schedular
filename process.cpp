@@ -73,6 +73,10 @@ int process::get_rem_CT()
 {
 	return CT-CT_EX;
 }
+int process::get_curr_WT(int t)
+{
+	return t-AT-CT_EX;
+}
 bool process::is_first_time()
 {
 	return Is_First_Time;

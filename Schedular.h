@@ -46,6 +46,8 @@ public:
 	bool BLK2RUN(process*);
 	void add2TRM(process*);
 	void simulate();
+	void migrate_RR2SJF(process*);
+	void migrate_FCFS2RR(process*);
 
 
 
