@@ -23,20 +23,24 @@ class BT
 	}
 	NodeT<T>* insert(NodeT<T>* troot, T item)
 	{
+		NodeT<T>* newnode = new Node{ item };
 		if (troot == NULL) {
-			NodeT<T>* newnode = new Node{ item };
 			troot = newnode;
 		}
-		else if (item < troot->data) {
+		else if (troot->left==nullptr) {
 			troot->left = insert(troot->left, item);
 		}
-		else if (item > troot->data) {
+		else if ( troot->right==nullptr) {
 			troot->right = insert(troot->right, item);
+		}
+		else {
+			// put in left for default if I fill it before
+			troot->left = insert(troot->left, item);
 		}
 		return troot;
 	}
 	//essential
-	void insert(int item) {
+	void insert(T item) {
 		root = insert(root, item);
 	}
 
@@ -49,67 +53,6 @@ class BT
 		else
 			return;
 	}
-	
-	//---------------------------------------------
-	NodeT<T>* findmin(NodeT<T>* troot) {
-		if (troot == NULL)
-			return NULL;
-		if (troot->left == NULL) {
-			// if there is no left so the root is the smallest as the right part will be surely greater than
-			return troot;
-		}
-		else {
-			return findmin(troot->left);
-		}
-	}
-	NodeT<T>* findmax(Node<T>* troot) {
-		if (troot == NULL)
-			return NULL;
-		if (troot->right == NULL)
-			return troot;
-		else {
-			return findmax(troot->right);
-		}
-	}
-	NodeT<T>* Delete(NodeT<T>* r, T key)
-	{
-		if (r == NULL) // Empty Tree
-			return NULL;
-		if (key < r->data) // Item exists in left sub tree
-			r->left = Delete(r->left, key);
-		else if (key > r->data) // item exists in right sub tree
-			r->right = Delete(r->right, key);
-		// here I reached the target 
-		else
-		{
-			if (r->left == NULL && r->right == NULL) // leaf node
-				r = NULL;
-			else if (r->left != NULL && r->right == NULL) // one child on the left
-			{
-				r->data = r->left->data;
-				delete r->left;
-				r->left = NULL;
-			}
-			else if (r->left == NULL && r->right != NULL) // one child on the right
-			{
-				r->data = r->right->data;
-				delete r->right;
-				r->right = NULL;
-			}
-			else
-			{
-				NodeT<T>* max = findmax(r->left);
-				r->data = max->data;
-				r->left = Delete(r->left, max->data);
-
-			}
-
-		}
-		return r;
-	}
-
-
-
 
 };
 
