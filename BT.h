@@ -15,10 +15,10 @@ public:
 	}
 };
 template<typename T>
-class BST
+class BT
 {
 	NodeT<T>* root;
-	BST() {
+	BT() {
 		root = NULL;
 	}
 	NodeT<T>* insert(NodeT<T>* troot, T item)
@@ -50,25 +50,6 @@ class BST
 			return;
 	}
 	
-	NodeT<T>* search(NodeT<T>* r, T key) {
-		if (r == NULL)
-			return NULL;
-		if (r->data == key)
-			return r;
-		else if (r->data < key)
-			return search(r->right, key);
-
-		else {
-			return search(r->left, key);
-		}
-	}
-	bool search(T key) {
-		root = search(root, key);
-		if (root == NULL)
-			return false;
-		else
-			return true;
-	}
 	//---------------------------------------------
 	NodeT<T>* findmin(NodeT<T>* troot) {
 		if (troot == NULL)
