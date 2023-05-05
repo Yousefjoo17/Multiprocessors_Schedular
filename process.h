@@ -35,7 +35,8 @@ public:
 	int get_IO_R();
 	int get_IO_D();
 	int get_n_total();
-	int get_n_current();
+	int get_n_current();	
+	int get_rem_CT();
 	bool is_first_time();
 	process* get_Child();
 	bool get_Is_Child();

@@ -10,7 +10,8 @@ class baseProcessor;
 class Schedular {
 
 public:
-	baseProcessor** Processors;
+	baseProcessor** Processors; 
+	// array of pointers to arrays (0,NF-1) -> FCFS | (NF,NF+NS-1) -> SJF | (NF+NS,NF+NS+NR-1) -> RR
 	Queue<process*> NEW; //queue of NEW stage
 	Queue<process*> BLK; // queue of Block stage
 	Queue<process*> TRM;  //Queue of TRM stage
@@ -92,4 +93,6 @@ public:
 	void NEW_RDY();
 	void P_Completion(process*);
 	int ShortestQueue();
+	int ShortestQueue(int,int);
+
 };

@@ -69,6 +69,10 @@ int process::get_n_total() {
 int process::get_n_current() {
 	return IO_current;
 }
+int process::get_rem_CT()
+{
+	return CT-CT_EX;
+}
 bool process::is_first_time()
 {
 	return Is_First_Time;

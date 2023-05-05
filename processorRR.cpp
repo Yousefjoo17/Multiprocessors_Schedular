@@ -2,6 +2,8 @@
 #include"baseProcessor.h"
 #include"Schedular.h"
 
+int processorRR::rtf = 0;
+
 processorRR::processorRR(Schedular* s) : baseProcessor(s)
 {
 	time_slice = s->get_RR_slice();
@@ -64,7 +66,11 @@ void processorRR::Schedular_Algo()
 		}
 		if (RUN) 
 		{
+			if (RUN->get_rem_CT() < rtf) {
 
+				//call migration 
+
+			}
 			if (time_Running == time_slice) 
 			{
 				add2RDY(RUN);
@@ -81,6 +87,11 @@ void processorRR::Schedular_Algo()
 			}
 		}
 	}
+}
+
+void processorRR::set_rtf(int x)
+{
+	rtf = x;
 }
 
 			

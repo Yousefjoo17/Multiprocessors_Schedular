@@ -78,6 +78,7 @@ public:
 	 int time_slice;
 	 int time_Running; // a time for each process running to compare with time_slice
 	 Queue<process*> RDY_RR;  //RDY list
+	 static int rtf;
 
  public:
 
@@ -88,7 +89,7 @@ public:
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
 	// virtual void Schedular_Algo();
-
+	 static void set_rtf(int);
 
  };
 

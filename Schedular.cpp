@@ -47,14 +47,16 @@ void Schedular::simulate()
 		InOut io;
 		io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
 		//UI user_interface(this);
+		processorFCFS::set_sig(SigKill);
+		processorRR::set_rtf(RTF);
 		for (int i = 0; i < NF; i++) {
 			Processors[i] = new processorFCFS(this);
 		}
 		for (int i = NF; i < NS + NF; i++) {
-			//Processors[i] = new processorSJF(this);
+			Processors[i] = new processorSJF(this);
 		}
 		for (int i = NF + NS; i < NR + NS + NS; i++) {
-			//Processors[i] = new processorRR(this);
+			Processors[i] = new processorRR(this);
 		}
 }
 
@@ -193,20 +195,34 @@ void Schedular::NEW_RDY()
 		Processors[m]->add2RDY(NEW.dequeue()); // move from NEW to be added in The Ready 
 	}
 }
+void migrate_RR_SJF() {
+
+
+
+}
 
 void Schedular::P_Completion(process*p)
 {
 	if(p->get_CT_EX() ==p->get_CT())
-	TRM.enqueue(p);
-	
-	
+	TRM.enqueue(p);	
 }
 
 int Schedular::ShortestQueue()
 {
 	int min = 0;
-	for (int i = 0; i < get_processors_counter() - 1; i++) {
-		min = Processors[0]->get_finishedTime(); // set the first proccessor in array is the shortest 
+	for (int i = 0; i < get_processors_counter(); i++) {
+		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
+		if (min > Processors[i]->get_finishedTime()) {
+			min = i; // get the place of the processor that has tha shortest queue
+		}
+	}
+	return min;
+}
+int Schedular::ShortestQueue(int start, int finish)
+{
+	int min = 0;
+	for (int i = start; i < finish; i++) {
+		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
 		if (min > Processors[i]->get_finishedTime()) {
 			min = i; // get the place of the processor that has tha shortest queue
 		}
