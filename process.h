@@ -49,7 +49,7 @@ public:
 	void set_n_current(int);
 	void set_Child(process*);
 	void set_Is_Child(bool);
-	friend ostream& operator<<(ostream& os, const process*& p)
+	friend ostream& operator<<(ostream& os, const process* p)
 	{
 		os << p->PID;
 		return os;

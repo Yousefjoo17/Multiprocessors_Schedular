@@ -42,7 +42,7 @@ public:
     virtual void Schedular_Algo() = 0;
 
 	void set_Run_pointer(process* p);
-	friend ostream& operator<<(ostream& os, const baseProcessor*& p)
+	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
 		os << p->PID;
 		return os;
