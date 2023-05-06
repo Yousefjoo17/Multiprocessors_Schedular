@@ -1,7 +1,7 @@
 #include "Schedular.h"
 
 Schedular::Schedular(string file) {
-	//Processors = nullptr;
+	Processors = nullptr;
 	time_step = 0;
 	BLK_count = 0;
 	TRM_count = 0;
@@ -74,12 +74,41 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 
 }
 
+void Schedular::work_stealing()
+{
+	int LQF, SQF;
+	int LQF_ind, SQF_ind;
+	LQF_ind = 0;
+	SQF_ind = 0;
+	LQF = Processors[0]->get_finishedTime();
+	SQF = Processors[0]->get_finishedTime();
+
+	for (int i = 1; i < NF + NS + NR; i++)
+	{
+		if (Processors[i]->get_finishedTime() > LQF)
+		{
+			LQF = Processors[i]->get_finishedTime();
+			LQF_ind = i;
+		}
+		if (Processors[i]->get_finishedTime() < SQF)
+		{
+			SQF = Processors[i]->get_finishedTime();
+			SQF_ind = i;
+		}
+		baseProcessor* ptr_LQF = Processors[LQF_ind];
+		baseProcessor* ptr_SQF = Processors[SQF_ind];
+		while ((LQF - SQF) / LQF > 0.40)
+			ptr_SQF->add2RDY(ptr_LQF->getfromRDY());
+	}
+
+}
+
 /*********************************************************************************/
 // setters 
 
 void Schedular::set_processors_counter()
 {
-	if (processors_counter == total_processes)
+	if (processors_counter == total_processes)  //????
 		time_step = 0;
 	else
 		time_step++;

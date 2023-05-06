@@ -74,7 +74,7 @@ void processorFCFS::Schedular_Algo()
 		{
 
 			finish_time -= RUN->get_CT();
-			//go to BLK
+			S_ptr->add2BLK(RUN);
 			RUN = nullptr;
 			if (!RDY_FCFS.is_empty()) {
 				RDY2RUN();
