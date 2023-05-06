@@ -143,6 +143,8 @@
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="QueueFCFS.h" />
     <ClInclude Include="Schedular.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="StackADT.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +156,7 @@
     <ClCompile Include="processorRR.cpp" />
     <ClCompile Include="processorSJF.cpp" />
     <ClCompile Include="Schedular.cpp" />
+    <ClCompile Include="Stack.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
