@@ -114,6 +114,11 @@ void processorRR::set_static(int x)
 	rtf = x;
 }
 
+process* processorRR::peek_RDY()
+{
+	return RDY_RR.peek();
+}
+
 			
 		
 	

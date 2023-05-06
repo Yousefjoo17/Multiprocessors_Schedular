@@ -97,8 +97,21 @@ void Schedular::work_stealing()
 		}
 		baseProcessor* ptr_LQF = Processors[LQF_ind];
 		baseProcessor* ptr_SQF = Processors[SQF_ind];
+		/*
+		stack<process*>s;
 		while ((LQF - SQF) / LQF > 0.40)
+		{
+			while (ptr_LQF->peek_RDY()->get_Is_Child())
+			{
+				s.push(ptr_LQF->getfromRDY());
+			}
 			ptr_SQF->add2RDY(ptr_LQF->getfromRDY());
+		}
+		while (s.peek())
+		{
+			ptr_LQF->add2RDY(s.pop());
+		}
+		*/
 	}
 
 }

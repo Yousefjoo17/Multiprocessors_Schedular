@@ -123,3 +123,8 @@ void processorFCFS::KillSig()
 	}
 }
 
+process* processorFCFS::peek_RDY()
+{
+	return RDY_FCFS.peek();
+}
+
