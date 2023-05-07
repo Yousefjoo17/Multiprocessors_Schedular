@@ -1,7 +1,6 @@
 #include "Schedular.h"
 
 Schedular::Schedular(string file) {
-	//Processors = nullptr;
 	time_step = 0;
 	BLK_count = 0;
 	TRM_count = 0;
@@ -14,6 +13,8 @@ Schedular::Schedular(string file) {
 	string filename = file;
 	InOut io;
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
+	Processors = new baseProcessor* [NF+NS+NR];
+
 }
 
 void Schedular::add2NEW(process* p)
