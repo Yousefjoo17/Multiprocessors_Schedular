@@ -11,7 +11,7 @@
 using namespace std;
 
 UI::UI( Schedular* schedule) {
-	the_scheduler = schedule;
+	S_ptr = schedule;
 }
 void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM, int numDisplay ) {
 	/*
