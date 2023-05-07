@@ -28,6 +28,6 @@ int main() {
 	cout << s.getfromNEW();
 	cout << s.getfromNEW();
 
-	s.work_stealing();
+//	s.work_stealing();
 	/***************************************/
 }

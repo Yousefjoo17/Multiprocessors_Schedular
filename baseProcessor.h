@@ -110,5 +110,3 @@ public:
 	 virtual process* peek_RDY();
 
  };
-
-

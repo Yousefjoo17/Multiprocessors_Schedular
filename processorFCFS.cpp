@@ -70,17 +70,18 @@ void processorFCFS::Schedular_Algo()
 				break;
 			}
 		}
-		if (RUN->peek_IO_R() == RUN->get_CT_EX())
-		{
+		if (RUN) {
+			if (RUN->peek_IO_R() == RUN->get_CT_EX())
+			{
 
-			finish_time -= RUN->get_CT();
-			S_ptr->add2BLK(RUN);
-			RUN = nullptr;
-			if (!RDY_FCFS.is_empty()) {
-				RDY2RUN();
+				finish_time -= RUN->get_CT();
+				S_ptr->add2BLK(RUN);
+				RUN = nullptr;
+				if (!RDY_FCFS.is_empty()) {
+					RDY2RUN();
+				}
 			}
 		}
-
 		if (RUN) {
 			if (RUN->get_CT_EX() == RUN->get_CT())
 			{
