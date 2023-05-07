@@ -75,12 +75,54 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 
 }
 
+void Schedular::work_stealing()
+{
+	int LQF, SQF;
+	int LQF_ind, SQF_ind;
+	LQF_ind = 0;
+	SQF_ind = 0;
+	LQF = Processors[0]->get_finishedTime();
+	SQF = Processors[0]->get_finishedTime();
+
+	for (int i = 1; i < NF + NS + NR; i++)
+	{
+		if (Processors[i]->get_finishedTime() > LQF)
+		{
+			LQF = Processors[i]->get_finishedTime();
+			LQF_ind = i;
+		}
+		if (Processors[i]->get_finishedTime() < SQF)
+		{
+			SQF = Processors[i]->get_finishedTime();
+			SQF_ind = i;
+		}
+		baseProcessor* ptr_LQF = Processors[LQF_ind];
+		baseProcessor* ptr_SQF = Processors[SQF_ind];
+		/*
+		stack<process*>s;
+		while ((LQF - SQF) / LQF > 0.40)
+		{
+			while (ptr_LQF->peek_RDY()->get_Is_Child())
+			{
+				s.push(ptr_LQF->getfromRDY());
+			}
+			ptr_SQF->add2RDY(ptr_LQF->getfromRDY());
+		}
+		while (s.peek())
+		{
+			ptr_LQF->add2RDY(s.pop());
+		}
+		*/
+	}
+
+}
+
 /*********************************************************************************/
 // setters 
 
 void Schedular::set_processors_counter()
 {
-	if (processors_counter == total_processes)
+	if (processors_counter == total_processes)  //????
 		time_step = 0;
 	else
 		time_step++;

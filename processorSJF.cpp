@@ -70,3 +70,8 @@ void processorSJF::Schedular_Algo()
 	}
 
 }
+
+process* processorSJF::peek_RDY()
+{
+	return RDY_SJF.peek();
+}

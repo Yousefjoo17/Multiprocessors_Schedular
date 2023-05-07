@@ -48,7 +48,7 @@ public:
 	void simulate();
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
-
+	void work_stealing();
 
 
 

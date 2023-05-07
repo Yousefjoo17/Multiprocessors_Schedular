@@ -40,8 +40,9 @@ public:
 	virtual process* getfromRUN()=0;
 	int get_finishedTime();
     virtual void Schedular_Algo() = 0;
-
 	void set_Run_pointer(process* p);
+	virtual process* peek_RDY()=0;
+
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
 		os << p->PID;
@@ -69,7 +70,7 @@ public:
 	 static void set_static(Queue<int>&,int);
 	 virtual void Schedular_Algo();
 	 void KillSig();	
-
+	 virtual process* peek_RDY();
 	 //void killprocess(int id);
 	 //void forkprocess()
  };
@@ -91,6 +92,7 @@ public:
 	 virtual void Schedular_Algo();
 	// virtual void Schedular_Algo();
 	 static void set_static(int);
+	 virtual process* peek_RDY();
 
  };
 
@@ -105,6 +107,8 @@ public:
 	 void RDY2RUN();
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
+	 virtual process* peek_RDY();
+
  };
 
 
