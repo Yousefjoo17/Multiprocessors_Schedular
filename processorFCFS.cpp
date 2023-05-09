@@ -129,3 +129,8 @@ process* processorFCFS::peek_RDY()
 	return RDY_FCFS.peek();
 }
 
+void processorFCFS::print()
+{
+	RDY_FCFS.print();
+}
+

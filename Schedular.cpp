@@ -39,6 +39,9 @@ process* Schedular::getfromBLK()
 
 void Schedular::add2TRM(process* p)
 {
+	total_RT += p->get_RT();
+	total_TRT += p->get_TRT();
+	total_WT += p->get_WT();
 	TRM.enqueue(p);
 }
 
@@ -63,6 +66,7 @@ void Schedular::simulate()
 
 void Schedular::migrate_RR2SJF(process* mig_p)
 {
+	RTF_Processes++;
 	int pro = ShortestQueue(NF,NF+NS);//get the shortest rdy queue of SJF processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a SJF processor
 
@@ -70,6 +74,7 @@ void Schedular::migrate_RR2SJF(process* mig_p)
 
 void Schedular::migrate_FCFS2RR(process* mig_p)
 {
+	MaxW_Processes++;
 	int pro = ShortestQueue(NF+NS, NF+NS+NR);//get the shortest rdy queue of RR processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
 

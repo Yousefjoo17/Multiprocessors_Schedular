@@ -73,8 +73,10 @@ public:
 		prioritynode <T>* currptr = head;
 		while (currptr!=nullptr)
 		{
-			cout << currptr->getitem() << ",";
+			cout << currptr->getitem() ;
 			currptr = currptr->getnext();
+			if (currptr)
+				cout << ", ";
 		}
 
 	}
