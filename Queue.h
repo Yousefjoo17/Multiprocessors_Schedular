@@ -83,8 +83,10 @@ public:
 
 		while (temp != NULL)
 		{
-			cout << temp->getitem() << ", ";
+			cout << temp->getitem() ;
 			temp = temp->getnext();
+			if (temp)
+				cout << ", ";
 		}
 		cout << endl;
 	}

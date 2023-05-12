@@ -2,6 +2,7 @@
 #include"process.h"
 #include"QueueFCFS.h"
 #include"Schedular.h"
+#include<windows.h>
 using namespace std;
 
 int main() {
@@ -24,6 +25,7 @@ int main() {
 	s.add2NEW(p2);
 	s.add2NEW(p3);
 	cout << p1 <<endl;
+	Sleep(1000);
 	cout << s.getfromNEW();
 	cout << s.getfromNEW();
 	cout << s.getfromNEW();

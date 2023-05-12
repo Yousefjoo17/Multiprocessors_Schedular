@@ -2,12 +2,14 @@
 #include"QueueFCFS.h"
 #include"process.h"
 #include"Queue.h"
+#include"InOut.h"
 #include<iostream>
 #include"Schedular.h"
 #include"priorityQueue.h"
 
 using namespace std;
 class Schedular;
+class InOut;
 
 class  baseProcessor {
 
@@ -42,6 +44,8 @@ public:
     virtual void Schedular_Algo() = 0;
 	void set_Run_pointer(process* p);
 	virtual process* peek_RDY()=0;
+	process* get_RUN();
+	virtual void print() = 0;
 
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
@@ -73,6 +77,8 @@ public:
 	 virtual process* peek_RDY();
 	 //void killprocess(int id);
 	 //void forkprocess()
+	 virtual void print();
+
  };
 
  class processorRR :public baseProcessor
@@ -93,6 +99,8 @@ public:
 	// virtual void Schedular_Algo();
 	 static void set_static(int);
 	 virtual process* peek_RDY();
+	 virtual void print();
+
 
  };
 
@@ -108,7 +116,7 @@ public:
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
 	 virtual process* peek_RDY();
+	 virtual void print();
+
 
  };
-
-

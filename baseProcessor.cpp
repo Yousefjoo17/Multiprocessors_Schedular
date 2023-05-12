@@ -22,6 +22,10 @@ baseProcessor::baseProcessor(Schedular*ptr)
 }
 
 void baseProcessor::set_Run_pointer(process* p) { RUN = p; }
+process* baseProcessor::get_RUN()
+{
+	return RUN;
+}
 void baseProcessor::set_busy_Idle()
 {
 	if (num_processes == 0 && !RUN)

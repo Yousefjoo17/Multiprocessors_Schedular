@@ -119,6 +119,11 @@ process* processorRR::peek_RDY()
 	return RDY_RR.peek();
 }
 
+void processorRR::print()
+{
+	RDY_RR.print();
+}
+
 			
 		
 	

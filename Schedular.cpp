@@ -1,7 +1,6 @@
 #include "Schedular.h"
 
 Schedular::Schedular(string file) {
-	Processors = nullptr;
 	time_step = 0;
 	BLK_count = 0;
 	TRM_count = 0;
@@ -12,8 +11,10 @@ Schedular::Schedular(string file) {
 	total_TRT = 0;
 	total_WT = 0;
 	string filename = file;
-	InOut io;
+	InOut io(this);
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
+	Processors = new baseProcessor* [NF+NS+NR];
+
 }
 
 void Schedular::add2NEW(process* p)
@@ -38,13 +39,16 @@ process* Schedular::getfromBLK()
 
 void Schedular::add2TRM(process* p)
 {
+	total_RT += p->get_RT();
+	total_TRT += p->get_TRT();
+	total_WT += p->get_WT();
 	TRM.enqueue(p);
 }
 
 void Schedular::simulate()
 {
 		string filename = "input_file";
-		InOut io;
+		InOut io(this);
 		io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
 		//UI user_interface(this);
 		processorFCFS::set_static(SigKill,MaxW);
@@ -62,6 +66,7 @@ void Schedular::simulate()
 
 void Schedular::migrate_RR2SJF(process* mig_p)
 {
+	RTF_Processes++;
 	int pro = ShortestQueue(NF,NF+NS);//get the shortest rdy queue of SJF processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a SJF processor
 
@@ -69,6 +74,7 @@ void Schedular::migrate_RR2SJF(process* mig_p)
 
 void Schedular::migrate_FCFS2RR(process* mig_p)
 {
+	MaxW_Processes++;
 	int pro = ShortestQueue(NF+NS, NF+NS+NR);//get the shortest rdy queue of RR processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
 

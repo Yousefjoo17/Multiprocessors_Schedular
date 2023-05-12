@@ -75,3 +75,8 @@ process* processorSJF::peek_RDY()
 {
 	return RDY_SJF.peek();
 }
+
+void processorSJF::print()
+{
+	RDY_SJF.print();
+}

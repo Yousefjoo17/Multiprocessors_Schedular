@@ -7,6 +7,8 @@
 #include <string>
 
 class baseProcessor;
+class InOut;
+
 class Schedular {
 
 public:
@@ -34,6 +36,8 @@ public:
 	int RUN_count;
 	int time_step;
 	int Running_time;
+	int RTF_Processes;
+	int MaxW_Processes;
 
 
 
