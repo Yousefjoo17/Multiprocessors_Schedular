@@ -11,7 +11,7 @@ Schedular::Schedular(string file) {
 	total_TRT = 0;
 	total_WT = 0;
 	string filename = file;
-	InOut io;
+	InOut io(this);
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
 	Processors = new baseProcessor* [NF+NS+NR];
 
@@ -48,7 +48,7 @@ void Schedular::add2TRM(process* p)
 void Schedular::simulate()
 {
 		string filename = "input_file";
-		InOut io;
+		InOut io(this);
 		io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
 		//UI user_interface(this);
 		processorFCFS::set_static(SigKill,MaxW);

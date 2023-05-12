@@ -7,6 +7,8 @@
 #include <string>
 
 class baseProcessor;
+class InOut;
+
 class Schedular {
 
 public:

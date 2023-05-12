@@ -2,12 +2,14 @@
 #include"QueueFCFS.h"
 #include"process.h"
 #include"Queue.h"
+#include"InOut.h"
 #include<iostream>
 #include"Schedular.h"
 #include"priorityQueue.h"
 
 using namespace std;
 class Schedular;
+class InOut;
 
 class  baseProcessor {
 
