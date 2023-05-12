@@ -15,10 +15,10 @@ private:
 	int WT; //Waiting time
 	Queue<int> IO; //Queue of IO_R (request time) then IO_D (duration)
 	int IO_total; //total nember if IO
-	int IO_current; //The IO needed to be done 
 	process* Child;
 	bool Is_Child;
 	bool Is_First_Time;
+	int total_IO_D;
 public:
 	process(int, int, int, int, Queue<int>&);
 	process(bool, process*&, int, int);
@@ -35,9 +35,9 @@ public:
 	int get_IO_R();
 	int get_IO_D();
 	int get_n_total();
-	int get_n_current();	
 	int get_rem_CT();
 	int get_curr_WT(int);
+	int get_toatal_IO_D();
 	bool is_first_time();
 	process* get_Child();
 	bool get_Is_Child();

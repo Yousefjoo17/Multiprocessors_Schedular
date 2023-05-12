@@ -12,18 +12,19 @@ process::process(int a, int p, int c, int n, Queue<int>& queue) {
 	Is_Child = false;
 	CT_EX = 0;
 	Is_First_Time = true;
+	total_IO_D = 0;
 }
 process::process(bool x, process*& parent, int current_t, int p) {
 	AT = current_t;
 	PID = p;
 	CT = parent->get_CT() - parent->get_CT_EX();
 	IO_total = 0;
-	IO_current = 0;
 	Child = nullptr;
 	Is_Child = x;
 	CT_EX = 0;
 	parent->set_Child(this);
 	Is_First_Time = true;
+	total_IO_D = 0;
 
 }
 int process::get_PID() {
@@ -53,21 +54,23 @@ int process::get_WT() {
 
 int process::peek_IO_R()
 {
-	return IO.peek();
+	if (!IO.is_empty())
+		return IO.peek();
+	else
+		return -1;
 }
 
 int process::get_IO_R() {
 	return IO.dequeue();
 }
 int process::get_IO_D() {
-	return IO.dequeue();
+	int x = IO.dequeue();
+	total_IO_D += x;
+	return x;
 }
 
 int process::get_n_total() {
 	return IO_total;
-}
-int process::get_n_current() {
-	return IO_current;
 }
 int process::get_rem_CT()
 {
@@ -76,6 +79,10 @@ int process::get_rem_CT()
 int process::get_curr_WT(int t)
 {
 	return t-AT-CT_EX;
+}
+int process::get_toatal_IO_D()
+{
+	return total_IO_D;
 }
 bool process::is_first_time()
 {
@@ -108,9 +115,6 @@ void process::set_TT(int x) {
 	TT = x;
 }
 
-void process::set_n_current(int x) {
-	IO_current = x;
-}
 void process::set_Child(process* x) {
 	Child = x;
 }

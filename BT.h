@@ -23,7 +23,7 @@ class BT
 	}
 	NodeT<T>* insert(NodeT<T>* troot, T item)
 	{
-		NodeT<T>* newnode = new Node{ item };
+		NodeT<T>* newnode = new NodeT<T>{ item };
 		if (troot == NULL) {
 			troot = newnode;
 		}
