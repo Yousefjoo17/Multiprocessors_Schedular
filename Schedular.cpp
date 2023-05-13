@@ -10,6 +10,8 @@ Schedular::Schedular(string file) {
 	total_RT = 0;
 	total_TRT = 0;
 	total_WT = 0;
+	 RTF_Processes=0;
+	 MaxW_Processes=0;
 	string filename = file;
 	InOut io(this);
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
@@ -290,9 +292,7 @@ int Schedular::ShortestQueue(int start, int finish)
 }
 bool Schedular::BLK2RUN(process* pr) {
 	if (BLK.is_empty()) { return false; }
-	Processors[ShortestQueue()]->set_Run_pointer(pr);
-
-}
+	Processors[ShortestQueue()]->set_Run_pointer(pr);return true;}
 
 
 
