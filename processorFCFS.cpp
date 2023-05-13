@@ -105,22 +105,37 @@ void processorFCFS::Schedular_Algo()
 
 void processorFCFS::KillSig()
 {
-	int curr = S_ptr->get_timestep();
-	if (curr != next_kill)
-		return;
-	int id = SigKill.peek();
-	if (RUN->get_PID() == id) 
-	{
-		// calll move to TRM;
-		id = SigKill.dequeue();
-		next_kill = SigKill.dequeue();
-	}
-	process* ptr= RDY_FCFS.remove_id(id);
-	if(ptr)
-	{	
-		//call move to TRM;
-		id = SigKill.dequeue();
-		next_kill = SigKill.dequeue();
+	if (!SigKill.is_empty()) {
+		int curr = S_ptr->get_timestep();
+		if (next_kill < curr && !SigKill.is_empty()) {
+			next_kill = SigKill.dequeue();
+			next_kill = SigKill.dequeue();
+
+		}
+		if (curr != next_kill)
+			return;
+		int id = SigKill.peek();
+		if (RUN->get_PID() == id)
+		{
+			finish_time -= RUN->get_CT();
+			RUN->set_TT(S_ptr->get_timestep());
+			total_turnaround_time += RUN->get_TRT();
+			S_ptr->add2TRM(RUN);
+			id = SigKill.dequeue();
+			if (!SigKill.is_empty())
+				next_kill = SigKill.dequeue();
+		}
+		process* ptr = RDY_FCFS.remove_id(id);
+		if (ptr)
+		{
+			finish_time -= ptr->get_CT();
+			ptr->set_TT(S_ptr->get_timestep());
+			total_turnaround_time += ptr->get_TRT();
+			S_ptr->add2TRM(ptr);
+			id = SigKill.dequeue();
+			if (!SigKill.is_empty())
+				next_kill = SigKill.dequeue();
+		}
 	}
 }
 
