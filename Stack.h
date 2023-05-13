@@ -1,8 +1,7 @@
 #pragma once
 #include "StackADT.h"
 template <class T>
-class Stack :
-    public StackADT<T>
+class Stack : public StackADT<T>
 {
 private:
 	T* items;		// Array of stack items
@@ -29,7 +28,7 @@ public:
 		return top == -1;
 	}  // end isEmpty
 
-	bool push(const T& newEntry)
+    bool push(const T& newEntry)
 	{
 		if (top == STACK_SIZE - 1) return false;
 

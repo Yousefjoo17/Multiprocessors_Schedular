@@ -76,6 +76,10 @@ process* processorSJF::peek_RDY()
 	return RDY_SJF.peek();
 }
 
+void processorSJF::add2_RDY_begining(process* ptr)
+{
+}
+
 void processorSJF::print()
 {
 	RDY_SJF.print();

@@ -44,4 +44,18 @@ public:
 			}
 		}
 	}
+
+	void add2thebegining(process* ptr)
+	{
+		node<process*>* pn = new node<process*>(ptr);
+
+		if (!front && !back)
+			front=back = pn;
+		else
+		{
+			pn->setnext(front);
+			front = pn;
+		}
+
+	}
 };
