@@ -72,7 +72,7 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 		while (time_step<15) {
-			time_step+=2;
+			time_step++;
 			NEW_RDY();
 			for (int i = 0; i < NR + NF + NS + NE; i++) {
 				Processors[i]->Schedular_Algo();
