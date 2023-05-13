@@ -2,10 +2,11 @@
 #include<iostream>
 using namespace std;
 
-process::process(int a, int p, int c, int n, Queue<int>& queue) {
+process::process(int a, int p, int c,int d, int n, Queue<int>& queue) {
 	AT = a;
 	PID = p;
 	CT = c;
+	deadline = d;
 	IO_total = n;
 	IO = queue;
 	Child = nullptr;
@@ -18,6 +19,7 @@ process::process(bool x, process*& parent, int current_t, int p) {
 	AT = current_t;
 	PID = p;
 	CT = parent->get_CT() - parent->get_CT_EX();
+	deadline = parent->get_deadline();
 	IO_total = 0;
 	Child = nullptr;
 	Is_Child = x;
@@ -83,6 +85,10 @@ int process::get_curr_WT(int t)
 int process::get_toatal_IO_D()
 {
 	return total_IO_D;
+}
+int process::get_deadline()
+{
+	return deadline;
 }
 bool process::is_first_time()
 {

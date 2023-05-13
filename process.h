@@ -19,8 +19,9 @@ private:
 	bool Is_Child;
 	bool Is_First_Time;
 	int total_IO_D;
+	int deadline;
 public:
-	process(int, int, int, int, Queue<int>&);
+	process(int, int, int, int, int, Queue<int>&);
 	process(bool, process*&, int, int);
 	//friend ostream& operator<<(ostream& os, const process*& p);
 	int get_PID();
@@ -38,6 +39,7 @@ public:
 	int get_rem_CT();
 	int get_curr_WT(int);
 	int get_toatal_IO_D();
+	int get_deadline();
 	bool is_first_time();
 	process* get_Child();
 	bool get_Is_Child();
