@@ -28,9 +28,15 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		for (int i = 0; i < NF; i++) {
 			cout << "processor " << i + 1 << "[FCFS]"; Processors[i]->print(); cout << endl;
 		}
-		for (int i = NF; i < NS + NF; i++) { cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; }
-		for (int i = NF + NS; i < NR + NS + NF; i++) { cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; }
-		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) { cout << "processor " << i + 1 << " [EDF  ]"; Processors[i]->print(); cout << endl; }
+		for (int i = NF; i < NS + NF; i++) {
+			cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; 
+		}
+		for (int i = NF + NS; i < NR + NS + NF; i++) { 
+			cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; 
+		}
+		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) { 
+			cout << "processor " << i + 1 << " [EDF ]"; Processors[i]->print(); cout << endl; 
+		}
 		cout << endl;
 		/////////////////////////////////////////////////////////////////////////
 		cout << "------------       BLK processes  ----------------" << endl;
@@ -44,7 +50,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << RUNC << " RUN: ";//the array is required
 		for (int i = 0; i < NF + NS + NR + NE; i++) {
 			if (Processors[i]->get_RUN()) {
-				cout << Processors[i]->get_RUN() << "(P" << i << ")";
+				cout << Processors[i]->get_RUN() << "(P" << i+1 << ")";
 				if (i < (NR + NS + NF + NE - 1)) { cout << ", "; }
 			}
 		}
@@ -55,6 +61,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		int TRMC = S_ptr->get_total_TRT();
 		cout << TRMC << " TRM: ";
 		TRM.print();
+		cout << endl << endl;
 		if (display_mode == 1)
 			system("pause");
 		else

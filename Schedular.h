@@ -5,6 +5,8 @@
 #include"InOut.h"
 #include"baseProcessor.h"
 #include <string>
+#include"Stack.h"
+#include"UI.h"
 
 class baseProcessor;
 class InOut;

@@ -88,7 +88,6 @@ public:
 			if (temp)
 				cout << ", ";
 		}
-		cout << endl;
 	}
 	int getlength() {
 		int count = 0;

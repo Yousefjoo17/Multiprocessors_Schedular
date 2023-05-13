@@ -32,6 +32,7 @@ void processorEDF::RDY2RUN()
 {
 	RUN = RDY_EDF.dequeue();
 	if (RUN->is_first_time()) {
+		finish_time += RUN->get_CT();
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
 	}

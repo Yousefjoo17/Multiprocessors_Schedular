@@ -21,6 +21,7 @@ int main() {
 	QueueFCFS f;
 	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);
 	Schedular s("deadline_inp");
+	s.simulate();
 	baseProcessor* proc = new processorSJF(&s);
 	cout << proc << endl;
 	s.add2NEW(p1);

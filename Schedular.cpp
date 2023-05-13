@@ -1,5 +1,4 @@
 #include "Schedular.h"
-#include"Stack.h"
 
 Schedular::Schedular(string file) {
 	time_step = 0;
@@ -56,8 +55,7 @@ void Schedular::simulate()
 {
 		string filename = "input_file";
 		InOut io(this);
-		io.readfile(filename, NEW, SigKill, NF, NS, NR, NE, RR_slice, RTF, MaxW, STL, FP, Overheatn, total_processes);
-		//UI user_interface(this);
+		UI user_interface(this);
 		baseProcessor::set_overheatn(Overheatn);
 		processorFCFS::set_static(SigKill,MaxW);
 		processorRR::set_static(RTF);
@@ -67,11 +65,20 @@ void Schedular::simulate()
 		for (int i = NF; i < NS + NF; i++) {
 			Processors[i] = new processorSJF(this);
 		}
-		for (int i = NF + NS; i < NR + NS + NS; i++) {
+		for (int i = NF + NS; i < NR + NS + NF; i++) {
 			Processors[i] = new processorRR(this);
 		}
-		for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
+		}
+		while (time_step<15) {
+			time_step+=2;
+			NEW_RDY();
+			for (int i = 0; i < NR + NF + NS + NE; i++) {
+				Processors[i]->Schedular_Algo();
+			}
+			user_interface.display(Processors, BLK, TRM);
+			
 		}
 }
 
@@ -287,11 +294,9 @@ void Schedular::P_Completion(process*p)
 
 int Schedular::ShortestQueue()
 {
-	int min = 0;
-	for (int i = 0; i < get_processors_counter(); i++) {
-		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
-		if (min > Processors[i]->get_finishedTime()) {
-			if(!Processors[i]->Is_overheated())
+	int min = 0;// set the first proccessor in array is the shortest 
+	for (int i = 1; i < NR + NF + NS + NE; i++) {
+		if (Processors[i]->get_finishedTime() < Processors[min]->get_finishedTime() && !Processors[i]->Is_overheated()) {
 				min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
@@ -299,11 +304,10 @@ int Schedular::ShortestQueue()
 }
 int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
 {
-	int min = 0;
-	for (int i = start; i < finish; i++) {
+	int min = start;
+	for (int i = start + 1; i < finish; i++) {
 		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
-		if (min > Processors[i]->get_finishedTime()) {
-			if (!Processors[i]->Is_overheated())
+		if (Processors[i]->get_finishedTime() < Processors[min]->get_finishedTime() && !Processors[i]->Is_overheated()) {
 				min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
