@@ -153,6 +153,10 @@ process* processorRR::peek_RDY()
 	return RDY_RR.peek();
 }
 
+void processorRR::add2_RDY_begining(process* ptr)
+{
+}
+
 void processorRR::print()
 {
 	RDY_RR.print();

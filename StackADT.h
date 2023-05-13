@@ -2,7 +2,8 @@
 template <class T>
 class StackADT
 {
-    virtual void push(T& root)=0;
+public:
+    virtual bool push(const T& root)=0;
 
     virtual bool pop(T& root) = 0;
     virtual bool isEmpty() const = 0;

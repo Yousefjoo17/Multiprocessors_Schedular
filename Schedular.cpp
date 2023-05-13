@@ -1,4 +1,5 @@
 #include "Schedular.h"
+#include"Stack.h"
 
 Schedular::Schedular(string file) {
 	time_step = 0;
@@ -113,21 +114,26 @@ void Schedular::work_stealing()
 		}
 		baseProcessor* ptr_LQF = Processors[LQF_ind];
 		baseProcessor* ptr_SQF = Processors[SQF_ind];
-		/*
-		stack<process*>s;
+		
+		
+		Stack<process*>s(50);
+		process*ptr;
 		while ((LQF - SQF) / LQF > 0.40)
 		{
-			while (ptr_LQF->peek_RDY()->get_Is_Child())
+			while (ptr_LQF->peek_RDY()->get_Is_Child())   // FCFS Processors only
 			{
 				s.push(ptr_LQF->getfromRDY());
 			}
 			ptr_SQF->add2RDY(ptr_LQF->getfromRDY());
 		}
-		while (s.peek())
+		while (s.pop(ptr))
 		{
-			ptr_LQF->add2RDY(s.pop());
+
+			baseProcessor* pfcfs = Processors[LQF_ind];
+			pfcfs = dynamic_cast<processorFCFS*>(Processors[LQF_ind]);
+			pfcfs->add2_RDY_begining(ptr);  // FCFS Processors only 
 		}
-		*/
+		
 	}
 
 }

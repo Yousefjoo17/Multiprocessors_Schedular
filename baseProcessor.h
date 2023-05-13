@@ -46,6 +46,7 @@ public:
 	void set_Run_pointer(process* p);
 	virtual process* peek_RDY()=0;
 	process* get_RUN();
+	virtual void add2_RDY_begining(process* ptr)=0;
 	virtual void print() = 0;
 	static void set_overheatn(int);
 	virtual void processor_overheat()=0;
@@ -80,6 +81,8 @@ public:
 	 void KillSig();	
 	 virtual process* peek_RDY();
 	 void processor_overheat();
+	 virtual void add2_RDY_begining(process* ptr);
+
 	 //void killprocess(int id);
 	 //void forkprocess()
 	 virtual void print();
@@ -106,6 +109,7 @@ public:
 	// virtual void Schedular_Algo();
 	 static void set_static(int);
 	 virtual process* peek_RDY();
+	 virtual void add2_RDY_begining(process* ptr);
 	 virtual void print();
 
 
@@ -142,6 +146,7 @@ public:
 	 virtual void Schedular_Algo();
 	 void processor_overheat();
 	 virtual process* peek_RDY();
+	 virtual void add2_RDY_begining(process* ptr);
 	 virtual void print();
 
 

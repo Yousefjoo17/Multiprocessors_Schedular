@@ -161,6 +161,11 @@ process* processorFCFS::peek_RDY()
 	return RDY_FCFS.peek();
 }
 
+void processorFCFS::add2_RDY_begining(process* ptr)
+{
+	RDY_FCFS.add2thebegining(ptr);
+}
+
 void processorFCFS::processor_overheat()
 {
 	overheatc++;
