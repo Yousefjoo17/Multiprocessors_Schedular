@@ -12,15 +12,15 @@ InOut::InOut(Schedular* ptr)
 	numio = 0;
 }
 
-void InOut::readfile(string filename, Queue<process*>& NEW, Queue<int>& SignalKill, int& NF, int& NS, int& NR, int& RR_slice, int& RTF, int& MaxW, int& STL, int& FP, int& total_processes)
+void InOut::readfile(string filename, Queue<process*>& NEW, Queue<int>& SignalKill, int& NF, int& NS, int& NR, int& NE, int& RR_slice, int& RTF, int& MaxW, int& STL, int& FP, int& overheatn, int& total_processes)
 {
 	ifstream file(filename + ".txt");
 	if (!file.is_open())
 		cout << "wrong file name!";
 	char temp = ' '; // temp chat to ger rid of braces and commas
-	file >> NF >> NS >> NR >> RR_slice >> RTF >> MaxW >> STL >> FP >> total_processes;
+	file >> NF >> NS >> NR >> NE >> RR_slice >> RTF >> MaxW >> STL >> FP >> overheatn >> total_processes;
 	for (int i = 0; i < total_processes; i++) {
-		file >> arrtime >> id >> cputime >> numio;
+		file >> arrtime >> id >> cputime >> deadline >> numio;
 		Queue<int> io;
 		if (numio > 0) {
 			for (int j = 0; j < numio; j++) {
@@ -35,7 +35,7 @@ void InOut::readfile(string filename, Queue<process*>& NEW, Queue<int>& SignalKi
 					file >> temp;
 			}
 		}
-		p = new process(arrtime, id, cputime, numio, io);
+		p = new process(arrtime, id, cputime, deadline, numio, io);
 		NEW.enqueue(p);
 	}
 	for (int i = 0; i < 12; i++) {
@@ -55,7 +55,7 @@ void InOut::readfile(string filename, Queue<process*>& NEW, Queue<int>& SignalKi
 void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** procossors)
 {
 	ofstream file(filename + ".txt");
-	file << "PID \t AT \t CT \t IO_D \t WT \t TRT" << endl;
+	file << "TT\t PID \t AT \t CT \t DL \t IO_D \t WT \t RT \t TRT" << endl;
 	process* curr;
 	for (int i = 0; i < S_ptr->get_total_processes(); i++) {
 		curr = TRM.dequeue();
@@ -63,6 +63,7 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 		file << curr->get_PID() << "\t";
 		file << curr->get_AT() << "\t";
 		file << curr->get_CT() << "\t";
+		file << curr->get_deadline() << "\t";
 		file << curr->get_toatal_IO_D()<< "\t";
 		file << curr->get_WT() << "\t";
 		file << curr->get_RT() << "\t";
@@ -72,26 +73,31 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << "Processes: " << S_ptr->get_total_processes()<<endl;
 
 	// ADD FUNCTIONS in Schedular!
-	/*file << "Avg WT = " << S_ptr->get_avg_WT();  gets average Waiting time for processes
-	file << ",\t Avg RT = " << S_ptr->get_avg_RT(); gets average Response time for processes
-	file << ",\t Avg TRT = " << S_ptr->get_avg_TRT()  << endl; gets Termination time for processes
-	file << "Migration %:\t RTF= " << S_ptr->get_per_RTF();  gets Percentage of process migration due to RTF 
-	file << "%,\t MaxW= " << S_ptr->get_per_MaxW() << "%" << endl;   gets Percentage of process migration due to MaxW
-	file << "Work Steal%: " << S_ptr->get_per_steal() << "%" << endl; gets Percentage of process moved by work steal
-	file << "Forked Process%: " << S_ptr->get_per_forked() << "%" << endl; gets Percentage of process fork
-	file << "Killed Process %: " << S_ptr->get_per_killed() << "%" << endl;gets Percentage of process kill */
+	/*file << "Avg WT = " << S_ptr->get_avg_WT(); // gets average Waiting time for processes
+	file << ",\t Avg RT = " << S_ptr->get_avg_RT(); //gets average Response time for processes
+	file << ",\t Avg TRT = " << S_ptr->get_avg_TRT()  << endl;// gets Termination time for processes
+	file << "Migration %:\t RTF= " << S_ptr->get_per_RTF(); //gets Percentage of process migration due to RTF 
+	file << "%,\t MaxW= " << S_ptr->get_per_MaxW() << "%" << endl; //gets Percentage of process migration due to MaxW
+	file << "Work Steal%: " << S_ptr->get_per_steal() << "%" << endl; //gets Percentage of process moved by work steal
+	file << "Forked Process%: " << S_ptr->get_per_forked() << "%" << endl; // gets Percentage of process fork
+	file << "Killed Process%: " << S_ptr->get_per_killed() << "%" << endl; //gets Percentage of process kill
+	file << "Before Deadline%: " << S_ptr->get_per_deadline() << "%" << endl; // gets Percentage of process done before deadline*/
 	file << endl;
 
 	int NF = S_ptr->get_NF();
 	int NR = S_ptr->get_NR();
 	int NS = S_ptr->get_NS();
-	int num_processors = NF + NS + NR;
+	int NE = S_ptr->get_NE();
+	int num_processors = NF + NS + NR + NE;
 	file << "Processors: " << num_processors;
 	file << " [" << NF << " FCFS, ";
 	file << NS << " SJF, ";
-	file << NR << " RR]" << endl;
+	file << NR << " RR, " ;
+	file << NE << " EDF]" << endl;
 
-	
+
+	// ADD get_processor_load(); get_processor_utiliz()
+
 	file << "Processors Load" << endl;
 	for (int i = 0; i < NF; i++) {
 		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
@@ -105,16 +111,21 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 			file << "%,\t";
 	}
 	file << endl;
-
 	for (int i = NF + NS; i < NR + NS + NS; i++) {
 		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
 		if (i != NF + NS + NR - 1)
 			file << "%,\t";
 	}
 	file << endl;
+	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
+		if (i != NF + NS + NR + NE - 1)
+			file << "%,\t";
+	}
+	file << endl;
 
 
-	file << "Processor Utiliz" << endl;
+	file << endl << "Processor Utiliz" << endl;
 	float avg_utiliz = 0;
 
 	for (int i = 0; i < NF; i++) {
@@ -138,8 +149,14 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 		if (i != NF + NS + NR - 1)
 			file << "%,\t";
 	}
+	file << endl;
+	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
+		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors)		if (i != NF + NS + NR + NE - 1)
+			file << "%,\t";
+	}
+	file << endl;
 	file << "Average Utiliz = " << avg_utiliz << "%";
-	
 	
 	file.close();
 }

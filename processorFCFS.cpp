@@ -50,58 +50,75 @@ void processorFCFS::set_static(Queue<int>& q,int w)
 
 void processorFCFS::Schedular_Algo()
 {
-	if (!RUN && !RDY_FCFS.is_empty()) {
-		RDY2RUN();
+	if (is_overheated) {
+		if (overheatc < overheatn) {
+			overheatc++;
+			return;
+		}
+		overheatc = 0;
+		is_overheated = false;
+		return;
 	}
-	if (!RUN && RDY_FCFS.is_empty()) {
-		total_idle_time++;
-	}
-	if (RUN) {
-		total_busy_time++;
-		while (!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
-			finish_time -= RUN->get_CT();
-			S_ptr->migrate_FCFS2RR(RUN);
-			RUN = nullptr;
-			if (!RDY_FCFS.is_empty())
-			{
+	if (!is_overheated) {
+		srand(time(NULL));
+		int r = 1 + (rand() % 100);
+		if (r < 3) {
+			processor_overheat();
+		}
+		else {
+			if (!RUN && !RDY_FCFS.is_empty()) {
 				RDY2RUN();
 			}
-			else {
-				break;
+			if (!RUN && RDY_FCFS.is_empty()) {
+				total_idle_time++;
 			}
-		}
-		if (RUN) {
-			if (RUN->peek_IO_R() == RUN->get_CT_EX())
-			{
+			if (RUN) {
+				total_busy_time++;
+				while (!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
+					finish_time -= RUN->get_CT();
+					S_ptr->migrate_FCFS2RR(RUN);
+					RUN = nullptr;
+					if (!RDY_FCFS.is_empty())
+					{
+						RDY2RUN();
+					}
+					else {
+						break;
+					}
+				}
+				if (RUN) {
+					if (RUN->peek_IO_R() == RUN->get_CT_EX())
+					{
 
-				finish_time -= RUN->get_CT();
-				S_ptr->add2BLK(RUN);
-				RUN = nullptr;
-				if (!RDY_FCFS.is_empty()) {
-					RDY2RUN();
+						finish_time -= RUN->get_CT();
+						S_ptr->add2BLK(RUN);
+						RUN = nullptr;
+						if (!RDY_FCFS.is_empty()) {
+							RDY2RUN();
+						}
+					}
+				}
+				if (RUN) {
+					if (RUN->get_CT_EX() == RUN->get_CT())
+					{
+						RUN->set_TT(S_ptr->get_timestep());
+						total_turnaround_time += RUN->get_TRT();
+						finish_time -= RUN->get_CT();
+						S_ptr->add2TRM(RUN);
+						RUN = nullptr;
+						if (!RDY_FCFS.is_empty()) {
+							RDY2RUN();
+						}
+					}
+				}
+				//forking
+				if (RUN) {
+					RUN->inc_CT_EX();
 				}
 			}
-		}
-		if (RUN) {
-			if (RUN->get_CT_EX() == RUN->get_CT())
-			{
-				RUN->set_TT(S_ptr->get_timestep());
-				total_turnaround_time += RUN->get_TRT();
-				finish_time -= RUN->get_CT();
-				S_ptr->add2TRM(RUN);
-				RUN = nullptr;
-				if (!RDY_FCFS.is_empty()) {
-					RDY2RUN();
-				}
-			}
-		}
-		//forking
-		if (RUN) {
-			RUN->inc_CT_EX();
 		}
 	}
 }
-
 
 void processorFCFS::KillSig()
 {
@@ -144,6 +161,19 @@ process* processorFCFS::peek_RDY()
 	return RDY_FCFS.peek();
 }
 
+void processorFCFS::processor_overheat()
+{
+	overheatc++;
+	is_overheated = true;
+	finish_time = 0;
+	if (RUN) {
+		S_ptr->add2RDY(RUN);
+		RUN == nullptr;
+	}
+	while (!RDY_FCFS.is_empty()) {
+		S_ptr->add2RDY(RDY_FCFS.dequeue());
+	}
+}
 void processorFCFS::print()
 {
 	RDY_FCFS.print();

@@ -24,7 +24,9 @@ protected:
 	int total_turnaround_time; //
 	/*total(summation) turn around time of all processes in the processor
 	in ready,running,block*/
-	bool is_busy;  //is the processor running a process ?
+	bool is_overheated;  //is the processor overheated
+	static int overheatn; // total overheat Duration
+	int overheatc; // elapsed overheat time
 	int pload; //processor 1oad %
 	int putil;// processor utility%
 	static int num_processors;// just to help me make a unique ID for each processor
@@ -32,7 +34,6 @@ protected:
 
 public:
 	baseProcessor(Schedular*p);
-	void set_busy_Idle();
 	void set_pload();
 	void set_putil();
 	int get_PID();
@@ -46,6 +47,9 @@ public:
 	virtual process* peek_RDY()=0;
 	process* get_RUN();
 	virtual void print() = 0;
+	static void set_overheatn(int);
+	virtual void processor_overheat()=0;
+	bool Is_overheated();
 
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
@@ -75,6 +79,7 @@ public:
 	 virtual void Schedular_Algo();
 	 void KillSig();	
 	 virtual process* peek_RDY();
+	 void processor_overheat();
 	 //void killprocess(int id);
 	 //void forkprocess()
 	 virtual void print();
@@ -96,6 +101,8 @@ public:
 	 void RDY2RUN();
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
+	 void processor_overheat();
+
 	// virtual void Schedular_Algo();
 	 static void set_static(int);
 	 virtual process* peek_RDY();
@@ -115,6 +122,25 @@ public:
 	 void RDY2RUN();
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
+	 void processor_overheat();
+
+	 virtual process* peek_RDY();
+	 virtual void print();
+
+
+ };
+ class processorEDF :public baseProcessor
+ {
+	 priorityQueue<process*> RDY_EDF;
+
+ public:
+	 processorEDF(Schedular* s);
+	 void add2RDY(process*);
+	 process* getfromRDY();
+	 void RDY2RUN();
+	 process* getfromRUN();
+	 virtual void Schedular_Algo();
+	 void processor_overheat();
 	 virtual process* peek_RDY();
 	 virtual void print();
 

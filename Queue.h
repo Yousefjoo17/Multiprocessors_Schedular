@@ -75,7 +75,7 @@ public:
 	{
 		if (!front && !back)
 		{
-			cout << "it's empty";
+			cout << "empty";
 			return;
 		}
 

@@ -24,7 +24,8 @@ public:
 	}
 	void enqueue(T i, int p)
 	{
-		prioritynode<T>* ptr = new prioritynode<T>(i, p);
+		p = p * -1; //to make the smallest number be of a higher prio
+		prioritynode<T>* ptr = new prioritynode<T>(i,p);
 		if (!head || p > head->getpriority())
 		{
 			ptr->setnext(head);
@@ -71,6 +72,11 @@ public:
 	void print()
 	{
 		prioritynode <T>* currptr = head;
+		if (!head)
+		{
+			cout << "empty";
+			return;
+		}
 		while (currptr!=nullptr)
 		{
 			cout << currptr->getitem() ;

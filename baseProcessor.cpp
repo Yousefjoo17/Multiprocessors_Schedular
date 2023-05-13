@@ -4,7 +4,7 @@
 using namespace std;
 
 int baseProcessor::num_processors = 0;
-
+int baseProcessor::overheatn = 0;
 baseProcessor::baseProcessor(Schedular*ptr)
 {
 	//srand(p->get_time()); //not sure
@@ -12,27 +12,28 @@ baseProcessor::baseProcessor(Schedular*ptr)
 	PID = ++num_processors;
 	RUN = nullptr;
 	num_processes = 0;
+	overheatc = 0;
 	finish_time = 0;
 	total_busy_time = 0;
 	total_busy_time = 0;
 	total_turnaround_time = 0;
-	is_busy = false;
+	is_overheated = false;
 	set_pload();
 	set_putil();
 }
-
+ void baseProcessor::set_overheatn(int x) {
+	overheatn = x;
+}
+ bool baseProcessor::Is_overheated()
+ {
+	 return is_overheated;
+ }
 void baseProcessor::set_Run_pointer(process* p) { RUN = p; }
 process* baseProcessor::get_RUN()
 {
 	return RUN;
 }
-void baseProcessor::set_busy_Idle()
-{
-	if (num_processes == 0 && !RUN)
-		is_busy = false;
-	else
-		is_busy = true;
-}
+
 void baseProcessor::set_pload()
 {
 	if (total_turnaround_time)
@@ -57,6 +58,4 @@ int baseProcessor::get_finishedTime()
 {
 	return finish_time;
 }
-
-
 

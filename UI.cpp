@@ -11,10 +11,8 @@ UI::UI( Schedular* scheduler) {
 }
 void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM) {
 	if (display_mode==3) {
-	/*	cout << "Silent Mode................    Simulation Starts";
-		if(S_ptr->get_total_processes()==S_ptr->get_TRM_Count())
-			cout<<"Simulation ends, Output file created";*/
-
+		cout << "Silent Mode................    Simulation Starts"<<endl;
+			cout<<"Simulation ends, Output file created";
 	}
 	
 	if (display_mode == 1 || display_mode == 2) {
@@ -24,13 +22,15 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		int NF = S_ptr->get_NF();
 		int NS = S_ptr->get_NS();
 		int NR = S_ptr->get_NR();
+		int NE = S_ptr->get_NE();
 
 		cout << "------------       RDY processes  ----------------" << endl;
 		for (int i = 0; i < NF; i++) {
 			cout << "processor " << i + 1 << "[FCFS]"; Processors[i]->print(); cout << endl;
 		}
-		for (int i = NF; i < NS + NF; i++) { cout << "processor " << i + NF + 1 << " [SJF ]"; Processors[i]->print(); cout << endl; }
-		for (int i = NF + NS; i < NR + NS + NF; i++) { cout << "processor " << i + NF + NS + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; }
+		for (int i = NF; i < NS + NF; i++) { cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; }
+		for (int i = NF + NS; i < NR + NS + NF; i++) { cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; }
+		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) { cout << "processor " << i + 1 << " [EDF  ]"; Processors[i]->print(); cout << endl; }
 		cout << endl;
 		/////////////////////////////////////////////////////////////////////////
 		cout << "------------       BLK processes  ----------------" << endl;
@@ -42,10 +42,10 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << "------------       RUN processes  ----------------" << endl;
 		int RUNC = S_ptr->get_RUN_count();
 		cout << RUNC << " RUN: ";//the array is required
-		for (int i = 0; i < NF + NS + NR; i++) {
+		for (int i = 0; i < NF + NS + NR + NE; i++) {
 			if (Processors[i]->get_RUN()) {
 				cout << Processors[i]->get_RUN() << "(P" << i << ")";
-				if (i < (NR + NS + NF - 1)) { cout << ", "; }
+				if (i < (NR + NS + NF + NE - 1)) { cout << ", "; }
 			}
 		}
 		cout << endl;
@@ -53,6 +53,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		cout << "------------       TRM processes  ----------------" << endl;
 		int TRMC = S_ptr->get_total_TRT();
+		cout << TRMC << " TRM: ";
 		TRM.print();
 		if (display_mode == 1)
 			system("pause");

@@ -1,37 +1,48 @@
-#include "processorSJF.h"
 #include"baseProcessor.h"
 #include"Schedular.h"
 
-processorSJF::processorSJF(Schedular* s) : baseProcessor(s)
+processorEDF::processorEDF(Schedular* s) : baseProcessor(s)
 {
 }
 
-void processorSJF::add2RDY(process* p)
+void processorEDF::add2RDY(process* p)
 {
-	RDY_SJF.enqueue(p,p->get_CT());
 	finish_time += p->get_CT();
+
+	if (p->get_deadline() < RUN->get_deadline()) {
+		RDY_EDF.enqueue(RUN, RUN->get_deadline());
+		RUN = p;
+		if (RUN->is_first_time()) {
+			RUN->set_RT(S_ptr->get_timestep());
+			RUN->set_first_time(false);
+		}
+	}
+	else {
+		RDY_EDF.enqueue(p, p->get_deadline());
+	}
+
 }
 
-process* processorSJF::getfromRDY()
+process* processorEDF::getfromRDY()
 {
-	return RDY_SJF.dequeue();
+	return RDY_EDF.dequeue();
 }
 
-void processorSJF::RDY2RUN()
+void processorEDF::RDY2RUN()
 {
-	RUN = RDY_SJF.dequeue();
+	RUN = RDY_EDF.dequeue();
 	if (RUN->is_first_time()) {
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
 	}
 }
 
-process* processorSJF::getfromRUN()
+process* processorEDF::getfromRUN()
 {
 	return RUN;
 }
 
-void processorSJF::Schedular_Algo()
+void processorEDF::Schedular_Algo()
 {
 	if (is_overheated) {
 		if (overheatc < overheatn) {
@@ -49,10 +60,10 @@ void processorSJF::Schedular_Algo()
 			processor_overheat();
 		}
 		else {
-			if (!RUN && !RDY_SJF.is_empty()) {
+			if (!RUN && !RDY_EDF.is_empty()) {
 				RDY2RUN();
 			}
-			if (!RUN && RDY_SJF.is_empty()) {
+			if (!RUN && RDY_EDF.is_empty()) {
 				total_idle_time++;
 			}
 			if (RUN) {
@@ -62,7 +73,7 @@ void processorSJF::Schedular_Algo()
 
 					finish_time -= RUN->get_CT();
 					//go to BLK
-					if (!RDY_SJF.is_empty()) {
+					if (!RDY_EDF.is_empty()) {
 						RDY2RUN();
 					}
 				}
@@ -75,7 +86,7 @@ void processorSJF::Schedular_Algo()
 						finish_time -= RUN->get_CT();
 						S_ptr->add2TRM(RUN);
 
-						if (!RDY_SJF.is_empty()) {
+						if (!RDY_EDF.is_empty()) {
 							RDY2RUN();
 						}
 					}
@@ -88,7 +99,7 @@ void processorSJF::Schedular_Algo()
 	}
 }
 
-void processorSJF::processor_overheat()
+void processorEDF::processor_overheat()
 {
 	overheatc++;
 	is_overheated = true;
@@ -97,17 +108,17 @@ void processorSJF::processor_overheat()
 		S_ptr->add2RDY(RUN);
 		RUN == nullptr;
 	}
-	while (!RDY_SJF.is_empty()) {
-		S_ptr->add2RDY(RDY_SJF.dequeue());
+	while (!RDY_EDF.is_empty()) {
+		S_ptr->add2RDY(RDY_EDF.dequeue());
 	}
 }
 
-process* processorSJF::peek_RDY()
+process* processorEDF::peek_RDY()
 {
-	return RDY_SJF.peek();
+	return RDY_EDF.peek();
 }
 
-void processorSJF::print()
+void processorEDF::print()
 {
-	RDY_SJF.print();
+	RDY_EDF.print();
 }

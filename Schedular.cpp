@@ -10,12 +10,13 @@ Schedular::Schedular(string file) {
 	total_RT = 0;
 	total_TRT = 0;
 	total_WT = 0;
-	 RTF_Processes=0;
-	 MaxW_Processes=0;
+	RTF_Processes=0;
+	MaxW_Processes=0;
+	BeforeDeadline = 0;
 	string filename = file;
 	InOut io(this);
-	io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
-	Processors = new baseProcessor* [NF+NS+NR];
+	io.readfile(filename, NEW, SigKill, NF, NS, NR, NE, RR_slice, RTF, MaxW, STL, FP, Overheatn, total_processes);
+	Processors = new baseProcessor* [NF+NS+NR+NE];
 
 }
 
@@ -41,6 +42,9 @@ process* Schedular::getfromBLK()
 
 void Schedular::add2TRM(process* p)
 {
+	if (p->get_deadline() <= time_step)
+		BeforeDeadline++;
+	TRM_count++;
 	total_RT += p->get_RT();
 	total_TRT += p->get_TRT();
 	total_WT += p->get_WT();
@@ -51,8 +55,9 @@ void Schedular::simulate()
 {
 		string filename = "input_file";
 		InOut io(this);
-		io.readfile(filename, NEW, SigKill, NF, NS, NR, RR_slice, RTF, MaxW, STL, FP, total_processes);
+		io.readfile(filename, NEW, SigKill, NF, NS, NR, NE, RR_slice, RTF, MaxW, STL, FP, Overheatn, total_processes);
 		//UI user_interface(this);
+		baseProcessor::set_overheatn(Overheatn);
 		processorFCFS::set_static(SigKill,MaxW);
 		processorRR::set_static(RTF);
 		for (int i = 0; i < NF; i++) {
@@ -64,19 +69,22 @@ void Schedular::simulate()
 		for (int i = NF + NS; i < NR + NS + NS; i++) {
 			Processors[i] = new processorRR(this);
 		}
+		for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+			Processors[i] = new processorEDF(this);
+		}
 }
 
 void Schedular::migrate_RR2SJF(process* mig_p)
 {
-	RTF_Processes++;
-	int pro = ShortestQueue(NF,NF+NS);//get the shortest rdy queue of SJF processors
-	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a SJF processor
+	RTF_Processes++; //inc migration counter
+	int pro = ShortestQueue(NF,NF+NS); //get the shortest rdy queue of SJF processors
+	Processors[pro]->add2RDY(mig_p);  // moves the process to the RDY queue of a SJF processor
 
 }
 
 void Schedular::migrate_FCFS2RR(process* mig_p)
 {
-	MaxW_Processes++;
+	MaxW_Processes++;  //inc migration counter
 	int pro = ShortestQueue(NF+NS, NF+NS+NR);//get the shortest rdy queue of RR processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
 
@@ -91,7 +99,7 @@ void Schedular::work_stealing()
 	LQF = Processors[0]->get_finishedTime();
 	SQF = Processors[0]->get_finishedTime();
 
-	for (int i = 1; i < NF + NS + NR; i++)
+	for (int i = 1; i < NF + NS + NR + NE; i++)
 	{
 		if (Processors[i]->get_finishedTime() > LQF)
 		{
@@ -210,6 +218,10 @@ int Schedular::get_NR() {
 	return NR;
 }
 
+int Schedular::get_NE() {
+	return NE;
+}
+
 int Schedular::get_total_processes() {
 	return total_processes;
 }
@@ -273,27 +285,40 @@ int Schedular::ShortestQueue()
 	for (int i = 0; i < get_processors_counter(); i++) {
 		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
 		if (min > Processors[i]->get_finishedTime()) {
-			min = i; // get the place of the processor that has tha shortest queue
+			if(!Processors[i]->Is_overheated())
+				min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
 	return min;
 }
-int Schedular::ShortestQueue(int start, int finish) 
-// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
+int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
 {
 	int min = 0;
 	for (int i = start; i < finish; i++) {
 		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
 		if (min > Processors[i]->get_finishedTime()) {
-			min = i; // get the place of the processor that has tha shortest queue
+			if (!Processors[i]->Is_overheated())
+				min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
 	return min;
 }
 bool Schedular::BLK2RUN(process* pr) {
 	if (BLK.is_empty()) { return false; }
-	Processors[ShortestQueue()]->set_Run_pointer(pr);return true;}
+	Processors[ShortestQueue()]->set_Run_pointer(pr);return true;
+}
 
+void Schedular::add2RDY(process* p) {
+	if (p->get_Is_Child()) {
+		int pro = ShortestQueue(0, NF);
+		Processors[pro]->add2RDY(p);
+	}
+	else {
+		int pro = ShortestQueue();
+		Processors[pro]->add2RDY(p);
+	}
+
+}
 
 
 
