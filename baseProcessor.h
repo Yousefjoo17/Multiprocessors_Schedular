@@ -127,8 +127,8 @@ public:
 	 process* getfromRUN();
 	 virtual void Schedular_Algo();
 	 void processor_overheat();
-
 	 virtual process* peek_RDY();
+	 void add2_RDY_begining(process* ptr);
 	 virtual void print();
 
 

@@ -118,6 +118,10 @@ process* processorEDF::peek_RDY()
 	return RDY_EDF.peek();
 }
 
+void processorEDF::add2_RDY_begining(process* ptr)
+{
+}
+
 void processorEDF::print()
 {
 	RDY_EDF.print();
