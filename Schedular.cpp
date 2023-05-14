@@ -13,6 +13,9 @@ Schedular::Schedular(string file) {
 	RTF_Processes=0;
 	MaxW_Processes=0;
 	BeforeDeadline = 0;
+	ForkedProcesses = 0;
+	KilledProcesses = 0;
+	totalworksteal=0;
 	string filename = file;
 	InOut io(this);
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, NE, RR_slice, RTF, MaxW, STL, FP, Overheatn, total_processes);
@@ -113,48 +116,61 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
 
 }
-
+// Stealing 
 void Schedular::work_stealing()
 {
 	int LQF, SQF;
 	int LQF_ind, SQF_ind;
 	LQF_ind = 0;
 	SQF_ind = 0;
-	LQF = Processors[0]->get_finishedTime();
-	SQF = Processors[0]->get_finishedTime();
-
-	for (int i = 1; i < NF + NS + NR + NE; i++)
+	LQF = Processors[0]->get_finishedTime(); // Assign the first to LQF as initilaiztion
+	SQF = Processors[0]->get_finishedTime(); // Assign the first to SQF as initilaiztion
+	//NF // number of FCFS processors
+	//NS // number of SJF processors 
+	//NR // number of RR processors
+	//NE // number of EDF processors
+	for (int i = 1; i < (NF + NS + NR + NE); i++)
 	{
 		if (Processors[i]->get_finishedTime() > LQF)
 		{
+			// if processor's finish time is greater than the LQF 
+			// let the LQF equals to this time
+			// and get the  index of this processor 
 			LQF = Processors[i]->get_finishedTime();
 			LQF_ind = i;
 		}
 		if (Processors[i]->get_finishedTime() < SQF)
 		{
+			// if not then store this time in SQF 
+			// and also get the index if this processor
 			SQF = Processors[i]->get_finishedTime();
 			SQF_ind = i;
 		}
-		baseProcessor* ptr_LQF = Processors[LQF_ind];
-		baseProcessor* ptr_SQF = Processors[SQF_ind];
+
+		baseProcessor* ptr_LQF = Processors[LQF_ind]; // assign the highest to the ptr_LQF
+		baseProcessor* ptr_SQF = Processors[SQF_ind]; // assign the lowest to the ptr_SQF
 		
 		
-		Stack<process*>s(50);
-		process*ptr;
-		while ((LQF - SQF) / LQF > 0.40)
+		Stack<process*>s(50); // creation of Stack of processes 
+		process*ptr; // pointer to process
+		int Ratio = (LQF - SQF) / LQF; // calculation of the Ratio
+		while (Ratio > 0.40)
 		{
-			while (ptr_LQF->peek_RDY()->get_Is_Child())   // FCFS Processors only
+			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
 			{
-				s.push(ptr_LQF->getfromRDY());
+				// while true 
+				s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
 			}
-			ptr_SQF->add2RDY(ptr_LQF->getfromRDY());
+			ptr_SQF->add2RDY(ptr_LQF->getfromRDY()); // add in the ready of the shortest Queue the upcoming from the Longest one
 		}
-		while (s.pop(ptr))
+
+		while (s.pop(ptr)) // start popping 
 		{
 
-			baseProcessor* pfcfs = Processors[LQF_ind];
-			pfcfs = dynamic_cast<processorFCFS*>(Processors[LQF_ind]);
+			baseProcessor* pfcfs = Processors[LQF_ind]; // assign the Longest processor to p first come first serve
+			pfcfs = dynamic_cast<processorFCFS*>(Processors[LQF_ind]); // dymanic casting checking on the type of the processor("FCFS")
 			pfcfs->add2_RDY_begining(ptr);  // FCFS Processors only 
+			// Finally 
 		}
 		
 	}
@@ -290,6 +306,64 @@ int Schedular::get_RUN_count() {
 int Schedular::get_timestep()
 {
 	return time_step;
+}
+
+int Schedular::get_avg_WT()
+{
+	return (total_WT /total_processes);
+}
+
+int Schedular::get_avg_RT()
+{
+	return (total_RT/total_processes);
+}
+
+int Schedular::get_avg_TRT()
+{
+	return(total_TRT / total_processes);
+}
+
+float Schedular::get_per_RTF()
+{
+	float R = (float)RTF_Processes;
+	float t = (float)total_processes;
+	return (R/t);
+}
+
+float Schedular::get_per_steal()
+{
+	float tw=(float)totalworksteal;
+	float t = (float)total_processes;
+
+	return(tw/t);
+}
+
+float Schedular::get_per_MaxW()
+{
+	float M = (float)MaxW_Processes;
+	float t = (float)total_processes;
+	return (M/t);
+}
+
+float Schedular::get_per_forked()
+{
+	float F = (float)ForkedProcesses;
+	float t = (float)total_processes;
+	return (F / t);
+}
+
+float Schedular::get_per_killed()
+{
+	float K=(float)KilledProcesses;
+	float t = (float)total_processes;
+	return(K/t);
+}
+
+float Schedular::get_per_deadline()
+{
+	float B=(float)BeforeDeadline;
+	float t = (float)total_processes;
+	return (B/t);
 }
 
 void Schedular::NEW_RDY()
