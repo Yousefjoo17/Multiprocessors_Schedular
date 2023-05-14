@@ -64,7 +64,7 @@ void processorFCFS::Schedular_Algo()
 	if (!is_overheated) {
 		srand(time(NULL));
 		int r = 1 + (rand() % 100);
-		if (r < 3) {
+		if (r<3) {
 			processor_overheat();
 		}
 		else {
@@ -177,9 +177,9 @@ void processorFCFS::processor_overheat()
 	overheatc++;
 	is_overheated = true;
 	finish_time = 0;
-	S_ptr->inc_RUN_count(-1);
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
+		S_ptr->inc_RUN_count(-1);
 		RUN == nullptr;
 	}
 	while (!RDY_FCFS.is_empty()) {

@@ -139,10 +139,10 @@ void processorRR::processor_overheat()
 	overheatc++;
 	is_overheated = true;
 	finish_time = 0;
-	S_ptr->inc_RUN_count(-1);
 	time_Running = 0;
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
+		S_ptr->inc_RUN_count(-1);
 		RUN == nullptr;
 	}
 	while (!RDY_RR.is_empty()) {

@@ -106,9 +106,9 @@ void processorEDF::processor_overheat()
 	overheatc++;
 	is_overheated = true;
 	finish_time = 0;
-	S_ptr->inc_RUN_count(-1);
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
+		S_ptr->inc_RUN_count(-1);
 		RUN == nullptr;
 	}
 	while (!RDY_EDF.is_empty()) {
