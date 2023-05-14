@@ -59,6 +59,8 @@ public:
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
+	void update_BLK();
+	
 	/********************************************************/
 	// setters 
 	void set_processors_counter();

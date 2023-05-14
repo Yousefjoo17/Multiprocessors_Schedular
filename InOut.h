@@ -12,7 +12,7 @@ using namespace std;
 
 class Shedular;
 
-class baseprocessor;
+class baseProcessor;
 
 class InOut {
 	Schedular* S_ptr;

@@ -90,6 +90,7 @@ void processorFCFS::Schedular_Algo()
 					}
 				}
 				if (RUN) {
+
 					if (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 
@@ -100,6 +101,8 @@ void processorFCFS::Schedular_Algo()
 						if (!RDY_FCFS.is_empty()) {
 							RDY2RUN();
 						}
+						S_ptr->update_BLK();
+
 					}
 				}
 				if (RUN) {
