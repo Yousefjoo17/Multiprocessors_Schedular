@@ -72,7 +72,7 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 	
-		while (time_step<18) {
+		while (time_step<159) {
 			time_step++;
 			NEW_RDY();
 			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
@@ -82,7 +82,7 @@ void Schedular::simulate()
 			user_interface.display(Processors, BLK, TRM);
 			
 		}
-		while (time_step < 45) {
+		while (time_step < 500) {
 			time_step++;
 			NEW_RDY();
 			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
