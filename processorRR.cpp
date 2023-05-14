@@ -18,7 +18,9 @@ void processorRR::add2RDY(process* p)
 
 process* processorRR::getfromRDY()
 {
-	return RDY_RR.dequeue();
+	process* ptr = RDY_RR.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorRR::RDY2RUN()

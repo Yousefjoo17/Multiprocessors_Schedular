@@ -19,7 +19,9 @@ void processorFCFS::add2RDY(process* p)
 
 process* processorFCFS::getfromRDY()
 {
-	return RDY_FCFS.dequeue();
+	process* ptr = RDY_FCFS.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorFCFS::add2RUN(process* p)

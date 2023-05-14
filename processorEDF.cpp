@@ -26,7 +26,9 @@ void processorEDF::add2RDY(process* p)
 
 process* processorEDF::getfromRDY()
 {
-	return RDY_EDF.dequeue();
+	process* ptr = RDY_EDF.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorEDF::RDY2RUN()
