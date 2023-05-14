@@ -12,6 +12,7 @@ processorRR::processorRR(Schedular* s) : baseProcessor(s)
 
 void processorRR::add2RDY(process* p)
 {
+	finish_time += p->get_CT();
 	RDY_RR.enqueue(p);
 }
 
@@ -23,8 +24,8 @@ process* processorRR::getfromRDY()
 void processorRR::RDY2RUN()
 {
 	RUN = RDY_RR.dequeue();
+	S_ptr->inc_RUN_count(1);
 	if (RUN->is_first_time()) {
-		finish_time += RUN->get_CT();
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
 	}
@@ -55,7 +56,6 @@ void processorRR::Schedular_Algo()
 		else {
 			if (!RUN && !RDY_RR.is_empty()) {
 				RDY2RUN();
-
 			}
 			if (!RUN && RDY_RR.is_empty()) {
 				total_idle_time++;
@@ -64,6 +64,7 @@ void processorRR::Schedular_Algo()
 				total_busy_time++;
 				while (RUN->get_rem_CT() < rtf) {
 					finish_time -= RUN->get_CT();
+					S_ptr->inc_RUN_count(-1);
 					time_Running = 0;
 					S_ptr->migrate_RR2SJF(RUN);
 					RUN = nullptr;
@@ -80,7 +81,9 @@ void processorRR::Schedular_Algo()
 					if (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 						finish_time -= RUN->get_CT();
+						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
+						RUN = nullptr;
 						// go to BLK
 						if (!RDY_RR.is_empty()) {
 							RDY2RUN();
@@ -94,6 +97,7 @@ void processorRR::Schedular_Algo()
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
 						finish_time -= RUN->get_CT();
+						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
 						S_ptr->add2TRM(RUN);
 						RUN = nullptr;
@@ -109,6 +113,7 @@ void processorRR::Schedular_Algo()
 					{
 						add2RDY(RUN);
 						RUN = nullptr;
+						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
 						if (!RDY_RR.is_empty())
 						{
@@ -134,6 +139,7 @@ void processorRR::processor_overheat()
 	overheatc++;
 	is_overheated = true;
 	finish_time = 0;
+	S_ptr->inc_RUN_count(-1);
 	time_Running = 0;
 	if (RUN) {
 		S_ptr->add2RDY(RUN);

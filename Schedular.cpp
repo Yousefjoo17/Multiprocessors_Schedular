@@ -71,17 +71,33 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-		while (time_step<15) {
+	
+		while (time_step<18) {
 			time_step++;
 			NEW_RDY();
-			for (int i = 0; i < NR + NF + NS + NE; i++) {
+			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
 				Processors[i]->Schedular_Algo();
-			}
+			}*/
+			loop_p();
 			user_interface.display(Processors, BLK, TRM);
 			
 		}
-}
+		while (time_step < 45) {
+			time_step++;
+			NEW_RDY();
+			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
+				Processors[i]->Schedular_Algo();
+			}*/
+			loop_p();
+			user_interface.display(Processors, BLK, TRM);
 
+		}
+}
+void Schedular::loop_p() {
+	for (int i = 0; i < NR + NF + NS + NE; i++) {
+		Processors[i]->Schedular_Algo();
+	}
+}
 void Schedular::migrate_RR2SJF(process* mig_p)
 {
 	RTF_Processes++; //inc migration counter
@@ -204,8 +220,8 @@ void Schedular::set_BLK_count(int blkc) {
 	BLK_count = blkc;
 }
 
-void Schedular::set_RUN_count(int runc) {
-	RUN_count = runc;
+void Schedular::inc_RUN_count(int runc) {
+	RUN_count += runc;
 }
 
 // getters

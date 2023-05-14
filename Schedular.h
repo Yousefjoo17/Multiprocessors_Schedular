@@ -55,6 +55,7 @@ public:
 	void add2RDY(process* p);
 	void add2TRM(process*);
 	void simulate();
+	void loop_p();
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
@@ -81,7 +82,7 @@ public:
 	void set_total_RT(int trtt);
 	void set_total_TRT(int trttt);
 	void set_BLK_count(int blkc);
-	void set_RUN_count(int runc);
+	void inc_RUN_count(int runc);
 
 	// getters
 	int get_processors_counter();

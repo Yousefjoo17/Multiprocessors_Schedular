@@ -47,11 +47,11 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		////////////////////////////////////////////////////////////////////////////////
 		cout << "------------       RUN processes  ----------------" << endl;
 		int RUNC = S_ptr->get_RUN_count();
-		cout << RUNC << " RUN: ";//the array is required
+		cout << RUNC << " RUN: ";
 		for (int i = 0; i < NF + NS + NR + NE; i++) {
 			if (Processors[i]->get_RUN()) {
 				cout << Processors[i]->get_RUN() << "(P" << i+1 << ")";
-				if (i < (NR + NS + NF + NE - 1)) { cout << ", "; }
+				if (i < RUNC-1) { cout << ", "; }
 			}
 		}
 		cout << endl;
