@@ -158,7 +158,7 @@ void Schedular::work_stealing()
 		{
 			LQF = ptr_LQF->get_finishedTime();
 			SQF = ptr_SQF->get_finishedTime();
-			if()
+			
 			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
 			{
 				// while true 
