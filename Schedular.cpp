@@ -153,7 +153,7 @@ void Schedular::work_stealing()
 		
 		Stack<process*>s(50); // creation of Stack of processes 
 		process*ptr; // pointer to process
-		int Ratio = (LQF - SQF) / LQF; // calculation of the Ratio
+		float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
 		while (Ratio > 0.40)
 		{
 			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
