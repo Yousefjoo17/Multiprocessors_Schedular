@@ -83,8 +83,8 @@ void processorRR::Schedular_Algo()
 						finish_time -= RUN->get_CT();
 						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
+						S_ptr->add2BLK(RUN);
 						RUN = nullptr;
-						// go to BLK
 						if (!RDY_RR.is_empty()) {
 							RDY2RUN();
 						}

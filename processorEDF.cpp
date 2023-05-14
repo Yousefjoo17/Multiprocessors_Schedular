@@ -8,12 +8,14 @@ processorEDF::processorEDF(Schedular* s) : baseProcessor(s)
 void processorEDF::add2RDY(process* p)
 {
 	finish_time += p->get_CT();
-	if (p->get_deadline() < RUN->get_deadline()) {
-		RDY_EDF.enqueue(RUN, RUN->get_deadline());
-		RUN = p;
-		if (RUN->is_first_time()) {
-			RUN->set_RT(S_ptr->get_timestep());
-			RUN->set_first_time(false);
+	if (RUN) {
+		if (p->get_deadline() < RUN->get_deadline()) {
+			RDY_EDF.enqueue(RUN, RUN->get_deadline());
+			RUN = p;
+			if (RUN->is_first_time()) {
+				RUN->set_RT(S_ptr->get_timestep());
+				RUN->set_first_time(false);
+			}
 		}
 	}
 	else {
@@ -73,7 +75,8 @@ void processorEDF::Schedular_Algo()
 
 					finish_time -= RUN->get_CT();
 					S_ptr->inc_RUN_count(-1);
-					//go to BLK
+					S_ptr->add2BLK(RUN);
+					RUN = nullptr;
 					if (!RDY_EDF.is_empty()) {
 						RDY2RUN();
 					}

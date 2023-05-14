@@ -16,7 +16,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 	}
 	
 	if (display_mode == 1 || display_mode == 2) {
-		cout << "Current Timestep:" << S_ptr->get_timestep();
+		cout << "Current Timestep: " << S_ptr->get_timestep();
 		cout << endl;//* the curent Timestep
 		baseProcessor** Processors = processors_arr;
 		int NF = S_ptr->get_NF();
@@ -26,7 +26,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 
 		cout << "------------       RDY processes  ----------------" << endl;
 		for (int i = 0; i < NF; i++) {
-			cout << "processor " << i + 1 << "[FCFS]"; Processors[i]->print(); cout << endl;
+			cout << "processor " << i + 1 << " [FCFS]"; Processors[i]->print(); cout << endl;
 		}
 		for (int i = NF; i < NS + NF; i++) {
 			cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; 
@@ -64,8 +64,8 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << endl << endl;
 		if (display_mode == 1)
 			system("pause");
-		else
-			Sleep(1000);
+		/*else
+			Sleep(1000);*/
 	}
 
 }

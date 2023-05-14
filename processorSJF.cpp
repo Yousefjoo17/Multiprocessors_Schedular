@@ -63,8 +63,7 @@ void processorSJF::Schedular_Algo()
 
 					finish_time -= RUN->get_CT();
 					S_ptr->inc_RUN_count(-1);
-					
-					//go to BLK
+					S_ptr->add2BLK(RUN);
 					RUN = nullptr;
 					if (!RDY_SJF.is_empty()) {
 						RDY2RUN();
