@@ -60,7 +60,7 @@ public:
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
 	void forking_tree_algo(process* );
-
+	void update_BLK();
 
 
 
@@ -116,7 +116,7 @@ public:
 	void NEW_RDY();
 	void P_Completion(process*);
 	int ShortestQueue();
-	int ShortestQueue(int,int);
+	int ShortestQueue(int, int);
 
 };
 
