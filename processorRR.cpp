@@ -64,7 +64,7 @@ void processorRR::Schedular_Algo()
 			}
 			if (RUN) {
 				total_busy_time++;
-				while (RUN->get_rem_CT() < rtf) {
+				while (rtf!=-1 && RUN->get_rem_CT() < rtf) {
 					finish_time -= RUN->get_CT();
 					S_ptr->inc_RUN_count(-1);
 					time_Running = 0;

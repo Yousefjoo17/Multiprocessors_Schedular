@@ -56,6 +56,7 @@ public:
 	void add2TRM(process*);
 	void simulate();
 	void loop_p();
+	void loop_p(int , int );
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
@@ -101,6 +102,7 @@ public:
 	int get_total_TRT();
 	int get_BLK_count();
 	int get_RUN_count();
+	int get_TRM_count();
 	int get_timestep();
 
 	int get_avg_WT(); // gets average Waiting time for processes
@@ -112,6 +114,7 @@ public:
 	float get_per_forked();  // gets Percentage of process fork
 	float get_per_killed();  //gets Percentage of process kill
 	float get_per_deadline(); // gets Percentage of process done before deadline
+	void inc_kill_count();
 	/*********************************/
 	void NEW_RDY();
 	void P_Completion(process*);

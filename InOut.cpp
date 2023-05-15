@@ -72,8 +72,7 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	}
 	file << "Processes: " << S_ptr->get_total_processes()<<endl;
 
-	// ADD FUNCTIONS in Schedular!
-	/*file << "Avg WT = " << S_ptr->get_avg_WT(); // gets average Waiting time for processes
+	file << "Avg WT = " << S_ptr->get_avg_WT(); // gets average Waiting time for processes
 	file << ",\t Avg RT = " << S_ptr->get_avg_RT(); //gets average Response time for processes
 	file << ",\t Avg TRT = " << S_ptr->get_avg_TRT()  << endl;// gets Termination time for processes
 	file << "Migration %:\t RTF= " << S_ptr->get_per_RTF(); //gets Percentage of process migration due to RTF 
@@ -81,7 +80,7 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << "Work Steal%: " << S_ptr->get_per_steal() << "%" << endl; //gets Percentage of process moved by work steal
 	file << "Forked Process%: " << S_ptr->get_per_forked() << "%" << endl; // gets Percentage of process fork
 	file << "Killed Process%: " << S_ptr->get_per_killed() << "%" << endl; //gets Percentage of process kill
-	file << "Before Deadline%: " << S_ptr->get_per_deadline() << "%" << endl; // gets Percentage of process done before deadline*/
+	file << "Before Deadline%: " << S_ptr->get_per_deadline() << "%" << endl; // gets Percentage of process done before deadline
 	file << endl;
 
 	int NF = S_ptr->get_NF();

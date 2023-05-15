@@ -68,7 +68,7 @@ public:
 
 	 QueueFCFS RDY_FCFS; //RDY list for FCFS
 	 static Queue<int> SigKill;
-	 static int next_kill;
+	 static int next_kill; //time step of next kill
 	 static int max_w;
  public:
 

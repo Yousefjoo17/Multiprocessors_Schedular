@@ -49,13 +49,13 @@ void Schedular::add2TRM(process* p)
 {
 	if (p->get_deadline() <= time_step)
 		BeforeDeadline++;
-	TRM_count++;
 	total_RT += p->get_RT();
 	total_TRT += p->get_TRT();
 	total_WT += p->get_WT();
 	if (p->get_leftChild() || p->get_rightChild()) {
 		KillChild(p); // recursively call
-	}
+	}	
+	TRM_count++;
 	p->set_Is_TRM(true);
 	TRM.enqueue(p);
 }
@@ -65,6 +65,12 @@ void Schedular::simulate()
 		string filename = "input_file";
 		InOut io(this);
 		UI user_interface(this);
+		if (NS == 0) {
+			RTF = -1;
+		}
+		if (NR == 0) {
+			MaxW = -1;
+		}
 		baseProcessor::set_overheatn(Overheatn);
 		processorFCFS::set_static(SigKill,MaxW);
 		processorRR::set_static(RTF);
@@ -80,21 +86,38 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-	
-		while (time_step<29) {
+		while (time_step <1116) {
 			time_step++;
 			NEW_RDY();
-
-
+			/*if (time_step % STL == 0)
+				work_stealing();*/
+			for (int i = 0; i < NF; i++) {
+				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
+				ptr->KillSig();
+			}
 			loop_p();
-			cout << Processors[5]->Is_overheated()<<" " <<  Processors[6]->Is_overheated() << " " << Processors[7]->Is_overheated() << " "<< Processors[8]->Is_overheated()<<" "<<endl;
 			update_BLK();
 			user_interface.display(Processors, BLK, TRM);
 
 		}
+		while (TRM_count!=total_processes) {
+			time_step++;
+			NEW_RDY();
+			/*if (time_step % STL == 0)
+				work_stealing();*/
+			for (int i = 0; i < NF; i++) {
+				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
+				ptr->KillSig();
+			}
+			loop_p();
+			update_BLK();
+			user_interface.display(Processors, BLK, TRM);
+
+		}
+		io.writefile("test", TRM, Processors);
 	
 
-		while (time_step < 35) {
+	/*	while (time_step < 35) {
 			time_step++;
 			NEW_RDY();
 			
@@ -102,7 +125,7 @@ void Schedular::simulate()
 			cout << Processors[5]->Is_overheated() << " " << Processors[6]->Is_overheated() << " " << Processors[7]->Is_overheated() << " " << Processors[8]->Is_overheated() << " " << endl;
 			update_BLK();
 			user_interface.display(Processors, BLK, TRM);
-		}
+		}*/
 }
 void Schedular::loop_p() {
 	for (int i = 0; i < NR + NF + NS + NE; i++) {
@@ -153,27 +176,33 @@ void Schedular::work_stealing()
 			SQF_ind = i;
 		}
 	}
-
+		if (LQF == 0)
+			return;
 		baseProcessor* ptr_LQF = Processors[LQF_ind]; // assign the highest to the ptr_LQF
 		baseProcessor* ptr_SQF = Processors[SQF_ind]; // assign the lowest to the ptr_SQF
 		
 		
 		Stack<process*>s(50);// creation of Stack of processes 
 		process* ptr; // pointer to process
+		
 		float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
 		while (Ratio > 0.40)
 		{
 			LQF = ptr_LQF->get_finishedTime();
 			SQF = ptr_SQF->get_finishedTime();
-			
-			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
+
+			while (ptr_LQF->peek_RDY())   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
 			{
-				s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
+				if (ptr_LQF->peek_RDY()->get_Is_Child())
+					s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
 			}
-			process* p = ptr_LQF->getfromRDY();
-			ptr_SQF->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
-			ptr_SQF->inc_finsihtime(p->get_CT() - p->get_CT_EX());  // increses the finsih time of the processor by the remained time 
-			ptr_LQF->inc_finsihtime(p->get_CT_EX() - p->get_CT());   // decrease ---  -----  --  -  --  ------- - ---  --- 
+			if (ptr_LQF->peek_RDY())
+			{process* p = ptr_LQF->getfromRDY();
+				ptr_SQF->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
+				totalworksteal++;
+				ptr_SQF->inc_finsihtime(p->get_CT() - p->get_CT_EX());  // increses the finsih time of the processor by the remained time 
+				ptr_LQF->inc_finsihtime(p->get_CT_EX() - p->get_CT());
+		}   // decrease ---  -----  --  -  --  ------- - ---  --- 
 			SQF = ptr_SQF->get_finishedTime();  //reset SQF
 			LQF = ptr_LQF->get_finishedTime();   //reset LQF
 		}
@@ -217,7 +246,7 @@ void Schedular::KillChild(process* parent )
 		if (!left->Is_TRM()) {
 			bool l= false;
 			for (int i = 0; i < NF; i++) {
-				processorFCFS* ptr = dynamic_cast<baseProcessor*>(Processors[i]);
+				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
 				l=ptr->remove_child(left->get_PID());
 				if (l)
 					break;
@@ -229,7 +258,7 @@ void Schedular::KillChild(process* parent )
 		if (!right->Is_TRM()) {
 			bool r = false;
 			for (int i = 0; i < NF; i++) {
-				processorFCFS* ptr = dynamic_cast<baseProcessor*>(Processors[i]);
+				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
 				r = ptr->remove_child(right->get_PID());
 				if (r)
 					break;
@@ -251,12 +280,15 @@ void Schedular::forking_tree_algo(process* parent) {
 			parent->set_leftchild(left);
 			int pro = ShortestQueue(0, NF);
 			Processors[pro]->add2RDY(left);
+			ForkedProcesses++;
+			
 		}
 		else if (!right && left) {
 			right = new process(true, parent, time_step, ++total_processes); // create new child and add to right
 			parent->set_rightchild(right); // setting 
 			int pro = ShortestQueue(0, NF);
 			Processors[pro]->add2RDY(right);
+			ForkedProcesses++;
 		}
 	}
 }
@@ -387,6 +419,11 @@ int Schedular::get_RUN_count() {
 	return RUN_count;
 }
 
+int Schedular::get_TRM_count()
+{
+	return TRM_count;
+}
+
 int Schedular::get_timestep()
 {
 	return time_step;
@@ -394,17 +431,17 @@ int Schedular::get_timestep()
 
 int Schedular::get_avg_WT()
 {
-	return (total_WT /total_processes);
+	return float(total_WT )/float(total_processes);
 }
 
 int Schedular::get_avg_RT()
 {
-	return (total_RT/total_processes);
+	return float(total_RT) / float(total_processes);
 }
 
 int Schedular::get_avg_TRT()
 {
-	return(total_TRT / total_processes);
+	return float(total_TRT)/ float(total_processes);
 }
 
 float Schedular::get_per_RTF()
@@ -450,6 +487,10 @@ float Schedular::get_per_deadline()
 	return (B/t);
 }
 
+void Schedular::inc_kill_count() {
+	KilledProcesses++;
+
+}
 void Schedular::NEW_RDY()
 {
 	// make sure that that the NEW isn't empty and also the arrival time of the first one equals to the time step

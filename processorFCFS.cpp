@@ -78,7 +78,7 @@ void processorFCFS::Schedular_Algo()
 			}
 			if (RUN) {
 				total_busy_time++;
-				while (!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
+				while (max_w!=-1&&!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
 					finish_time -= RUN->get_CT();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->migrate_FCFS2RR(RUN);
@@ -137,7 +137,7 @@ void processorFCFS::KillSig()
 {
 	if (!SigKill.is_empty()) {
 		int curr = S_ptr->get_timestep();
-		if (next_kill < curr && !SigKill.is_empty()) {
+		if (next_kill < curr ) {
 			next_kill = SigKill.dequeue();
 			next_kill = SigKill.dequeue();
 
@@ -145,13 +145,15 @@ void processorFCFS::KillSig()
 		if (curr != next_kill)
 			return;
 		int id = SigKill.peek();
-		if (RUN->get_PID() == id)
+		if (RUN&&RUN->get_PID() == id)
 		{
 			finish_time -= RUN->get_CT();
 			S_ptr->inc_RUN_count(-1);
 			RUN->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += RUN->get_TRT();
 			S_ptr->add2TRM(RUN);
+			RUN = nullptr;
+			S_ptr->inc_kill_count();
 			id = SigKill.dequeue();
 			if (!SigKill.is_empty())
 				next_kill = SigKill.dequeue();
@@ -163,6 +165,7 @@ void processorFCFS::KillSig()
 			ptr->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += ptr->get_TRT();
 			S_ptr->add2TRM(ptr);
+			S_ptr->inc_kill_count();
 			id = SigKill.dequeue();
 			if (!SigKill.is_empty())
 				next_kill = SigKill.dequeue();

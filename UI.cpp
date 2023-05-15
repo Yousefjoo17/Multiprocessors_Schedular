@@ -58,7 +58,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		cout << "------------       TRM processes  ----------------" << endl;
-		int TRMC = S_ptr->get_total_TRT();
+		int TRMC = S_ptr->get_TRM_count();
 		cout << TRMC << " TRM: ";
 		TRM.print();
 		cout << endl << endl;

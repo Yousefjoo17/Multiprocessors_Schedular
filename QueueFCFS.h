@@ -14,7 +14,6 @@ public:
 	process* remove_id(int id)
 	{
 		if (is_empty()) {
-			cout << "The Queue is empty " << endl;
 			return nullptr;
 		}
 		else {
@@ -26,7 +25,6 @@ public:
 			}
 			if (!curr)
 			{
-				cout << "it's not found";
 				return nullptr;
 			}
 			else if (curr == front) {
