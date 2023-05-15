@@ -14,7 +14,9 @@ void processorSJF::add2RDY(process* p)
 
 process* processorSJF::getfromRDY()
 {
-	return RDY_SJF.dequeue();
+	process* ptr = RDY_SJF.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorSJF::RDY2RUN()

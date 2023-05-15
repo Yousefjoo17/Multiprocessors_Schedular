@@ -155,12 +155,15 @@ void Schedular::work_stealing()
 		baseProcessor* ptr_LQF = Processors[LQF_ind]; // assign the highest to the ptr_LQF
 		baseProcessor* ptr_SQF = Processors[SQF_ind]; // assign the lowest to the ptr_SQF
 		
-			
-		Stack<process*>s(50); // creation of Stack of processes 
-		process*p; // pointer to process
-		float Ratio = (LQF - SQF) / LQF; // calculation of the Ratio
+		
+		Stack<process*>s(50);// creation of Stack of processes 
+		process* ptr; // pointer to process
+		float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
 		while (Ratio > 0.40)
 		{
+			LQF = ptr_LQF->get_finishedTime();
+			SQF = ptr_SQF->get_finishedTime();
+			
 			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
 			{
 				s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
