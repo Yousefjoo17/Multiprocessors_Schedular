@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
 	
-	priorityQueue<int> q1; Queue<int> q2; Queue<int> q3; Queue<int> q4;
+	/*priorityQueue<int> q1; Queue<int> q2; Queue<int> q3; Queue<int> q4;
 	q1.enqueue(10,1); q1.enqueue(7, 2); q1.enqueue(1,4);
 	srand(time(NULL));
 	int r = 1 + (rand() % 100);
@@ -19,9 +19,10 @@ int main() {
 	process* p2 = new process(3, 2, 65, 2,1, q2);
 	process* p3 = new process(5, 3, 34, 2,1, q3);
 	QueueFCFS f;
-	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);
+	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);*/
 	Schedular s("deadline_inp");
-	baseProcessor* proc = new processorSJF(&s);
+	s.simulate();
+	/*baseProcessor* proc = new processorSJF(&s);
 	cout << proc << endl;
 	s.add2NEW(p1);
 	s.add2NEW(p2);
@@ -31,6 +32,6 @@ int main() {
 	cout << s.getfromNEW();
 	cout << s.getfromNEW();
 	cout << s.getfromNEW();
-	s.work_stealing();
+	s.work_stealing();*/
 	/***************************************/
 }

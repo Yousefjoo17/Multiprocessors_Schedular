@@ -15,6 +15,7 @@ process::process(int a, int p, int c,int d, int n, Queue<int>& queue) {
 	CT_EX = 0;
 	Is_First_Time = true;
 	total_IO_D = 0;
+	IO_D_EX = 0;
 }
 process::process(bool x, process*& parent, int current_t, int p) {
 	AT = current_t;
@@ -28,6 +29,7 @@ process::process(bool x, process*& parent, int current_t, int p) {
 	CT_EX = 0;
 	Is_First_Time = true;
 	total_IO_D = 0;
+	IO_D_EX = 0;
 
 }
 int process::get_PID() {
@@ -62,14 +64,26 @@ int process::peek_IO_R()
 	else
 		return -1;
 }
-
+int process::peek_IO_D()
+{
+	return IO.peek();
+}
 int process::get_IO_R() {
 	return IO.dequeue();
 }
 int process::get_IO_D() {
 	int x = IO.dequeue();
 	total_IO_D += x;
+	IO_D_EX = 0;
 	return x;
+}
+int process::get_IO_D_EX()
+{
+	return IO_D_EX;
+}
+void process::inc_IO_D_EX()
+{
+	IO_D_EX++;
 }
 
 int process::get_n_total() {

@@ -54,6 +54,11 @@ int baseProcessor::get_PID()
 	return PID;
 }
 
+void baseProcessor::inc_finsihtime(int i)
+{
+	finish_time += i;
+}
+
 int baseProcessor::get_finishedTime()
 {
 	return finish_time;

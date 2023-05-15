@@ -20,7 +20,8 @@ private:
 	process* right_child;
 	bool Is_Child;
 	bool Is_First_Time;
-	int total_IO_D;
+	int total_IO_D;//tototal time steps spent in IO
+	int IO_D_EX;
 	int deadline;
 public:
 	process(int, int, int, int, int, Queue<int>&);
@@ -35,8 +36,11 @@ public:
 	int get_TRT();
 	int get_WT();
 	int peek_IO_R();
+	int peek_IO_D();
 	int get_IO_R();
 	int get_IO_D();
+	int get_IO_D_EX();
+	void inc_IO_D_EX();
 	int get_n_total();
 	int get_rem_CT();
 	int get_curr_WT(int);

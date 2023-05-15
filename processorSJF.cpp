@@ -14,12 +14,15 @@ void processorSJF::add2RDY(process* p)
 
 process* processorSJF::getfromRDY()
 {
-	return RDY_SJF.dequeue();
+	process* ptr = RDY_SJF.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorSJF::RDY2RUN()
 {
 	RUN = RDY_SJF.dequeue();
+	S_ptr->inc_RUN_count(1);
 	if (RUN->is_first_time()) {
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
@@ -61,7 +64,9 @@ void processorSJF::Schedular_Algo()
 				{
 
 					finish_time -= RUN->get_CT();
-					//go to BLK
+					S_ptr->inc_RUN_count(-1);
+					S_ptr->add2BLK(RUN);
+					RUN = nullptr;
 					if (!RDY_SJF.is_empty()) {
 						RDY2RUN();
 					}
@@ -72,9 +77,10 @@ void processorSJF::Schedular_Algo()
 					{
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
+						S_ptr->inc_RUN_count(-1);
 						finish_time -= RUN->get_CT();
 						S_ptr->add2TRM(RUN);
-
+						RUN = nullptr;
 						if (!RDY_SJF.is_empty()) {
 							RDY2RUN();
 						}
@@ -94,6 +100,7 @@ void processorSJF::processor_overheat()
 	is_overheated = true;
 	finish_time = 0;
 	if (RUN) {
+		S_ptr->inc_RUN_count(-1);
 		S_ptr->add2RDY(RUN);
 		RUN == nullptr;
 	}

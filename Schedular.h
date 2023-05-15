@@ -5,6 +5,8 @@
 #include"InOut.h"
 #include"baseProcessor.h"
 #include <string>
+#include"Stack.h"
+#include"UI.h"
 
 class baseProcessor;
 class InOut;
@@ -40,9 +42,9 @@ public:
 	int RTF_Processes;
 	int MaxW_Processes;
 	int BeforeDeadline;
-
-
-
+	int ForkedProcesses;
+	int KilledProcesses;
+	int totalworksteal;
 public:
 	Schedular(string);
 	void add2NEW(process*);
@@ -53,6 +55,7 @@ public:
 	void add2RDY(process* p);
 	void add2TRM(process*);
 	void simulate();
+	void loop_p();
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
@@ -80,7 +83,7 @@ public:
 	void set_total_RT(int trtt);
 	void set_total_TRT(int trttt);
 	void set_BLK_count(int blkc);
-	void set_RUN_count(int runc);
+	void inc_RUN_count(int runc);
 
 	// getters
 	int get_processors_counter();
@@ -100,6 +103,15 @@ public:
 	int get_RUN_count();
 	int get_timestep();
 
+	int get_avg_WT(); // gets average Waiting time for processes
+	int get_avg_RT();  //gets average Response time for processes
+	int get_avg_TRT(); // gets Termination time for processes
+	float get_per_RTF(); //gets Percentage of process migration due to RTF
+	float get_per_steal(); //gets Percentage of process moved by work steal
+	float get_per_MaxW(); //gets Percentage of process migration due to MaxW
+	float get_per_forked();  // gets Percentage of process fork
+	float get_per_killed();  //gets Percentage of process kill
+	float get_per_deadline(); // gets Percentage of process done before deadline
 	/*********************************/
 	void NEW_RDY();
 	void P_Completion(process*);
@@ -107,3 +119,4 @@ public:
 	int ShortestQueue(int,int);
 
 };
+

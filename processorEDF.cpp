@@ -8,13 +8,14 @@ processorEDF::processorEDF(Schedular* s) : baseProcessor(s)
 void processorEDF::add2RDY(process* p)
 {
 	finish_time += p->get_CT();
-
-	if (p->get_deadline() < RUN->get_deadline()) {
-		RDY_EDF.enqueue(RUN, RUN->get_deadline());
-		RUN = p;
-		if (RUN->is_first_time()) {
-			RUN->set_RT(S_ptr->get_timestep());
-			RUN->set_first_time(false);
+	if (RUN) {
+		if (p->get_deadline() < RUN->get_deadline()) {
+			RDY_EDF.enqueue(RUN, RUN->get_deadline());
+			RUN = p;
+			if (RUN->is_first_time()) {
+				RUN->set_RT(S_ptr->get_timestep());
+				RUN->set_first_time(false);
+			}
 		}
 	}
 	else {
@@ -25,12 +26,15 @@ void processorEDF::add2RDY(process* p)
 
 process* processorEDF::getfromRDY()
 {
-	return RDY_EDF.dequeue();
+	process* ptr = RDY_EDF.dequeue();
+	finish_time -= ptr->get_CT();
+	return ptr;
 }
 
 void processorEDF::RDY2RUN()
 {
 	RUN = RDY_EDF.dequeue();
+	S_ptr->inc_RUN_count(1);
 	if (RUN->is_first_time()) {
 		RUN->set_RT(S_ptr->get_timestep());
 		RUN->set_first_time(false);
@@ -72,7 +76,9 @@ void processorEDF::Schedular_Algo()
 				{
 
 					finish_time -= RUN->get_CT();
-					//go to BLK
+					S_ptr->inc_RUN_count(-1);
+					S_ptr->add2BLK(RUN);
+					RUN = nullptr;
 					if (!RDY_EDF.is_empty()) {
 						RDY2RUN();
 					}
@@ -84,6 +90,7 @@ void processorEDF::Schedular_Algo()
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
 						finish_time -= RUN->get_CT();
+						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2TRM(RUN);
 
 						if (!RDY_EDF.is_empty()) {
@@ -106,7 +113,8 @@ void processorEDF::processor_overheat()
 	finish_time = 0;
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
-		RUN == nullptr;
+		S_ptr->inc_RUN_count(-1);
+		RUN = nullptr;
 	}
 	while (!RDY_EDF.is_empty()) {
 		S_ptr->add2RDY(RDY_EDF.dequeue());
