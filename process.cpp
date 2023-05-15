@@ -56,7 +56,7 @@ int process::get_TRT() {
 	return TT - AT;
 }
 int process::get_WT() {
-	return TT - AT - CT;
+	return TRT - CT;
 }
 
 int process::peek_IO_R()

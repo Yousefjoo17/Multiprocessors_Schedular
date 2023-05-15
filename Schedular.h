@@ -56,7 +56,6 @@ public:
 	void add2TRM(process*);
 	void simulate();
 	void loop_p();
-	void loop_p(int , int );
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();

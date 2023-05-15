@@ -73,7 +73,7 @@ void processorSJF::Schedular_Algo()
 				}
 				if (RUN)
 				{
-					if (RUN->get_CT_EX()> RUN->get_CT())
+					if (RUN->get_CT_EX() == RUN->get_CT())
 					{
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
