@@ -16,6 +16,7 @@ process::process(int a, int p, int c,int d, int n, Queue<int>& queue) {
 	Is_First_Time = true;
 	total_IO_D = 0;
 	IO_D_EX = 0;
+	is_TRM = false;
 }
 process::process(bool x, process*& parent, int current_t, int p) {
 	AT = current_t;
@@ -30,6 +31,7 @@ process::process(bool x, process*& parent, int current_t, int p) {
 	Is_First_Time = true;
 	total_IO_D = 0;
 	IO_D_EX = 0;
+	is_TRM = false;
 
 }
 int process::get_PID() {
@@ -149,6 +151,14 @@ void process::set_Child(process* x) {
 }
 void process::set_leftchild(process* x) {
 	left_child = x;
+}
+void process::set_Is_TRM(bool x)
+{
+	is_TRM = x;
+}
+bool process::Is_TRM()
+{
+	return is_TRM;
 }
 void process::set_rightchild(process* x) {
 	right_child = x;

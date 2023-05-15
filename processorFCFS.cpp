@@ -126,6 +126,8 @@ void processorFCFS::Schedular_Algo()
 				if (RUN) {
 					RUN->inc_CT_EX();
 				}
+				
+
 			}
 		}
 	}
@@ -195,5 +197,25 @@ void processorFCFS::processor_overheat()
 void processorFCFS::print()
 {
 	RDY_FCFS.print();
+}
+bool processorFCFS::remove_child(int id) {
+	if (!RUN) {
+		return false;
+
+	}
+	if (RUN->get_PID()==id) {
+		finish_time -= RUN->get_CT();
+		S_ptr->inc_RUN_count(-1);
+		RUN->set_TT(S_ptr->get_timestep());
+		total_turnaround_time += RUN->get_TRT();
+		RUN = nullptr;
+		return true;
+	}
+	if (!RDY_FCFS.remove_id(id)) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }
 

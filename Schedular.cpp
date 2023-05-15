@@ -53,6 +53,10 @@ void Schedular::add2TRM(process* p)
 	total_RT += p->get_RT();
 	total_TRT += p->get_TRT();
 	total_WT += p->get_WT();
+	if (p->get_leftChild() || p->get_rightChild()) {
+		KillChild(p); // recursively call
+	}
+	p->set_Is_TRM(true);
 	TRM.enqueue(p);
 }
 
@@ -202,23 +206,60 @@ void Schedular::update_BLK()
 
 }
 
+void Schedular::KillChild(process* parent )
+{
+	if (parent == nullptr) {
+		return;
+	}
+	process* left = parent->get_leftChild();
+	process* right = parent->get_rightChild();
+	if (left) {
+		if (!left->Is_TRM()) {
+			bool l= false;
+			for (int i = 0; i < NF; i++) {
+				processorFCFS* ptr = dynamic_cast<baseProcessor*>(Processors[i]);
+				l=ptr->remove_child(left->get_PID());
+				if (l)
+					break;
+			}
+			add2TRM(left);
+		}
+	}
+	if (right) {
+		if (!right->Is_TRM()) {
+			bool r = false;
+			for (int i = 0; i < NF; i++) {
+				processorFCFS* ptr = dynamic_cast<baseProcessor*>(Processors[i]);
+				r = ptr->remove_child(right->get_PID());
+				if (r)
+					break;
+			}
+			add2TRM(right);
+		}
+	}
+	
+}
+
 void Schedular::forking_tree_algo(process* parent) {
 	srand(time(nullptr));
 	if (1 + (rand() % 100) <= FP)
 	{
-		process* left=parent->get_leftChild();
+		process* left=parent->get_leftChild(); 
 		process* right = parent->get_rightChild();
 		if (!left) {
-			left = new process(true, parent, time_step, ++total_processes);
+			left = new process(true, parent, time_step, ++total_processes); //create new child and add it to the left side
 			parent->set_leftchild(left);
 			int pro = ShortestQueue(0, NF);
 			Processors[pro]->add2RDY(left);
 		}
 		else if (!right && left) {
-			right = new process(true, parent, time_step, ++total_processes);
-			parent->set_rightchild(right);
+			right = new process(true, parent, time_step, ++total_processes); // create new child and add to right
+			parent->set_rightchild(right); // setting 
 			int pro = ShortestQueue(0, NF);
-			Processors[pro]->add2RDY(right);}}}
+			Processors[pro]->add2RDY(right);
+		}
+	}
+}
 
 /*********************************************************************************/
 // setters 

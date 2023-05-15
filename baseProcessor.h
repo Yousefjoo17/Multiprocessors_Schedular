@@ -52,6 +52,7 @@ public:
 	static void set_overheatn(int);
 	virtual void processor_overheat()=0;
 	bool Is_overheated();
+	void deleteRUN();
 
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
@@ -87,6 +88,8 @@ public:
 	 //void killprocess(int id);
 	 //void forkprocess()
 	 virtual void print();
+
+	 bool remove_child(int);
 
  };
 

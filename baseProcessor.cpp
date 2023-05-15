@@ -28,6 +28,10 @@ baseProcessor::baseProcessor(Schedular*ptr)
  {
 	 return is_overheated;
  }
+ void baseProcessor::deleteRUN()
+ {
+	 RUN == nullptr;
+ }
 void baseProcessor::set_Run_pointer(process* p) { RUN = p; }
 process* baseProcessor::get_RUN()
 {

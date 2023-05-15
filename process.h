@@ -23,6 +23,7 @@ private:
 	int total_IO_D;//tototal time steps spent in IO
 	int IO_D_EX;
 	int deadline;
+	bool is_TRM;
 public:
 	process(int, int, int, int, int, Queue<int>&);
 	process(bool, process*&, int, int);
@@ -61,6 +62,8 @@ public:
 	void set_Child(process*);
 	void set_rightchild(process*);
 	void set_leftchild(process*);
+	void set_Is_TRM(bool);
+	bool Is_TRM();
 
 	void set_Is_Child(bool);
 	friend ostream& operator<<(ostream& os, const process* p)

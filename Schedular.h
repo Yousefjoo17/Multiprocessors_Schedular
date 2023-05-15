@@ -61,7 +61,7 @@ public:
 	void work_stealing();
 	void forking_tree_algo(process* );
 	void update_BLK();
-
+	void KillChild(process*);
 
 
 
