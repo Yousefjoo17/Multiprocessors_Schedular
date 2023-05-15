@@ -86,20 +86,6 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-		while (time_step <1116) {
-			time_step++;
-			NEW_RDY();
-			/*if (time_step % STL == 0)
-				work_stealing();*/
-			for (int i = 0; i < NF; i++) {
-				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
-				ptr->KillSig();
-			}
-			loop_p();
-			update_BLK();
-			user_interface.display(Processors, BLK, TRM);
-
-		}
 		while (TRM_count!=total_processes) {
 			time_step++;
 			NEW_RDY();
