@@ -35,6 +35,7 @@ process* Schedular::getfromNEW()
 
 void Schedular::add2BLK(process* p)
 {
+	BLK_count++;
 	int x = p->get_IO_R();
 	BLK.enqueue(p);
 }
@@ -76,29 +77,23 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 	
-		while (time_step<2000) {
+		while (time_step<26) {
 			time_step++;
 			NEW_RDY();
 
-
-           		for (int i = 0; i < NR + NF + NS + NE; i++) {
-				Processors[i]->Schedular_Algo();
-			}
+           	
 			loop_p();
+			update_BLK();
 			user_interface.display(Processors, BLK, TRM);
 
 		}
 	while (time_step < 500) {
-			time_step++;
-			NEW_RDY();
-			work_stealing();
-
-			for (int i = 0; i < NR + NF + NS + NE; i++) {
-				Processors[i]->Schedular_Algo();
-			}
-			loop_p();
-			user_interface.display(Processors, BLK, TRM);
-
+		time_step++;
+		NEW_RDY();
+		
+		loop_p();
+		update_BLK();
+		user_interface.display(Processors, BLK, TRM);
 		}
 		
 }
@@ -192,12 +187,13 @@ void Schedular::update_BLK()
 		return;
 	else if (BLK.peek()->get_IO_D_EX() < BLK.peek()->peek_IO_D())
 	{
-		BLK.peek()->inc_CT_EX();
+		BLK.peek()->inc_IO_D_EX();
 	}
 	else
 	{
 		process* ptr = BLK.dequeue();
 		ptr->get_IO_D();
+		BLK_count--;
 		Processors[ShortestQueue()]->add2RDY(ptr);
 	}
 
