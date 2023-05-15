@@ -207,6 +207,24 @@ void Schedular::update_BLK()
 
 }
 
+void Schedular::forking_tree_algo(process* parent) {
+	srand(time(nullptr));
+	if (1 + (rand() % 100) <= FP)
+	{
+		process* left=parent->get_leftChild();
+		process* right = parent->get_rightChild();
+		if (!left) {
+			left = new process(true, parent, time_step, ++total_processes);
+			parent->set_leftchild(left);
+			int pro = ShortestQueue(0, NF);
+			Processors[pro]->add2RDY(left);
+		}
+		else if (!right && left) {
+			right = new process(true, parent, time_step, ++total_processes);
+			parent->set_rightchild(right);
+			int pro = ShortestQueue(0, NF);
+			Processors[pro]->add2RDY(right);}}}
+
 /*********************************************************************************/
 // setters 
 
@@ -448,6 +466,7 @@ void Schedular::add2RDY(process* p) {
 	}
 
 }
+
 
 
 

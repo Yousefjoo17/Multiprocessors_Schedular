@@ -59,8 +59,15 @@ public:
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
-	void update_BLK();
-	
+	void forking_tree_algo(process* );
+
+
+
+
+
+
+
+
 	/********************************************************/
 	// setters 
 	void set_processors_counter();

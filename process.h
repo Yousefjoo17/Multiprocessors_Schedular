@@ -16,6 +16,8 @@ private:
 	Queue<int> IO; //Queue of IO_R (request time) then IO_D (duration)
 	int IO_total; //total nember if IO
 	process* Child;
+	process* left_child;
+	process* right_child;
 	bool Is_Child;
 	bool Is_First_Time;
 	int total_IO_D;//tototal time steps spent in IO
@@ -46,6 +48,9 @@ public:
 	int get_deadline();
 	bool is_first_time();
 	process* get_Child();
+	process* get_rightChild();
+	process* get_leftChild();
+
 	bool get_Is_Child();
 	void inc_CT_EX();
 	void set_first_time(bool);
@@ -54,6 +59,9 @@ public:
 	void set_TT(int);
 	void set_n_current(int);
 	void set_Child(process*);
+	void set_rightchild(process*);
+	void set_leftchild(process*);
+
 	void set_Is_Child(bool);
 	friend ostream& operator<<(ostream& os, const process* p)
 	{

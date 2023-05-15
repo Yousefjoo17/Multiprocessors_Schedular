@@ -9,7 +9,8 @@ process::process(int a, int p, int c,int d, int n, Queue<int>& queue) {
 	deadline = d;
 	IO_total = n;
 	IO = queue;
-	Child = nullptr;
+	right_child = nullptr;
+	left_child = nullptr;
 	Is_Child = false;
 	CT_EX = 0;
 	Is_First_Time = true;
@@ -22,10 +23,10 @@ process::process(bool x, process*& parent, int current_t, int p) {
 	CT = parent->get_CT() - parent->get_CT_EX();
 	deadline = parent->get_deadline();
 	IO_total = 0;
-	Child = nullptr;
+	right_child = nullptr;
+	left_child = nullptr;
 	Is_Child = x;
 	CT_EX = 0;
-	parent->set_Child(this);
 	Is_First_Time = true;
 	total_IO_D = 0;
 	IO_D_EX = 0;
@@ -111,6 +112,14 @@ bool process::is_first_time()
 process* process::get_Child() {
 	return Child;
 }
+process* process::get_rightChild() {
+	return right_child;
+}
+process* process::get_leftChild() {
+	return left_child;
+}
+
+
 bool process::get_Is_Child() {
 	return Is_Child;
 }
@@ -137,6 +146,12 @@ void process::set_TT(int x) {
 
 void process::set_Child(process* x) {
 	Child = x;
+}
+void process::set_leftchild(process* x) {
+	left_child = x;
+}
+void process::set_rightchild(process* x) {
+	right_child = x;
 }
 void process::set_Is_Child(bool x) {
 	Is_Child = x;

@@ -121,6 +121,9 @@ void processorFCFS::Schedular_Algo()
 				}
 				//forking
 				if (RUN) {
+					S_ptr->forking_tree_algo(RUN);
+				}
+				if (RUN) {
 					RUN->inc_CT_EX();
 				}
 			}
