@@ -48,7 +48,7 @@ void processorSJF::Schedular_Algo()
 	if (!is_overheated) {
 		srand(time(NULL));
 		int r = 1 + (rand() % 100);
-		if (r < 3) {
+		if (r < 2) {
 			processor_overheat();
 		}
 		else {
@@ -102,10 +102,11 @@ void processorSJF::processor_overheat()
 	if (RUN) {
 		S_ptr->inc_RUN_count(-1);
 		S_ptr->add2RDY(RUN);
-		RUN == nullptr;
+		RUN = nullptr;
 	}
 	while (!RDY_SJF.is_empty()) {
-		S_ptr->add2RDY(RDY_SJF.dequeue());
+		process* ptr = RDY_SJF.dequeue();
+		S_ptr->add2RDY(ptr);
 	}
 }
 

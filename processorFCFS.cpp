@@ -66,7 +66,7 @@ void processorFCFS::Schedular_Algo()
 	if (!is_overheated) {
 		srand(time(NULL));
 		int r = 1 + (rand() % 100);
-		if (r<3) {
+		if (r< 2 ) {
 			processor_overheat();
 		}
 		else {
