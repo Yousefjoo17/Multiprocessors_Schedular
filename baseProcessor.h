@@ -41,6 +41,7 @@ public:
 	virtual process* getfromRDY()=0;
 	virtual void RDY2RUN()=0;
 	virtual process* getfromRUN()=0;
+	void inc_finsihtime(int);
 	int get_finishedTime();
     virtual void Schedular_Algo() = 0;
 	void set_Run_pointer(process* p);

@@ -92,6 +92,7 @@ void processorFCFS::Schedular_Algo()
 					}
 				}
 				if (RUN) {
+
 					if (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 
@@ -102,6 +103,8 @@ void processorFCFS::Schedular_Algo()
 						if (!RDY_FCFS.is_empty()) {
 							RDY2RUN();
 						}
+						S_ptr->update_BLK();
+
 					}
 				}
 				if (RUN) {
@@ -182,7 +185,7 @@ void processorFCFS::processor_overheat()
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
 		S_ptr->inc_RUN_count(-1);
-		RUN == nullptr;
+		RUN = nullptr;
 	}
 	while (!RDY_FCFS.is_empty()) {
 		S_ptr->add2RDY(RDY_FCFS.dequeue());

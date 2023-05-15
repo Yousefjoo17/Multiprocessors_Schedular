@@ -35,6 +35,7 @@ process* Schedular::getfromNEW()
 
 void Schedular::add2BLK(process* p)
 {
+	int x = p->get_IO_R();
 	BLK.enqueue(p);
 }
 
@@ -75,26 +76,31 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 	
-		while (time_step<161) {
+		while (time_step<2000) {
 			time_step++;
 			NEW_RDY();
-			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
+
+
+           		for (int i = 0; i < NR + NF + NS + NE; i++) {
 				Processors[i]->Schedular_Algo();
-			}*/
-			loop_p();
-			user_interface.display(Processors, BLK, TRM);
-			
-		}
-		while (time_step < 500) {
-			time_step++;
-			NEW_RDY();
-			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
-				Processors[i]->Schedular_Algo();
-			}*/
+			}
 			loop_p();
 			user_interface.display(Processors, BLK, TRM);
 
 		}
+	while (time_step < 500) {
+			time_step++;
+			NEW_RDY();
+			work_stealing();
+
+			for (int i = 0; i < NR + NF + NS + NE; i++) {
+				Processors[i]->Schedular_Algo();
+			}
+			loop_p();
+			user_interface.display(Processors, BLK, TRM);
+
+		}
+		
 }
 void Schedular::loop_p() {
 	for (int i = 0; i < NR + NF + NS + NE; i++) {
@@ -119,13 +125,11 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 // Stealing 
 void Schedular::work_stealing()
 {
-	int LQF, SQF;
-	int LQF_ind, SQF_ind;
-	LQF_ind = 0;
-	SQF_ind = 0;
+	int LQF, SQF, LQF_ind, SQF_ind;
+	LQF_ind = SQF_ind = 0;
 	LQF = Processors[0]->get_finishedTime(); // Assign the first to LQF as initilaiztion
 	SQF = Processors[0]->get_finishedTime(); // Assign the first to SQF as initilaiztion
-	//NF // number of FCFS processors
+	//NF // number of FCFS processors 
 	//NS // number of SJF processors 
 	//NR // number of RR processors
 	//NE // number of EDF processors
@@ -146,6 +150,7 @@ void Schedular::work_stealing()
 			SQF = Processors[i]->get_finishedTime();
 			SQF_ind = i;
 		}
+	}
 
 		baseProcessor* ptr_LQF = Processors[LQF_ind]; // assign the highest to the ptr_LQF
 		baseProcessor* ptr_SQF = Processors[SQF_ind]; // assign the lowest to the ptr_SQF
@@ -161,21 +166,39 @@ void Schedular::work_stealing()
 			
 			while (ptr_LQF->peek_RDY()->get_Is_Child() )   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
 			{
-				// while true 
 				s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
 			}
-			ptr_SQF->add2RDY(ptr_LQF->getfromRDY()); // add in the ready of the shortest Queue the upcoming from the Longest one
+			p = ptr_LQF->getfromRDY();
+			ptr_SQF->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
+			ptr_SQF->inc_finsihtime(p->get_CT() - p->get_CT_EX());  // increses the finsih time of the processor by the remained time 
+			ptr_LQF->inc_finsihtime(p->get_CT_EX() - p->get_CT());   // decrease ---  -----  --  -  --  ------- - ---  --- 
+			SQF = ptr_SQF->get_finishedTime();  //reset SQF
+			LQF = ptr_LQF->get_finishedTime();   //reset LQF
 		}
 
-		while (s.pop(ptr)) // start popping 
+		process* pr;
+		while (s.pop(pr)) // start popping 
 		{
-
-			baseProcessor* pfcfs = Processors[LQF_ind]; // assign the Longest processor to p first come first serve
-			pfcfs = dynamic_cast<processorFCFS*>(Processors[LQF_ind]); // dymanic casting checking on the type of the processor("FCFS")
-			pfcfs->add2_RDY_begining(ptr);  // FCFS Processors only 
-			// Finally 
+			ptr_LQF->add2_RDY_begining(pr);
 		}
 		
+	
+
+}
+
+void Schedular::update_BLK()
+{
+	if (BLK.is_empty())
+		return;
+	else if (BLK.peek()->get_IO_D_EX() < BLK.peek()->peek_IO_D())
+	{
+		BLK.peek()->inc_CT_EX();
+	}
+	else
+	{
+		process* ptr = BLK.dequeue();
+		ptr->get_IO_D();
+		Processors[ShortestQueue()]->add2RDY(ptr);
 	}
 
 }

@@ -114,7 +114,7 @@ void processorEDF::processor_overheat()
 	if (RUN) {
 		S_ptr->add2RDY(RUN);
 		S_ptr->inc_RUN_count(-1);
-		RUN == nullptr;
+		RUN = nullptr;
 	}
 	while (!RDY_EDF.is_empty()) {
 		S_ptr->add2RDY(RDY_EDF.dequeue());
