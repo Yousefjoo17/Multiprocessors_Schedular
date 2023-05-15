@@ -168,7 +168,7 @@ void Schedular::work_stealing()
 			{
 				s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
 			}
-			p = ptr_LQF->getfromRDY();
+			process* p = ptr_LQF->getfromRDY();
 			ptr_SQF->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
 			ptr_SQF->inc_finsihtime(p->get_CT() - p->get_CT_EX());  // increses the finsih time of the processor by the remained time 
 			ptr_LQF->inc_finsihtime(p->get_CT_EX() - p->get_CT());   // decrease ---  -----  --  -  --  ------- - ---  --- 
