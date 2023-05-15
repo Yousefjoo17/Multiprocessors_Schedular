@@ -77,7 +77,7 @@ void processorEDF::Schedular_Algo()
 				total_busy_time++;
 				if (RUN->peek_IO_R() == RUN->get_CT_EX())
 				{
-					finish_time = finish_time - RUN->get_CT();
+					finish_time  -= RUN->get_CT();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->add2BLK(RUN);
 					RUN = nullptr;

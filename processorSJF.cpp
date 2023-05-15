@@ -105,8 +105,7 @@ void processorSJF::processor_overheat()
 		RUN = nullptr;
 	}
 	while (!RDY_SJF.is_empty()) {
-		process* ptr = RDY_SJF.dequeue();
-		S_ptr->add2RDY(ptr);
+		S_ptr->add2RDY(RDY_SJF.dequeue());
 	}
 }
 
