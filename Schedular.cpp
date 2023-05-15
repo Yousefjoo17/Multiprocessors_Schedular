@@ -75,7 +75,7 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 	
-		while (time_step<159) {
+		while (time_step<161) {
 			time_step++;
 			NEW_RDY();
 			/*for (int i = 0; i < NR + NF + NS + NE; i++) {
@@ -398,8 +398,7 @@ int Schedular::ShortestQueue()
 int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
 {
 	int min = start;
-	for (int i = start + 1; i < finish; i++) {
-		min = Processors[i]->get_finishedTime(); // set the first proccessor in array is the shortest 
+	for (int i = start + 1; i < finish; i++) { 
 		if (Processors[i]->get_finishedTime() < Processors[min]->get_finishedTime() && !Processors[i]->Is_overheated()) {
 				min = i; // get the place of the processor that has tha shortest queue
 		}
