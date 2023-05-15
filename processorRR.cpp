@@ -112,7 +112,8 @@ void processorRR::Schedular_Algo()
 				if (RUN)
 				{
 					if (time_Running == time_slice)
-					{
+					{			
+						finish_time -= RUN->get_CT();
 						add2RDY(RUN);
 						RUN = nullptr;
 						S_ptr->inc_RUN_count(-1);

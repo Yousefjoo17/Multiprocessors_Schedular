@@ -103,8 +103,6 @@ void processorFCFS::Schedular_Algo()
 						if (!RDY_FCFS.is_empty()) {
 							RDY2RUN();
 						}
-						S_ptr->update_BLK();
-
 					}
 				}
 				if (RUN) {

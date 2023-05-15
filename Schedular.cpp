@@ -77,21 +77,29 @@ void Schedular::simulate()
 			Processors[i] = new processorEDF(this);
 		}
 	
-		while (time_step<26) {
+		while (time_step<200) {
 			time_step++;
 			NEW_RDY();
 
-           	
+
 			loop_p();
+			cout << Processors[0]->get_finishedTime() << " " << Processors[1]->get_finishedTime() << endl;
+			cout << Processors[9]->get_finishedTime() << " " << Processors[10]->get_finishedTime() << endl;
+			cout << Processors[12]->get_finishedTime() << " " << Processors[13]->get_finishedTime() << endl;
 			update_BLK();
 			user_interface.display(Processors, BLK, TRM);
 
 		}
-	while (time_step < 500) {
+
+
+		while (time_step < 500) {
 		time_step++;
 		NEW_RDY();
-		
+		cout << Processors[12]->get_finishedTime() << " " << Processors[13]->get_finishedTime() << endl;
+
 		loop_p();
+		cout << Processors[12]->get_finishedTime() << " " << Processors[13]->get_finishedTime() << endl;
+
 		update_BLK();
 		user_interface.display(Processors, BLK, TRM);
 		}
