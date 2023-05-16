@@ -86,7 +86,7 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-		while (TRM_count!=total_processes) {
+		while (time_step<500) {   //TRM_count!=total_processes
 			time_step++;
 			NEW_RDY();
 			/*if (time_step % STL == 0)

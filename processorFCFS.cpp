@@ -12,14 +12,14 @@ processorFCFS::processorFCFS(Schedular*ptr):baseProcessor(ptr)
 
 void processorFCFS::add2RDY(process* p)
 {
-	finish_time += p->get_CT();
+	finish_time += p->get_CT()-p->get_CT_EX();
 	RDY_FCFS.enqueue(p);
 }
 
 process* processorFCFS::getfromRDY()
 {
 	process* ptr = RDY_FCFS.dequeue();
-	finish_time -= ptr->get_CT();
+	finish_time -= ptr->get_CT()-ptr->get_CT_EX();
 	return ptr;
 }
 
@@ -78,7 +78,7 @@ void processorFCFS::Schedular_Algo()
 			if (RUN) {
 				total_busy_time++;
 				while (max_w!=-1&&!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
-					finish_time -= RUN->get_CT();
+					finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->migrate_FCFS2RR(RUN);
 					RUN = nullptr;
@@ -95,7 +95,7 @@ void processorFCFS::Schedular_Algo()
 					if (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 
-						finish_time -= RUN->get_CT();
+						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2BLK(RUN);
 						RUN = nullptr;
@@ -109,7 +109,7 @@ void processorFCFS::Schedular_Algo()
 					{
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
-						finish_time -= RUN->get_CT();
+						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2TRM(RUN);
 						RUN = nullptr;
@@ -124,6 +124,7 @@ void processorFCFS::Schedular_Algo()
 				}
 				if (RUN) {
 					RUN->inc_CT_EX();
+					finish_time--;
 				}
 				
 
@@ -146,7 +147,7 @@ void processorFCFS::KillSig()
 		int id = SigKill.peek();
 		if (RUN&&RUN->get_PID() == id)
 		{
-			finish_time -= RUN->get_CT();
+			finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 			S_ptr->inc_RUN_count(-1);
 			RUN->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += RUN->get_TRT();
@@ -160,7 +161,7 @@ void processorFCFS::KillSig()
 		process* ptr = RDY_FCFS.remove_id(id);
 		if (ptr)
 		{
-			finish_time -= ptr->get_CT();
+			finish_time -= ptr->get_CT()-ptr->get_CT_EX();
 			ptr->set_TT(S_ptr->get_timestep());
 			total_turnaround_time += ptr->get_TRT();
 			S_ptr->add2TRM(ptr);
@@ -206,7 +207,7 @@ bool processorFCFS::remove_child(int id) {
 
 	}
 	if (RUN->get_PID()==id) {
-		finish_time -= RUN->get_CT();
+		finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 		S_ptr->inc_RUN_count(-1);
 		RUN->set_TT(S_ptr->get_timestep());
 		total_turnaround_time += RUN->get_TRT();

@@ -12,14 +12,14 @@ processorRR::processorRR(Schedular* s) : baseProcessor(s)
 
 void processorRR::add2RDY(process* p)
 {
-	finish_time += p->get_CT();
+	finish_time += p->get_CT()-p->get_CT_EX();
 	RDY_RR.enqueue(p);
 }
 
 process* processorRR::getfromRDY()
 {
 	process* ptr = RDY_RR.dequeue();
-	finish_time -= ptr->get_CT();
+	finish_time -= ptr->get_CT()-ptr->get_CT_EX();
 	return ptr;
 }
 
@@ -65,7 +65,7 @@ void processorRR::Schedular_Algo()
 			if (RUN) {
 				total_busy_time++;
 				while (rtf!=-1 && RUN->get_rem_CT() < rtf) {
-					finish_time -= RUN->get_CT();
+					finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
 					time_Running = 0;
 					S_ptr->migrate_RR2SJF(RUN);
@@ -82,7 +82,7 @@ void processorRR::Schedular_Algo()
 				{
 					if (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
-						finish_time -= RUN->get_CT();
+						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
 						S_ptr->add2BLK(RUN);
@@ -98,7 +98,7 @@ void processorRR::Schedular_Algo()
 					{
 						RUN->set_TT(S_ptr->get_timestep());
 						total_turnaround_time += RUN->get_TRT();
-						finish_time -= RUN->get_CT();
+						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						time_Running = 0;
 						S_ptr->add2TRM(RUN);
@@ -113,7 +113,7 @@ void processorRR::Schedular_Algo()
 				{
 					if (time_Running == time_slice)
 					{			
-						finish_time -= RUN->get_CT();
+						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						add2RDY(RUN);
 						RUN = nullptr;
 						S_ptr->inc_RUN_count(-1);
@@ -129,7 +129,7 @@ void processorRR::Schedular_Algo()
 					if (time_Running < time_slice)
 					{
 						RUN->inc_CT_EX(); time_Running++;
-
+						finish_time--;
 					}
 				}
 			}
