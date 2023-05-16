@@ -1,4 +1,4 @@
-#include"baseProcessor.h"
+#include"Processors.h"
 #include"Schedular.h"
 
 processorEDF::processorEDF(Schedular* s) : baseProcessor(s)

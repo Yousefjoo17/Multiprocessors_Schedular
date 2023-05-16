@@ -2,7 +2,7 @@
 #define PROCESSORSJF_H
 #pragma once
 #include"priorityQueue.h"
-#include"baseProcessor.h"
+#include"Processors.h"
 class baseProcessor;
 class Schedular;
 #endif

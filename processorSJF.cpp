@@ -1,5 +1,5 @@
 #include "processorSJF.h"
-#include"baseProcessor.h"
+#include"Processors.h"
 #include"Schedular.h"
 
 processorSJF::processorSJF(Schedular* s) : baseProcessor(s)

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="baseProcessor.h">
+    <ClInclude Include="Processors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="process.h">

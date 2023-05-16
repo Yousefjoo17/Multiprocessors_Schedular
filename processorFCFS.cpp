@@ -1,6 +1,5 @@
-#include "processorFCFS.h"
 #include<iostream>
-#include"baseProcessor.h"
+#include"Processors.h"
 using namespace std;
 Queue<int> q;
 Queue<int> processorFCFS::SigKill = q;
