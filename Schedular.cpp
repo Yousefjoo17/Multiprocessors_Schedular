@@ -86,11 +86,13 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-		while (time_step<500) {   //TRM_count!=total_processes
+		while (time_step<25) {   //TRM_count!=total_processes
 			time_step++;
 			NEW_RDY();
-			/*if (time_step % STL == 0)
-				work_stealing();*/
+
+			if (time_step % STL == 0)
+				work_stealing();
+
 			for (int i = 0; i < NF; i++) {
 				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
 				ptr->KillSig();
@@ -137,71 +139,47 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 void Schedular::work_stealing()
 {
 	int LQF, SQF, LQF_ind, SQF_ind;
-	LQF_ind = SQF_ind = 0;
-	LQF = Processors[0]->get_finishedTime(); // Assign the first to LQF as initilaiztion
-	SQF = Processors[0]->get_finishedTime(); // Assign the first to SQF as initilaiztion
-	//NF // number of FCFS processors 
-	//NS // number of SJF processors 
-	//NR // number of RR processors
-	//NE // number of EDF processors
-	for (int i = 1; i < (NF + NS + NR + NE); i++)
+	LQF= LQF_ind = SQF_ind = -1;
+	SQF = 99999;
+	for (int i = 0; i < (NF + NS + NR + NE); i++)
 	{
-		if (Processors[i]->get_finishedTime() > LQF)
+		if ( Processors[i]->get_finishedTime() > LQF)
 		{
-			// if processor's finish time is greater than the LQF 
-			// let the LQF equals to this time
-			// and get the  index of this processor 
 			LQF = Processors[i]->get_finishedTime();
 			LQF_ind = i;
 		}
 		if (Processors[i]->get_finishedTime() < SQF)
 		{
-			// if not then store this time in SQF 
-			// and also get the index if this processor
 			SQF = Processors[i]->get_finishedTime();
 			SQF_ind = i;
 		}
 	}
-		if (LQF == 0)
+
+		if (LQF == 0 || LQF_ind==-1 || SQF_ind==-1 || LQF==-1 || SQF==-1)
 			return;
-		baseProcessor* ptr_LQF = Processors[LQF_ind]; // assign the highest to the ptr_LQF
-		baseProcessor* ptr_SQF = Processors[SQF_ind]; // assign the lowest to the ptr_SQF
 		
-		
-		Stack<process*>s(50);// creation of Stack of processes 
-		process* ptr; // pointer to process
+	    Stack<process*>s(50);// creation of Stack of processes 
 		
 		float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
-		while (Ratio > 0.40)
-		{
-			LQF = ptr_LQF->get_finishedTime();
-			SQF = ptr_SQF->get_finishedTime();
-
-			while (ptr_LQF->peek_RDY())   // FCFS Processors only // look at the the first RDY from the ptr_LQF and check whether it's child or not	
+			while (Ratio > 0.40)
 			{
-				if (ptr_LQF->peek_RDY()->get_Is_Child())
-					s.push(ptr_LQF->getfromRDY());  // take from the ready and push it in the stack created before
+				while (Processors[LQF_ind]->peek_RDY()&& Processors[LQF_ind]->peek_RDY()->get_Is_Child())   // FCFS Processors only 	
+						s.push(Processors[LQF_ind]->getfromRDY());
+				
+				if (Processors[LQF_ind]->peek_RDY())
+				{
+					process* p = Processors[LQF_ind]->getfromRDY();
+					Processors[SQF_ind]->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
+					totalworksteal++;	
+				}   
+				SQF = Processors[LQF_ind]->get_finishedTime();  //reset SQF
+				LQF = Processors[LQF_ind]->get_finishedTime();   //reset LQF
+			    Ratio = float(LQF - SQF) / float(LQF); // Update the Ratio
 			}
-			if (ptr_LQF->peek_RDY())
-			{process* p = ptr_LQF->getfromRDY();
-				ptr_SQF->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
-				totalworksteal++;
-				ptr_SQF->inc_finsihtime(p->get_CT() - p->get_CT_EX());  // increses the finsih time of the processor by the remained time 
-				ptr_LQF->inc_finsihtime(p->get_CT_EX() - p->get_CT());
-		}   // decrease ---  -----  --  -  --  ------- - ---  --- 
-			SQF = ptr_SQF->get_finishedTime();  //reset SQF
-			LQF = ptr_LQF->get_finishedTime();   //reset LQF
-		}
-
-		process* pr;
-		while (s.pop(pr)) // start popping 
-		{
-			ptr_LQF->add2_RDY_begining(pr);
-		}
-		
-	
-
-}
+			process* pr;
+			while (s.pop(pr))   // start popping 
+				Processors[LQF_ind]->add2_RDY_begining(pr);
+    }
 
 void Schedular::update_BLK()
 {
