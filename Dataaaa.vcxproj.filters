@@ -21,16 +21,7 @@
     <ClInclude Include="process.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="processorFCFS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Schedular.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ListADT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="node.h">
@@ -43,12 +34,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QueueFCFS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="processorRR.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="processorSJF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="prioritynode.h">
@@ -70,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InOut.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InOut.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="processorEDF.cpp">
