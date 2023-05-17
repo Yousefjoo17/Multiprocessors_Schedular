@@ -21,38 +21,35 @@ protected:
 	int finish_time; //the time required to finish all processes in the RDY state
 	int total_busy_time;  //total time the processor is running
 	int total_idle_time;   //total time the processor isn't running
-	int total_turnaround_time; //
-	/*total(summation) turn around time of all processes in the processor
-	in ready,running,block*/
 	bool is_overheated;  //is the processor overheated
 	static int overheatn; // total overheat Duration
 	int overheatc; // elapsed overheat time
-	int pload; //processor 1oad %
-	int putil;// processor utility%
+	float pload; //processor 1oad %
+	float putil;// processor utility%
 	static int num_processors;// just to help me make a unique ID for each processor
 
 
 public:
-	baseProcessor(Schedular*p);
-	void set_pload();
-	void set_putil();
+	baseProcessor(Schedular* p);
 	int get_PID();
-	virtual void add2RDY(process*)=0;
-	virtual process* getfromRDY()=0;
-	virtual void RDY2RUN()=0;
-	virtual process* getfromRUN()=0;
+	virtual void add2RDY(process*) = 0;
+	virtual process* getfromRDY() = 0;
+	virtual void RDY2RUN() = 0;
+	virtual process* getfromRUN() = 0;
 	void inc_finsihtime(int);
 	int get_finishedTime();
-    virtual void Schedular_Algo() = 0;
+	virtual void Schedular_Algo() = 0;
 	void set_Run_pointer(process* p);
-	virtual process* peek_RDY()=0;
+	virtual process* peek_RDY() = 0;
 	process* get_RUN();
-	virtual void add2_RDY_begining(process* ptr)=0;
+	virtual void add2_RDY_begining(process* ptr) = 0;
 	virtual void print() = 0;
 	static void set_overheatn(int);
-	virtual void processor_overheat()=0;
+	virtual void processor_overheat() = 0;
 	bool Is_overheated();
 	void deleteRUN();
+	virtual float get_processor_load();
+	virtual float get_processor_utiliz();
 
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{
@@ -63,95 +60,95 @@ public:
 };
 
 
- class processorFCFS : public baseProcessor
- {
+class processorFCFS : public baseProcessor
+{
 
-	 QueueFCFS RDY_FCFS; //RDY list for FCFS
-	 static Queue<int> SigKill;
-	 static int next_kill; //time step of next kill
-	 static int max_w;
- public:
+	QueueFCFS RDY_FCFS; //RDY list for FCFS
+	static Queue<int> SigKill;
+	static int next_kill; //time step of next kill
+	static int max_w;
+public:
 
-	 processorFCFS(Schedular*p);
-	 virtual void add2RDY(process*);
-	 virtual  process* getfromRDY();
-	 void add2RUN(process*);
-	 process* getfromRUN();
-	 void RDY2RUN();
-	 static void set_static(Queue<int>&,int);
-	 virtual void Schedular_Algo();
-	 void KillSig();	
-	 virtual process* peek_RDY();
-	 void processor_overheat();
-	 virtual void add2_RDY_begining(process* ptr);
+	processorFCFS(Schedular* p);
+	virtual void add2RDY(process*);
+	virtual  process* getfromRDY();
+	void add2RUN(process*);
+	process* getfromRUN();
+	void RDY2RUN();
+	static void set_static(Queue<int>&, int);
+	virtual void Schedular_Algo();
+	void KillSig();
+	virtual process* peek_RDY();
+	void processor_overheat();
+	virtual void add2_RDY_begining(process* ptr);
 
-	 //void killprocess(int id);
-	 //void forkprocess()
-	 virtual void print();
+	//void killprocess(int id);
+	//void forkprocess()
+	virtual void print();
 
-	 bool remove_child(int);
+	bool remove_child(int);
 
- };
+};
 
- class processorRR :public baseProcessor
- {
-	 int time_slice;
-	 int time_Running; // a time for each process running to compare with time_slice
-	 Queue<process*> RDY_RR;  //RDY list
-	 static int rtf;
+class processorRR :public baseProcessor
+{
+	int time_slice;
+	int time_Running; // a time for each process running to compare with time_slice
+	Queue<process*> RDY_RR;  //RDY list
+	static int rtf;
 
- public:
+public:
 
-	 processorRR(Schedular* p);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
+	processorRR(Schedular* p);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
 
 	// virtual void Schedular_Algo();
-	 static void set_static(int);
-	 virtual process* peek_RDY();
-	 virtual void add2_RDY_begining(process* ptr);
-	 virtual void print();
+	static void set_static(int);
+	virtual process* peek_RDY();
+	virtual void add2_RDY_begining(process* ptr);
+	virtual void print();
 
 
- };
+};
 
- class processorSJF :public baseProcessor
- {
-	 priorityQueue<process*> RDY_SJF;
+class processorSJF :public baseProcessor
+{
+	priorityQueue<process*> RDY_SJF;
 
- public:
-	 processorSJF(Schedular* s);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
-	 virtual process* peek_RDY();
-	 void add2_RDY_begining(process* ptr);
-	 virtual void print();
-
-
- };
- class processorEDF :public baseProcessor
- {
-	 priorityQueue<process*> RDY_EDF;
-
- public:
-	 processorEDF(Schedular* s);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
-	 virtual process* peek_RDY();
-	 virtual void add2_RDY_begining(process* ptr);
-	 virtual void print();
+public:
+	processorSJF(Schedular* s);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
+	virtual process* peek_RDY();
+	void add2_RDY_begining(process* ptr);
+	virtual void print();
 
 
- };
+};
+class processorEDF :public baseProcessor
+{
+	priorityQueue<process*> RDY_EDF;
+
+public:
+	processorEDF(Schedular* s);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
+	virtual process* peek_RDY();
+	virtual void add2_RDY_begining(process* ptr);
+	virtual void print();
+
+
+};

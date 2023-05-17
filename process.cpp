@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 
-process::process(int a, int p, int c,int d, int n, Queue<int>& queue) {
+process::process(int a, int p, int c, int d, int n, Queue<int>& queue) {
 	AT = a;
 	PID = p;
 	CT = c;
@@ -93,11 +93,11 @@ int process::get_n_total() {
 }
 int process::get_rem_CT()
 {
-	return CT-CT_EX;
+	return CT - CT_EX;
 }
 int process::get_curr_WT(int t)
 {
-	return t-AT-CT_EX;
+	return t - AT - CT_EX;
 }
 int process::get_toatal_IO_D()
 {

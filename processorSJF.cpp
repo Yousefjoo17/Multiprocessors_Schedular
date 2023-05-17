@@ -1,4 +1,3 @@
-#include "processorSJF.h"
 #include"Processors.h"
 #include"Schedular.h"
 
@@ -8,14 +7,14 @@ processorSJF::processorSJF(Schedular* s) : baseProcessor(s)
 
 void processorSJF::add2RDY(process* p)
 {
-	RDY_SJF.enqueue(p,p->get_CT());
-	finish_time += p->get_CT()-p->get_CT_EX();
+	RDY_SJF.enqueue(p, p->get_CT());
+	finish_time += p->get_CT() - p->get_CT_EX();
 }
 
 process* processorSJF::getfromRDY()
 {
 	process* ptr = RDY_SJF.dequeue();
-	finish_time -= ptr->get_CT()-ptr->get_CT_EX();
+	finish_time -= ptr->get_CT() - ptr->get_CT_EX();
 	return ptr;
 }
 
@@ -60,29 +59,33 @@ void processorSJF::Schedular_Algo()
 			}
 			if (RUN) {
 				total_busy_time++;
-				if (RUN->peek_IO_R() == RUN->get_CT_EX())
+				while (RUN->peek_IO_R() == RUN->get_CT_EX())
 				{
 
-					finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+					finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->add2BLK(RUN);
 					RUN = nullptr;
 					if (!RDY_SJF.is_empty()) {
 						RDY2RUN();
 					}
+					else {
+						break;
+					}
 				}
-				if (RUN)
-				{
-					if (RUN->get_CT_EX() == RUN->get_CT())
+				if (RUN) {
+					while (RUN->get_CT_EX() == RUN->get_CT())
 					{
 						RUN->set_TT(S_ptr->get_timestep());
-						total_turnaround_time += RUN->get_TRT();
+						finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
-						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->add2TRM(RUN);
 						RUN = nullptr;
 						if (!RDY_SJF.is_empty()) {
 							RDY2RUN();
+						}
+						else {
+							break;
 						}
 					}
 				}

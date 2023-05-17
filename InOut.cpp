@@ -58,9 +58,9 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << "TT\t PID \t AT \t CT \t DL \t IO_D \t WT \t RT \t TRT" << endl;
 	process* curr;
 	for (int i = 0; i < S_ptr->get_total_processes(); i++) {
-		
-			curr = TRM.dequeue();
-			if (curr){
+
+		curr = TRM.dequeue();
+		if (curr) {
 			file << curr->get_TT() << "\t";
 			file << curr->get_PID() << "\t";
 			file << curr->get_AT() << "\t";
@@ -73,11 +73,11 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 			file << endl;
 		}
 	}
-	file << "Processes: " << S_ptr->get_total_processes()<<endl;
+	file << "Processes: " << S_ptr->get_total_processes() << endl;
 
 	file << "Avg WT = " << S_ptr->get_avg_WT(); // gets average Waiting time for processes
 	file << ",\t Avg RT = " << S_ptr->get_avg_RT(); //gets average Response time for processes
-	file << ",\t Avg TRT = " << S_ptr->get_avg_TRT()  << endl;// gets Termination time for processes
+	file << ",\t Avg TRT = " << S_ptr->get_avg_TRT() << endl;// gets Termination time for processes
 	file << "Migration %:\t RTF= " << S_ptr->get_per_RTF(); //gets Percentage of process migration due to RTF 
 	file << "%,\t MaxW= " << S_ptr->get_per_MaxW() << "%" << endl; //gets Percentage of process migration due to MaxW
 	file << "Work Steal%: " << S_ptr->get_per_steal() << "%" << endl; //gets Percentage of process moved by work steal
@@ -94,71 +94,88 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << "Processors: " << num_processors;
 	file << " [" << NF << " FCFS, ";
 	file << NS << " SJF, ";
-	file << NR << " RR, " ;
+	file << NR << " RR, ";
 	file << NE << " EDF]" << endl;
 
 
-	// ADD get_processor_load(); get_processor_utiliz()
 
 	file << "Processors Load" << endl;
-	for (int i = 0; i < NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF - 1)
-				file<<"%,\t";
+	if (NF != 0) {
+		for (int i = 0; i < NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF; i < NS + NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS - 1)
-			file << "%,\t";
+	if (NS != 0) {
+		for (int i = NF; i < NS + NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS; i < NR + NS + NS; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS + NR - 1)
-			file << "%,\t";
+	if (NR != 0) {
+		for (int i = NF + NS; i < NR + NS + NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS + NR - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS + NR + NE - 1)
-			file << "%,\t";
+	if (NE != 0) {
+		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS + NR + NE - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
 
 
 	file << endl << "Processor Utiliz" << endl;
 	float avg_utiliz = 0;
 
-	for (int i = 0; i < NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz())/ float(num_processors);
-		if (i != NF - 1)
-			file << "%,\t";
+	if (NF != 0) {
+		for (int i = 0; i < NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF; i < NS + NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors);
-		if (i != NF + NS - 1)
-			file << "%,\t";
-	}
-	file << endl;
 
-	for (int i = NF + NS; i < NR + NS + NS; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors);
-		if (i != NF + NS + NR - 1)
-			file << "%,\t";
+	if (NS != 0) {
+		for (int i = NF; i < NS + NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors)		if (i != NF + NS + NR + NE - 1)
-			file << "%,\t";
+	if (NR != 0) {
+		for (int i = NF + NS; i < NR + NS + NF ; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS + NR - 1)
+				file << ",\t";
+		}
+		file << endl;
+	}
+
+	if (NE != 0) {
+		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS + NR + NE - 1)
+				file << ",\t";
+		}
 	}
 	file << endl;
 	file << "Average Utiliz = " << avg_utiliz << "%";
-	
+
 	file.close();
 }
