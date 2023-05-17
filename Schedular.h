@@ -59,7 +59,7 @@ public:
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
-	void forking_tree_algo(process* );
+	void forking_tree_algo(process*);
 	void update_BLK();
 	void KillChild(process*);
 

@@ -10,16 +10,16 @@ Schedular::Schedular(string file) {
 	total_RT = 0;
 	total_TRT = 0;
 	total_WT = 0;
-	RTF_Processes=0;
-	MaxW_Processes=0;
+	RTF_Processes = 0;
+	MaxW_Processes = 0;
 	BeforeDeadline = 0;
 	ForkedProcesses = 0;
 	KilledProcesses = 0;
-	totalworksteal=0;
+	totalworksteal = 0;
 	string filename = file;
 	InOut io(this);
 	io.readfile(filename, NEW, SigKill, NF, NS, NR, NE, RR_slice, RTF, MaxW, STL, FP, Overheatn, total_processes);
-	Processors = new baseProcessor* [NF+NS+NR+NE];
+	Processors = new baseProcessor * [NF + NS + NR + NE];
 
 }
 
@@ -54,7 +54,7 @@ void Schedular::add2TRM(process* p)
 	total_WT += p->get_WT();
 	if (p->get_leftChild() || p->get_rightChild()) {
 		KillChild(p); // recursively call
-	}	
+	}
 	TRM_count++;
 	p->set_Is_TRM(true);
 	TRM.enqueue(p);
@@ -62,64 +62,44 @@ void Schedular::add2TRM(process* p)
 
 void Schedular::simulate()
 {
-		string filename = "input_file";
-		InOut io(this);
-		UI user_interface(this);
-		if (NS == 0) {
-			RTF = -1;
-		}
-		if (NR == 0) {
-			MaxW = -1;
-		}
-		baseProcessor::set_overheatn(Overheatn);
-		processorFCFS::set_static(SigKill,MaxW);
-		processorRR::set_static(RTF);
-		for (int i = 0; i < NF; i++) {
-			Processors[i] = new processorFCFS(this);
-		}
-		for (int i = NF; i < NS + NF; i++) {
-			Processors[i] = new processorSJF(this);
-		}
-		for (int i = NF + NS; i < NR + NS + NF; i++) {
-			Processors[i] = new processorRR(this);
-		}
-		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
-			Processors[i] = new processorEDF(this);
-		}
-		//while (time_step<1698) {
-		//	time_step++;
-		//	NEW_RDY();
-		//	/*if (time_step % STL == 0)
-		//		work_stealing();*/
-		//	for (int i = 0; i < NF; i++) {
-		//		processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
-		//		ptr->KillSig();
-		//	}
-		//	loop_p();
-		//	update_BLK();
-		//	user_interface.display(Processors, BLK, TRM);
-
-		//}
+	string filename = "input_file";
+	InOut io(this);
+	UI user_interface(this);
+	if (NS == 0) {
+		RTF = -1;
+	}
+	if (NR == 0) {
+		MaxW = -1;
+	}
+	baseProcessor::set_overheatn(Overheatn);
+	processorFCFS::set_static(SigKill, MaxW);
+	processorRR::set_static(RTF);
+	for (int i = 0; i < NF; i++) {
+		Processors[i] = new processorFCFS(this);
+	}
+	for (int i = NF; i < NS + NF; i++) {
+		Processors[i] = new processorSJF(this);
+	}
+	for (int i = NF + NS; i < NR + NS + NF; i++) {
+		Processors[i] = new processorRR(this);
+	}
+	for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
+		Processors[i] = new processorEDF(this);
+	}
 	
 
-		while (TRM_count != total_processes) {
-			time_step++;
-			NEW_RDY();
-			if (time_step % STL == 0)
-				work_stealing();
-			loop_Signal_kill();
-			for (int i = 0; i < NR+NS; i++) {
-				if (Processors[i]->get_RUN())
-					if (Processors[i]->get_RUN()->get_CT_EX() >= Processors[i]->get_RUN()->get_CT()&& Processors[i]->get_RUN()->get_PID() == 3)
-						system("pause");
-			}
-			
-			loop_p();
-			update_BLK();
-			user_interface.display(Processors, BLK, TRM);
-		}
-		io.writefile("test", TRM, Processors);
-	
+	while (TRM_count < total_processes) {
+		time_step++;
+		NEW_RDY();
+		if (time_step % STL == 0)
+			work_stealing();
+		loop_Signal_kill();
+		loop_p();
+		update_BLK();
+		user_interface.display(Processors, BLK, TRM);
+	}
+	io.writefile("test", TRM, Processors);
+
 
 }
 void Schedular::loop_p() {
@@ -137,7 +117,7 @@ void Schedular::loop_Signal_kill() {
 void Schedular::migrate_RR2SJF(process* mig_p)
 {
 	RTF_Processes++; //inc migration counter
-	int pro = ShortestQueue(NF,NF+NS); //get the shortest rdy queue of SJF processors
+	int pro = ShortestQueue(NF, NF + NS); //get the shortest rdy queue of SJF processors
 	Processors[pro]->add2RDY(mig_p);  // moves the process to the RDY queue of a SJF processor
 
 }
@@ -145,7 +125,7 @@ void Schedular::migrate_RR2SJF(process* mig_p)
 void Schedular::migrate_FCFS2RR(process* mig_p)
 {
 	MaxW_Processes++;  //inc migration counter
-	int pro = ShortestQueue(NF+NS, NF+NS+NR);//get the shortest rdy queue of RR processors
+	int pro = ShortestQueue(NF + NS, NF + NS + NR);//get the shortest rdy queue of RR processors
 	Processors[pro]->add2RDY(mig_p); // moves the process to the RDY queue of a RR processor
 
 }
@@ -153,11 +133,11 @@ void Schedular::migrate_FCFS2RR(process* mig_p)
 void Schedular::work_stealing()
 {
 	int LQF, SQF, LQF_ind, SQF_ind;
-	LQF= LQF_ind = SQF_ind = -1;
+	LQF = LQF_ind = SQF_ind = -1;
 	SQF = 99999;
 	for (int i = 0; i < (NF + NS + NR + NE); i++)
 	{
-		if ( Processors[i]->get_finishedTime() > LQF)
+		if (Processors[i]->get_finishedTime() > LQF)
 		{
 			LQF = Processors[i]->get_finishedTime();
 			LQF_ind = i;
@@ -169,34 +149,34 @@ void Schedular::work_stealing()
 		}
 	}
 
-		if (LQF == 0 || LQF_ind==-1 || SQF_ind==-1 || LQF==-1 || SQF==-1)
-			return;
-		
-	    Stack<process*>s(50);// creation of Stack of processes 
-		
-		float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
-			while (Ratio > 0.40)
-			{
-				while (Processors[LQF_ind]->peek_RDY()&& Processors[LQF_ind]->peek_RDY()->get_Is_Child())   // FCFS Processors only 	
-						s.push(Processors[LQF_ind]->getfromRDY());
-				
-				if (Processors[LQF_ind]->peek_RDY())
-				{
-					process* p = Processors[LQF_ind]->getfromRDY();
-					Processors[SQF_ind]->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
-					totalworksteal++;	
-				}   
-				SQF = Processors[LQF_ind]->get_finishedTime();  //reset SQF
-				LQF = Processors[LQF_ind]->get_finishedTime();   //reset LQF
-			    Ratio = float(LQF - SQF) / float(LQF); // Update the Ratio
-				if (!Processors[LQF_ind]->peek_RDY())
-					break;
-			}
-			process* pr;
-			while (s.pop(pr))   // start popping 
-				Processors[LQF_ind]->add2_RDY_begining(pr);
+	if (LQF == 0 || LQF_ind == -1 || SQF_ind == -1 || LQF == -1 || SQF == -1)
+		return;
 
-    }
+	Stack<process*>s(50);// creation of Stack of processes 
+
+	float Ratio = float(LQF - SQF) / float(LQF); // calculation of the Ratio
+	while (Ratio > 0.40)
+	{
+		while (Processors[LQF_ind]->peek_RDY() && Processors[LQF_ind]->peek_RDY()->get_Is_Child())   // FCFS Processors only 	
+			s.push(Processors[LQF_ind]->getfromRDY());
+
+		if (Processors[LQF_ind]->peek_RDY())
+		{
+			process* p = Processors[LQF_ind]->getfromRDY();
+			Processors[SQF_ind]->add2RDY(p); // add in the ready of the shortest Queue the upcoming from the Longest one
+			totalworksteal++;
+		}
+		SQF = Processors[LQF_ind]->get_finishedTime();  //reset SQF
+		LQF = Processors[LQF_ind]->get_finishedTime();   //reset LQF
+		Ratio = float(LQF - SQF) / float(LQF); // Update the Ratio
+		if (!Processors[LQF_ind]->peek_RDY())
+			break;
+	}
+	process* pr;
+	while (s.pop(pr))   // start popping 
+		Processors[LQF_ind]->add2_RDY_begining(pr);
+
+}
 
 void Schedular::update_BLK()
 {
@@ -216,7 +196,7 @@ void Schedular::update_BLK()
 
 }
 
-void Schedular::KillChild(process* parent )
+void Schedular::KillChild(process* parent)
 {
 	if (parent == nullptr) {
 		return;
@@ -225,10 +205,10 @@ void Schedular::KillChild(process* parent )
 	process* right = parent->get_rightChild();
 	if (left) {
 		if (!left->Is_TRM()) {
-			bool l= false;
+			bool l = false;
 			for (int i = 0; i < NF; i++) {
 				processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
-				l=ptr->remove_child(left->get_PID());
+				l = ptr->remove_child(left->get_PID());
 				if (l)
 					break;
 				delete ptr; //
@@ -250,14 +230,14 @@ void Schedular::KillChild(process* parent )
 			add2TRM(right);
 		}
 	}
-	
+
 }
 
 void Schedular::forking_tree_algo(process* parent) {
 	srand(time(nullptr));
-	if (1 + (rand() % 100) <= FP+40)
+	if (1 + (rand() % 100) <= FP + 60)
 	{
-		process* left=parent->get_leftChild(); 
+		process* left = parent->get_leftChild();
 		process* right = parent->get_rightChild();
 		if (!left) {
 			left = new process(true, parent, time_step, ++total_processes); //create new child and add it to the left side
@@ -265,7 +245,7 @@ void Schedular::forking_tree_algo(process* parent) {
 			int pro = ShortestQueue(0, NF);
 			Processors[pro]->add2RDY(left);
 			ForkedProcesses++;
-			
+
 		}
 		else if (!right && left) {
 			right = new process(true, parent, time_step, ++total_processes); // create new child and add to right
@@ -415,7 +395,7 @@ int Schedular::get_timestep()
 
 int Schedular::get_avg_WT()
 {
-	return float(total_WT )/float(total_processes);
+	return float(total_WT) / float(total_processes);
 }
 
 int Schedular::get_avg_RT()
@@ -425,29 +405,29 @@ int Schedular::get_avg_RT()
 
 int Schedular::get_avg_TRT()
 {
-	return float(total_TRT)/ float(total_processes);
+	return float(total_TRT) / float(total_processes);
 }
 
 float Schedular::get_per_RTF()
 {
 	float R = (float)RTF_Processes;
 	float t = (float)total_processes;
-	return 100 * (R/t);
+	return 100 * (R / t);
 }
 
 float Schedular::get_per_steal()
 {
-	float tw=(float)totalworksteal;
+	float tw = (float)totalworksteal;
 	float t = (float)total_processes;
 
-	return 100* (tw/t);
+	return 100 * (tw / t);
 }
 
 float Schedular::get_per_MaxW()
 {
 	float M = (float)MaxW_Processes;
 	float t = (float)total_processes;
-	return 100 * (M/t);
+	return 100 * (M / t);
 }
 
 float Schedular::get_per_forked()
@@ -459,16 +439,16 @@ float Schedular::get_per_forked()
 
 float Schedular::get_per_killed()
 {
-	float K=(float)KilledProcesses;
+	float K = (float)KilledProcesses;
 	float t = (float)total_processes;
-	return 100*(K/t);
+	return 100 * (K / t);
 }
 
 float Schedular::get_per_deadline()
 {
-	float B=(float)BeforeDeadline;
+	float B = (float)BeforeDeadline;
 	float t = (float)total_processes;
-	return 100*(B/t);
+	return 100 * (B / t);
 }
 
 void Schedular::inc_kill_count() {
@@ -491,7 +471,7 @@ int Schedular::ShortestQueue()
 	int min = 0;// set the first proccessor in array is the shortest 
 	for (int i = 1; i < NR + NF + NS + NE; i++) {
 		if (Processors[i]->get_finishedTime() < Processors[min]->get_finishedTime() && !Processors[i]->Is_overheated()) {
-				min = i; // get the place of the processor that has tha shortest queue
+			min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
 	return min;
@@ -499,9 +479,9 @@ int Schedular::ShortestQueue()
 int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue() that get as an input the range of processors to get the shortest of a certain processor type
 {
 	int min = start;
-	for (int i = start + 1; i < finish; i++) { 
+	for (int i = start + 1; i < finish; i++) {
 		if (Processors[i]->get_finishedTime() < Processors[min]->get_finishedTime() && !Processors[i]->Is_overheated()) {
-				min = i; // get the place of the processor that has tha shortest queue
+			min = i; // get the place of the processor that has tha shortest queue
 		}
 	}
 	return min;
@@ -509,7 +489,7 @@ int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue()
 
 bool Schedular::BLK2RUN(process* pr) {
 	if (BLK.is_empty()) { return false; }
-	Processors[ShortestQueue()]->set_Run_pointer(pr);return true;
+	Processors[ShortestQueue()]->set_Run_pointer(pr); return true;
 }
 
 void Schedular::add2RDY(process* p) {
@@ -526,7 +506,7 @@ void Schedular::add2RDY(process* p) {
 Schedular::~Schedular()
 {
 	delete[] Processors; //
- //
+	//
 }
 
 

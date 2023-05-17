@@ -3,14 +3,15 @@
 
 using namespace std;
 
-UI::UI( Schedular* scheduler) {
+UI::UI(Schedular* scheduler) {
 	S_ptr = scheduler;
-	do{ cout << "Enter 1 for Interactive Mode , 2 for Step-by-step Mode or 3 for Silent Mode: ";
-	cin >> display_mode;
-	} while (display_mode < 1 || display_mode>3 );
+	do {
+		cout << "Enter 1 for Interactive Mode , 2 for Step-by-step Mode or 3 for Silent Mode: ";
+		cin >> display_mode;
+	} while (display_mode < 1 || display_mode>3);
 }
-void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM) {
-	if (display_mode==3) {
+void UI::display(baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM) {
+	if (display_mode == 3) {
 		if (S_ptr->get_timestep() == 1)
 		{
 			cout << "Silent Mode................    Simulation Starts" << endl;
@@ -23,7 +24,7 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 			return;
 		}
 	}
-	
+
 	if (display_mode == 1 || display_mode == 2) {
 		cout << "Current Timestep: " << S_ptr->get_timestep();
 		cout << endl;//* the curent Timestep
@@ -36,21 +37,17 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << "------------       RDY processes  ----------------" << endl;
 		for (int i = 0; i < NF; i++) {
 			cout << "processor " << i + 1 << " [FCFS]"; Processors[i]->print(); cout << endl;
-			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
 		}
 		for (int i = NF; i < NS + NF; i++) {
-			cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; 
-			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+			cout << "processor " << i + 1 << " [SJF ]"; Processors[i]->print(); cout << endl;
 
 		}
-		for (int i = NF + NS; i < NR + NS + NF; i++) { 
-			cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; 
-			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+		for (int i = NF + NS; i < NR + NS + NF; i++) {
+			cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl;
 
 		}
-		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) { 
-			cout << "processor " << i + 1 << " [EDF ]"; Processors[i]->print(); cout << endl; 
-			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) {
+			cout << "processor " << i + 1 << " [EDF ]"; Processors[i]->print(); cout << endl;
 
 		}
 		cout << endl;
@@ -66,8 +63,8 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << RUNC << " RUN: ";
 		for (int i = 0; i < NF + NS + NR + NE; i++) {
 			if (Processors[i]->get_RUN()) {
-				cout << Processors[i]->get_RUN() << "(P" << i+1 << ")";
-				if (i < RUNC-1) { cout << ", "; }
+				cout << Processors[i]->get_RUN() << "(P" << i + 1 << ")";
+				if (i < RUNC - 1) { cout << ", "; }
 			}
 		}
 		cout << endl;
@@ -86,4 +83,4 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 
 }
 //end of func of display
-UI::~UI(){};
+UI::~UI() {};

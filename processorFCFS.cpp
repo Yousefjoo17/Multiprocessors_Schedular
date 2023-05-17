@@ -6,20 +6,20 @@ Queue<int> processorFCFS::SigKill = q;
 int processorFCFS::next_kill = 0;
 int processorFCFS::max_w = 0;
 
-processorFCFS::processorFCFS(Schedular*ptr):baseProcessor(ptr)
+processorFCFS::processorFCFS(Schedular* ptr) :baseProcessor(ptr)
 {
 }
 
 void processorFCFS::add2RDY(process* p)
 {
-	finish_time += p->get_CT()-p->get_CT_EX();
+	finish_time += p->get_CT() - p->get_CT_EX();
 	RDY_FCFS.enqueue(p);
 }
 
 process* processorFCFS::getfromRDY()
 {
 	process* ptr = RDY_FCFS.dequeue();
-	finish_time -= ptr->get_CT()-ptr->get_CT_EX();
+	finish_time -= ptr->get_CT() - ptr->get_CT_EX();
 	return ptr;
 }
 
@@ -43,7 +43,7 @@ void processorFCFS::RDY2RUN()
 	}
 }
 
-void processorFCFS::set_static(Queue<int>& q,int w)
+void processorFCFS::set_static(Queue<int>& q, int w)
 {
 	SigKill = q;
 	next_kill = SigKill.dequeue();
@@ -65,7 +65,7 @@ void processorFCFS::Schedular_Algo()
 	if (!is_overheated) {
 		srand(time(NULL));
 		int r = 1 + (rand() % 100);
-		if (r < 2 ) {
+		if (r < 2) {
 			processor_overheat();
 		}
 		else {
@@ -77,8 +77,8 @@ void processorFCFS::Schedular_Algo()
 			}
 			if (RUN) {
 				total_busy_time++;
-				while (max_w!=-1&&!RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
-					finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+				while (max_w != -1 && !RUN->get_Is_Child() && RUN->get_curr_WT(S_ptr->get_timestep()) > max_w) {
+					finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->migrate_FCFS2RR(RUN);
 					RUN = nullptr;
@@ -95,7 +95,7 @@ void processorFCFS::Schedular_Algo()
 					while (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 
-						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+						finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2BLK(RUN);
 						RUN = nullptr;
@@ -111,7 +111,7 @@ void processorFCFS::Schedular_Algo()
 					while (RUN->get_CT_EX() == RUN->get_CT())
 					{
 						RUN->set_TT(S_ptr->get_timestep());
-						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+						finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2TRM(RUN);
 						RUN = nullptr;
@@ -131,7 +131,7 @@ void processorFCFS::Schedular_Algo()
 					RUN->inc_CT_EX();
 					finish_time--;
 				}
-				
+
 
 			}
 		}
@@ -142,7 +142,7 @@ void processorFCFS::KillSig()
 {
 	if (!SigKill.is_empty()) {
 		int curr = S_ptr->get_timestep();
-		if (next_kill < curr ) {
+		if (next_kill < curr) {
 			next_kill = SigKill.dequeue();
 			next_kill = SigKill.dequeue();
 
@@ -150,9 +150,9 @@ void processorFCFS::KillSig()
 		if (curr != next_kill)
 			return;
 		int id = SigKill.peek();
-		if (RUN&&RUN->get_PID() == id)
+		if (RUN && RUN->get_PID() == id)
 		{
-			finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+			finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 			S_ptr->inc_RUN_count(-1);
 			RUN->set_TT(S_ptr->get_timestep());
 			S_ptr->add2TRM(RUN);
@@ -165,7 +165,7 @@ void processorFCFS::KillSig()
 		process* ptr = RDY_FCFS.remove_id(id);
 		if (ptr)
 		{
-			finish_time -= ptr->get_CT()-ptr->get_CT_EX();
+			finish_time -= ptr->get_CT() - ptr->get_CT_EX();
 			ptr->set_TT(S_ptr->get_timestep());
 			S_ptr->add2TRM(ptr);
 			S_ptr->inc_kill_count();
@@ -209,8 +209,8 @@ bool processorFCFS::remove_child(int id) {
 		return false;
 
 	}
-	if (RUN->get_PID()==id) {
-		finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+	if (RUN->get_PID() == id) {
+		finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 		S_ptr->inc_RUN_count(-1);
 		RUN->set_TT(S_ptr->get_timestep());
 		RUN = nullptr;

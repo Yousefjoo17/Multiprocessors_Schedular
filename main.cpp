@@ -20,7 +20,7 @@ int main() {
 	process* p3 = new process(5, 3, 34, 2,1, q3);
 	QueueFCFS f;
 	f.enqueue(p1);	f.enqueue(p2);	f.enqueue(p3);*/
-	Schedular s("LF2");
+	Schedular s("LF1");
 	s.simulate();
 	/*baseProcessor* proc = new processorSJF(&s);
 	cout << proc << endl;

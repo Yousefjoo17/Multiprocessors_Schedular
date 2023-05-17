@@ -7,14 +7,14 @@ processorSJF::processorSJF(Schedular* s) : baseProcessor(s)
 
 void processorSJF::add2RDY(process* p)
 {
-	RDY_SJF.enqueue(p,p->get_CT());
-	finish_time += p->get_CT()-p->get_CT_EX();
+	RDY_SJF.enqueue(p, p->get_CT());
+	finish_time += p->get_CT() - p->get_CT_EX();
 }
 
 process* processorSJF::getfromRDY()
 {
 	process* ptr = RDY_SJF.dequeue();
-	finish_time -= ptr->get_CT()-ptr->get_CT_EX();
+	finish_time -= ptr->get_CT() - ptr->get_CT_EX();
 	return ptr;
 }
 
@@ -62,7 +62,7 @@ void processorSJF::Schedular_Algo()
 				while (RUN->peek_IO_R() == RUN->get_CT_EX())
 				{
 
-					finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+					finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
 					S_ptr->add2BLK(RUN);
 					RUN = nullptr;

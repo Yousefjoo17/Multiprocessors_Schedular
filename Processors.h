@@ -30,22 +30,22 @@ protected:
 
 
 public:
-	baseProcessor(Schedular*p);
+	baseProcessor(Schedular* p);
 	int get_PID();
-	virtual void add2RDY(process*)=0;
-	virtual process* getfromRDY()=0;
-	virtual void RDY2RUN()=0;
-	virtual process* getfromRUN()=0;
+	virtual void add2RDY(process*) = 0;
+	virtual process* getfromRDY() = 0;
+	virtual void RDY2RUN() = 0;
+	virtual process* getfromRUN() = 0;
 	void inc_finsihtime(int);
 	int get_finishedTime();
-    virtual void Schedular_Algo() = 0;
+	virtual void Schedular_Algo() = 0;
 	void set_Run_pointer(process* p);
-	virtual process* peek_RDY()=0;
+	virtual process* peek_RDY() = 0;
 	process* get_RUN();
-	virtual void add2_RDY_begining(process* ptr)=0;
+	virtual void add2_RDY_begining(process* ptr) = 0;
 	virtual void print() = 0;
 	static void set_overheatn(int);
-	virtual void processor_overheat()=0;
+	virtual void processor_overheat() = 0;
 	bool Is_overheated();
 	void deleteRUN();
 	virtual float get_processor_load();
@@ -60,95 +60,95 @@ public:
 };
 
 
- class processorFCFS : public baseProcessor
- {
+class processorFCFS : public baseProcessor
+{
 
-	 QueueFCFS RDY_FCFS; //RDY list for FCFS
-	 static Queue<int> SigKill;
-	 static int next_kill; //time step of next kill
-	 static int max_w;
- public:
+	QueueFCFS RDY_FCFS; //RDY list for FCFS
+	static Queue<int> SigKill;
+	static int next_kill; //time step of next kill
+	static int max_w;
+public:
 
-	 processorFCFS(Schedular*p);
-	 virtual void add2RDY(process*);
-	 virtual  process* getfromRDY();
-	 void add2RUN(process*);
-	 process* getfromRUN();
-	 void RDY2RUN();
-	 static void set_static(Queue<int>&,int);
-	 virtual void Schedular_Algo();
-	 void KillSig();	
-	 virtual process* peek_RDY();
-	 void processor_overheat();
-	 virtual void add2_RDY_begining(process* ptr);
+	processorFCFS(Schedular* p);
+	virtual void add2RDY(process*);
+	virtual  process* getfromRDY();
+	void add2RUN(process*);
+	process* getfromRUN();
+	void RDY2RUN();
+	static void set_static(Queue<int>&, int);
+	virtual void Schedular_Algo();
+	void KillSig();
+	virtual process* peek_RDY();
+	void processor_overheat();
+	virtual void add2_RDY_begining(process* ptr);
 
-	 //void killprocess(int id);
-	 //void forkprocess()
-	 virtual void print();
+	//void killprocess(int id);
+	//void forkprocess()
+	virtual void print();
 
-	 bool remove_child(int);
+	bool remove_child(int);
 
- };
+};
 
- class processorRR :public baseProcessor
- {
-	 int time_slice;
-	 int time_Running; // a time for each process running to compare with time_slice
-	 Queue<process*> RDY_RR;  //RDY list
-	 static int rtf;
+class processorRR :public baseProcessor
+{
+	int time_slice;
+	int time_Running; // a time for each process running to compare with time_slice
+	Queue<process*> RDY_RR;  //RDY list
+	static int rtf;
 
- public:
+public:
 
-	 processorRR(Schedular* p);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
+	processorRR(Schedular* p);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
 
 	// virtual void Schedular_Algo();
-	 static void set_static(int);
-	 virtual process* peek_RDY();
-	 virtual void add2_RDY_begining(process* ptr);
-	 virtual void print();
+	static void set_static(int);
+	virtual process* peek_RDY();
+	virtual void add2_RDY_begining(process* ptr);
+	virtual void print();
 
 
- };
+};
 
- class processorSJF :public baseProcessor
- {
-	 priorityQueue<process*> RDY_SJF;
+class processorSJF :public baseProcessor
+{
+	priorityQueue<process*> RDY_SJF;
 
- public:
-	 processorSJF(Schedular* s);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
-	 virtual process* peek_RDY();
-	 void add2_RDY_begining(process* ptr);
-	 virtual void print();
-
-
- };
- class processorEDF :public baseProcessor
- {
-	 priorityQueue<process*> RDY_EDF;
-
- public:
-	 processorEDF(Schedular* s);
-	 void add2RDY(process*);
-	 process* getfromRDY();
-	 void RDY2RUN();
-	 process* getfromRUN();
-	 virtual void Schedular_Algo();
-	 void processor_overheat();
-	 virtual process* peek_RDY();
-	 virtual void add2_RDY_begining(process* ptr);
-	 virtual void print();
+public:
+	processorSJF(Schedular* s);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
+	virtual process* peek_RDY();
+	void add2_RDY_begining(process* ptr);
+	virtual void print();
 
 
- };
+};
+class processorEDF :public baseProcessor
+{
+	priorityQueue<process*> RDY_EDF;
+
+public:
+	processorEDF(Schedular* s);
+	void add2RDY(process*);
+	process* getfromRDY();
+	void RDY2RUN();
+	process* getfromRUN();
+	virtual void Schedular_Algo();
+	void processor_overheat();
+	virtual process* peek_RDY();
+	virtual void add2_RDY_begining(process* ptr);
+	virtual void print();
+
+
+};
