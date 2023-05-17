@@ -56,6 +56,7 @@ public:
 	void add2TRM(process*);
 	void simulate();
 	void loop_p();
+	void loop_Signal_kill();
 	void migrate_RR2SJF(process*);
 	void migrate_FCFS2RR(process*);
 	void work_stealing();
@@ -116,7 +117,6 @@ public:
 	void inc_kill_count();
 	/*********************************/
 	void NEW_RDY();
-	void P_Completion(process*);
 	int ShortestQueue();
 	int ShortestQueue(int, int);
 

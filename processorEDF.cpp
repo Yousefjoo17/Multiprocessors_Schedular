@@ -75,7 +75,7 @@ void processorEDF::Schedular_Algo()
 			}
 			if (RUN) {
 				total_busy_time++;
-				if (RUN->peek_IO_R() == RUN->get_CT_EX())
+				while (RUN->peek_IO_R() == RUN->get_CT_EX())
 				{
 					finish_time  -= RUN->get_CT()-RUN->get_CT_EX();
 					S_ptr->inc_RUN_count(-1);
@@ -84,19 +84,23 @@ void processorEDF::Schedular_Algo()
 					if (!RDY_EDF.is_empty()) {
 						RDY2RUN();
 					}
+					else {
+						break;
+					}
 				}
-				if (RUN)
-				{
-					if (RUN->get_CT_EX() == RUN->get_CT())
+				if (RUN) {
+					while (RUN->get_CT_EX() == RUN->get_CT())
 					{
 						RUN->set_TT(S_ptr->get_timestep());
-						total_turnaround_time += RUN->get_TRT();
-						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
+						finish_time -= RUN->get_CT() - RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2TRM(RUN);
-
+						RUN = nullptr;
 						if (!RDY_EDF.is_empty()) {
 							RDY2RUN();
+						}
+						else {
+							break;
 						}
 					}
 				}

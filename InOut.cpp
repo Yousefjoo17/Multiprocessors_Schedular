@@ -95,64 +95,81 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << NE << " EDF]" << endl;
 
 
-	// ADD get_processor_load(); get_processor_utiliz()
 
 	file << "Processors Load" << endl;
-	for (int i = 0; i < NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF - 1)
-				file<<"%,\t";
+	if (NF != 0) {
+		for (int i = 0; i < NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF - 1)
+				file << ",\t";
+		}	
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF; i < NS + NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS - 1)
-			file << "%,\t";
+	if (NS != 0) {
+		for (int i = NF; i < NS + NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS; i < NR + NS + NS; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS + NR - 1)
-			file << "%,\t";
+	if (NR != 0) {
+		for (int i = NF + NS; i < NR + NS + NS; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS + NR - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_load();
-		if (i != NF + NS + NR + NE - 1)
-			file << "%,\t";
+	if (NE != 0) {
+		for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_load() << "%";
+			if (i < NF + NS + NR + NE - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
 
 
 	file << endl << "Processor Utiliz" << endl;
 	float avg_utiliz = 0;
 
-	for (int i = 0; i < NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz())/ float(num_processors);
-		if (i != NF - 1)
-			file << "%,\t";
+	if (NF != 0) {
+		for (int i = 0; i < NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF; i < NS + NF; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors);
-		if (i != NF + NS - 1)
-			file << "%,\t";
-	}
-	file << endl;
 
-	for (int i = NF + NS; i < NR + NS + NS; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors);
-		if (i != NF + NS + NR - 1)
-			file << "%,\t";
+	if (NS != 0) {
+		for (int i = NF; i < NS + NF; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS - 1)
+				file << ",\t";
+		}
+		file << endl;
 	}
-	file << endl;
-	for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
-		//file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz();
-		//avg_utiliz += float(procossors[i]->get_processor_utiliz()) / float(num_processors)		if (i != NF + NS + NR + NE - 1)
-			file << "%,\t";
+	if (NR != 0) {
+		for (int i = NF + NS; i < NR + NS + NS; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS + NR - 1)
+				file << ",\t";
+		}
+		file << endl;
+	}
+
+	if (NE != 0) {
+		for (int i = NF + NS + NR; i < NR + NS + NS + NE; i++) {
+			file << "p" << i + 1 << "=" << procossors[i]->get_processor_utiliz() << "%";
+			avg_utiliz += procossors[i]->get_processor_utiliz() / float(num_processors);
+			if (i < NF + NS + NR + NE - 1)
+				file << ",\t";
+		}
 	}
 	file << endl;
 	file << "Average Utiliz = " << avg_utiliz << "%";

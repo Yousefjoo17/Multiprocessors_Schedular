@@ -21,21 +21,16 @@ protected:
 	int finish_time; //the time required to finish all processes in the RDY state
 	int total_busy_time;  //total time the processor is running
 	int total_idle_time;   //total time the processor isn't running
-	int total_turnaround_time; //
-	/*total(summation) turn around time of all processes in the processor
-	in ready,running,block*/
 	bool is_overheated;  //is the processor overheated
 	static int overheatn; // total overheat Duration
 	int overheatc; // elapsed overheat time
-	int pload; //processor 1oad %
-	int putil;// processor utility%
+	float pload; //processor 1oad %
+	float putil;// processor utility%
 	static int num_processors;// just to help me make a unique ID for each processor
 
 
 public:
 	baseProcessor(Schedular*p);
-	void set_pload();
-	void set_putil();
 	int get_PID();
 	virtual void add2RDY(process*)=0;
 	virtual process* getfromRDY()=0;
@@ -53,6 +48,8 @@ public:
 	virtual void processor_overheat()=0;
 	bool Is_overheated();
 	void deleteRUN();
+	virtual float get_processor_load();
+	virtual float get_processor_utiliz();
 
 	friend ostream& operator<<(ostream& os, const baseProcessor* p)
 	{

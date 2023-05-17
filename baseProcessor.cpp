@@ -14,12 +14,9 @@ baseProcessor::baseProcessor(Schedular*ptr)
 	num_processes = 0;
 	overheatc = 0;
 	finish_time = 0;
+	total_idle_time = 0;
 	total_busy_time = 0;
-	total_busy_time = 0;
-	total_turnaround_time = 0;
 	is_overheated = false;
-	set_pload();
-	set_putil();
 }
  void baseProcessor::set_overheatn(int x) {
 	overheatn = x;
@@ -32,26 +29,23 @@ baseProcessor::baseProcessor(Schedular*ptr)
  {
 	 RUN == nullptr;
  }
+ float baseProcessor::get_processor_load()
+ {
+	 pload = 100 * float(total_busy_time) / float(S_ptr->get_total_TRT());
+
+	 return pload;
+ }
+ float baseProcessor::get_processor_utiliz()
+ {
+	 putil = 100* float(total_busy_time) / float(total_busy_time + total_idle_time);
+	 return putil;
+ }
 void baseProcessor::set_Run_pointer(process* p) { RUN = p; }
 process* baseProcessor::get_RUN()
 {
 	return RUN;
 }
 
-void baseProcessor::set_pload()
-{
-	if (total_turnaround_time)
-		pload = total_busy_time / total_turnaround_time;
-	else
-		pload = 0;
-}
-void baseProcessor::set_putil()
-{
-	if (total_busy_time + total_idle_time)
-		putil = total_busy_time / (total_busy_time + total_idle_time);
-	else
-		putil = 0;
-}
 
 int baseProcessor::get_PID()
 {

@@ -65,7 +65,7 @@ void processorFCFS::Schedular_Algo()
 	if (!is_overheated) {
 		srand(time(NULL));
 		int r = 1 + (rand() % 100);
-		if (r< 2 ) {
+		if (r < 2 ) {
 			processor_overheat();
 		}
 		else {
@@ -92,7 +92,7 @@ void processorFCFS::Schedular_Algo()
 				}
 				if (RUN) {
 
-					if (RUN->peek_IO_R() == RUN->get_CT_EX())
+					while (RUN->peek_IO_R() == RUN->get_CT_EX())
 					{
 
 						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
@@ -102,19 +102,24 @@ void processorFCFS::Schedular_Algo()
 						if (!RDY_FCFS.is_empty()) {
 							RDY2RUN();
 						}
+						else {
+							break;
+						}
 					}
 				}
 				if (RUN) {
-					if (RUN->get_CT_EX() == RUN->get_CT())
+					while (RUN->get_CT_EX() == RUN->get_CT())
 					{
 						RUN->set_TT(S_ptr->get_timestep());
-						total_turnaround_time += RUN->get_TRT();
 						finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 						S_ptr->inc_RUN_count(-1);
 						S_ptr->add2TRM(RUN);
 						RUN = nullptr;
 						if (!RDY_FCFS.is_empty()) {
 							RDY2RUN();
+						}
+						else {
+							break;
 						}
 					}
 				}
@@ -150,7 +155,6 @@ void processorFCFS::KillSig()
 			finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 			S_ptr->inc_RUN_count(-1);
 			RUN->set_TT(S_ptr->get_timestep());
-			total_turnaround_time += RUN->get_TRT();
 			S_ptr->add2TRM(RUN);
 			RUN = nullptr;
 			S_ptr->inc_kill_count();
@@ -163,7 +167,6 @@ void processorFCFS::KillSig()
 		{
 			finish_time -= ptr->get_CT()-ptr->get_CT_EX();
 			ptr->set_TT(S_ptr->get_timestep());
-			total_turnaround_time += ptr->get_TRT();
 			S_ptr->add2TRM(ptr);
 			S_ptr->inc_kill_count();
 			id = SigKill.dequeue();
@@ -210,14 +213,16 @@ bool processorFCFS::remove_child(int id) {
 		finish_time -= RUN->get_CT()-RUN->get_CT_EX();
 		S_ptr->inc_RUN_count(-1);
 		RUN->set_TT(S_ptr->get_timestep());
-		total_turnaround_time += RUN->get_TRT();
 		RUN = nullptr;
 		return true;
 	}
-	if (!RDY_FCFS.remove_id(id)) {
+	process* ptr = RDY_FCFS.remove_id(id);
+	if (!ptr) {
 		return false;
 	}
 	else {
+		finish_time -= ptr->get_CT() - ptr->get_CT_EX();
+		ptr->set_TT(S_ptr->get_timestep());
 		return true;
 	}
 }

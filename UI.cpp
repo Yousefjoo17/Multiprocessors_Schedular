@@ -11,8 +11,17 @@ UI::UI( Schedular* scheduler) {
 }
 void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <process*>& TRM) {
 	if (display_mode==3) {
-		cout << "Silent Mode................    Simulation Starts"<<endl;
-			cout<<"Simulation ends, Output file created";
+		if (S_ptr->get_timestep() == 1)
+		{
+			cout << "Silent Mode................    Simulation Starts" << endl;
+		}
+		else if (S_ptr->get_TRM_count() == S_ptr->get_total_processes())
+		{
+			cout << "Simulation ends, Output file created";
+		}
+		else {
+			return;
+		}
 	}
 	
 	if (display_mode == 1 || display_mode == 2) {
