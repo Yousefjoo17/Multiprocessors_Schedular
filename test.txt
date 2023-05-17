@@ -1,8 +1,8 @@
 TT	 PID 	 AT 	 CT 	 DL 	 IO_D 	 WT 	 RT 	 TRT
 Processes: 30
 Avg WT = 0,	 Avg RT = 0,	 Avg TRT = 0
-Migration %:	 RTF= 0%,	 MaxW= 0%
-Work Steal%: 0%
+Migration %:	 RTF= 0%,	 MaxW= 2.66667%
+Work Steal%: 1.5%
 Forked Process%: 0%
 Killed Process%: 0%
 Before Deadline%: 0%

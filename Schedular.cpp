@@ -86,7 +86,7 @@ void Schedular::simulate()
 		for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 			Processors[i] = new processorEDF(this);
 		}
-		while (time_step<25) {   //TRM_count!=total_processes
+		while (time_step<500) {   //TRM_count!=total_processes
 			time_step++;
 			NEW_RDY();
 
@@ -175,10 +175,13 @@ void Schedular::work_stealing()
 				SQF = Processors[LQF_ind]->get_finishedTime();  //reset SQF
 				LQF = Processors[LQF_ind]->get_finishedTime();   //reset LQF
 			    Ratio = float(LQF - SQF) / float(LQF); // Update the Ratio
+				if (!Processors[LQF_ind]->peek_RDY())
+					break;
 			}
 			process* pr;
 			while (s.pop(pr))   // start popping 
 				Processors[LQF_ind]->add2_RDY_begining(pr);
+
     }
 
 void Schedular::update_BLK()
