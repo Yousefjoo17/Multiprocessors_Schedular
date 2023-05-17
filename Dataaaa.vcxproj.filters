@@ -72,9 +72,6 @@
     <ClInclude Include="InOut.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="baseProcessor.cpp">
@@ -105,9 +102,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InOut.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="processorEDF.cpp">

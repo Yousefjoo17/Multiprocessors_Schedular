@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Processors.h" />
-    <ClInclude Include="BT.h" />
     <ClInclude Include="InOut.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ListADT.h" />
@@ -150,7 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="baseProcessor.cpp" />
-    <ClCompile Include="BT.cpp" />
     <ClCompile Include="InOut.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="process.cpp" />

@@ -217,6 +217,7 @@ void Schedular::KillChild(process* parent )
 				l=ptr->remove_child(left->get_PID());
 				if (l)
 					break;
+				delete ptr; //
 			}
 			add2TRM(left);
 		}
@@ -229,6 +230,8 @@ void Schedular::KillChild(process* parent )
 				r = ptr->remove_child(right->get_PID());
 				if (r)
 					break;
+				delete ptr; //
+
 			}
 			add2TRM(right);
 		}
@@ -494,6 +497,7 @@ int Schedular::ShortestQueue(int start, int finish)// overloaded ShortestQueue()
 	}
 	return min;
 }
+
 bool Schedular::BLK2RUN(process* pr) {
 	if (BLK.is_empty()) { return false; }
 	Processors[ShortestQueue()]->set_Run_pointer(pr);return true;
@@ -510,8 +514,11 @@ void Schedular::add2RDY(process* p) {
 	}
 
 }
-
-
+Schedular::~Schedular()
+{
+	delete[] Processors; //
+ //
+}
 
 
 

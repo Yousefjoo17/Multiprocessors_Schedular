@@ -34,6 +34,7 @@ public:
 		curr->setnext(newnode);
 		tail = newnode;
 
+		delete newnode; //
 	}
 	process* remove_id(int id)
 	{
@@ -111,4 +112,6 @@ public:
 		}
 		return count;
 	}
+
+	
 };

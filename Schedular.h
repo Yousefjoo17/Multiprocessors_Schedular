@@ -119,6 +119,7 @@ public:
 	void P_Completion(process*);
 	int ShortestQueue();
 	int ShortestQueue(int, int);
+	~Schedular();
 
 };
 

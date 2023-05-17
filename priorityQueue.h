@@ -42,7 +42,7 @@ public:
 			currptr->setnext(ptr);
 			ptr->setnext(temp);
 		}
-
+		delete ptr; //
 	}
 
 	T dequeue()

@@ -53,10 +53,7 @@ public:
 		TopEntry = items[top];
 		return true;
 	} 
-	~Stack()
-	{
-		delete[]items;
-	}
+	
 	Stack(const Stack<T>& S) :STACK_SIZE(1000)
 	{
 		items = new T[STACK_SIZE];
@@ -64,7 +61,10 @@ public:
 			items[i] = S.items[i];
 		top = S.top;
 	}
-
+	~Stack()
+	{
+		delete[]items; //
+	}
 
 }; 
 

@@ -54,6 +54,6 @@ public:
 			pn->setnext(front);
 			front = pn;
 		}
-
+		delete pn; //
 	}
 };
