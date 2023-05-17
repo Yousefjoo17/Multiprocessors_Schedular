@@ -105,8 +105,8 @@ void Schedular::simulate()
 		while (TRM_count != total_processes) {
 			time_step++;
 			NEW_RDY();
-			/*if (time_step % STL == 0)
-				work_stealing();*/
+			if (time_step % STL == 0)
+				work_stealing();
 			loop_Signal_kill();
 			for (int i = 0; i < NR+NS; i++) {
 				if (Processors[i]->get_RUN())

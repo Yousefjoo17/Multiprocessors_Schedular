@@ -4,9 +4,6 @@
 #include"Schedular.h"
 #include<iostream>
 #include"process.h"
-#include"processorFCFS.h"
-#include"processorRR.h"
-#include"processorSJF.h"
 #include"Queue.h"
 #include"Schedular.h"
 #include<Windows.h> // FOR sleeping	
