@@ -49,6 +49,7 @@ public:
 	{
 		if (is_empty())
 		{
+			cout << "queue underflow";
 			return 0;
 		}
 		prioritynode<T>* temp = head;
@@ -62,6 +63,7 @@ public:
 	{
 		if (is_empty())
 		{
+			cout << "queue underflow";
 			return 0;
 		}
 		return head->getitem();
