@@ -36,7 +36,6 @@ public:
 			back->setnext(ptr);
 			back = ptr;
 		}
-		delete ptr; //
 	}
 
 	T dequeue()
@@ -84,7 +83,7 @@ public:
 
 		while (temp != NULL)
 		{
-			cout << temp->getitem() ;
+			cout << temp->getitem();
 			temp = temp->getnext();
 			if (temp)
 				cout << ", ";
