@@ -86,34 +86,14 @@ void Schedular::simulate()
 	for (int i = NF + NS + NR; i < NR + NF + NS + NE; i++) {
 		Processors[i] = new processorEDF(this);
 	}
-	//while (time_step<1698) {
-	//	time_step++;
-	//	NEW_RDY();
-	//	/*if (time_step % STL == 0)
-	//		work_stealing();*/
-	//	for (int i = 0; i < NF; i++) {
-	//		processorFCFS* ptr = dynamic_cast<processorFCFS*>(Processors[i]);
-	//		ptr->KillSig();
-	//	}
-	//	loop_p();
-	//	update_BLK();
-	//	user_interface.display(Processors, BLK, TRM);
+	
 
-	//}
-
-
-	while (TRM_count != total_processes) {
+	while (TRM_count < total_processes) {
 		time_step++;
 		NEW_RDY();
 		if (time_step % STL == 0)
 			work_stealing();
 		loop_Signal_kill();
-		for (int i = 0; i < NR + NS; i++) {
-			if (Processors[i]->get_RUN())
-				if (Processors[i]->get_RUN()->get_CT_EX() >= Processors[i]->get_RUN()->get_CT() && Processors[i]->get_RUN()->get_PID() == 3)
-					system("pause");
-		}
-
 		loop_p();
 		update_BLK();
 		user_interface.display(Processors, BLK, TRM);
@@ -231,7 +211,6 @@ void Schedular::KillChild(process* parent)
 				l = ptr->remove_child(left->get_PID());
 				if (l)
 					break;
-				delete ptr; //
 			}
 			add2TRM(left);
 		}
@@ -244,8 +223,6 @@ void Schedular::KillChild(process* parent)
 				r = ptr->remove_child(right->get_PID());
 				if (r)
 					break;
-				delete ptr; //
-
 			}
 			add2TRM(right);
 		}
@@ -255,7 +232,7 @@ void Schedular::KillChild(process* parent)
 
 void Schedular::forking_tree_algo(process* parent) {
 	srand(time(nullptr));
-	if (1 + (rand() % 100) <= FP + 40)
+	if (1 + (rand() % 100) <= FP + 60)
 	{
 		process* left = parent->get_leftChild();
 		process* right = parent->get_rightChild();
