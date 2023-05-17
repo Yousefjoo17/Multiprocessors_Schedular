@@ -152,7 +152,6 @@
     <ClCompile Include="processorRR.cpp" />
     <ClCompile Include="processorSJF.cpp" />
     <ClCompile Include="Schedular.cpp" />
-    <ClCompile Include="Stack.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

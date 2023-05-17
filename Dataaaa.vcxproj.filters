@@ -83,9 +83,6 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InOut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
