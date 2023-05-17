@@ -36,15 +36,22 @@ void UI::display( baseProcessor** processors_arr, Queue<process*>& BLK, Queue <p
 		cout << "------------       RDY processes  ----------------" << endl;
 		for (int i = 0; i < NF; i++) {
 			cout << "processor " << i + 1 << " [FCFS]"; Processors[i]->print(); cout << endl;
+			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
 		}
 		for (int i = NF; i < NS + NF; i++) {
 			cout << "processor " << i+ 1 << " [SJF ]"; Processors[i]->print(); cout << endl; 
+			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+
 		}
 		for (int i = NF + NS; i < NR + NS + NF; i++) { 
 			cout << "processor " << i + 1 << " [RR  ]"; Processors[i]->print(); cout << endl; 
+			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+
 		}
 		for (int i = NF + NS + NR; i < NR + NS + NF + NE; i++) { 
 			cout << "processor " << i + 1 << " [EDF ]"; Processors[i]->print(); cout << endl; 
+			cout << "the finished time " << Processors[i]->get_finishedTime() << endl;
+
 		}
 		cout << endl;
 		/////////////////////////////////////////////////////////////////////////

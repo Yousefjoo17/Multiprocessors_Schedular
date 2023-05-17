@@ -119,6 +119,7 @@ public:
 	void NEW_RDY();
 	int ShortestQueue();
 	int ShortestQueue(int, int);
+	~Schedular();
 
 };
 

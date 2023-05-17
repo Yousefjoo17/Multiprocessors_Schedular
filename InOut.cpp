@@ -58,17 +58,20 @@ void InOut::writefile(string filename, Queue<process*>& TRM, baseProcessor** pro
 	file << "TT\t PID \t AT \t CT \t DL \t IO_D \t WT \t RT \t TRT" << endl;
 	process* curr;
 	for (int i = 0; i < S_ptr->get_total_processes(); i++) {
-		curr = TRM.dequeue();
-		file << curr->get_TT() << "\t";
-		file << curr->get_PID() << "\t";
-		file << curr->get_AT() << "\t";
-		file << curr->get_CT() << "\t";
-		file << curr->get_deadline() << "\t";
-		file << curr->get_toatal_IO_D()<< "\t";
-		file << curr->get_WT() << "\t";
-		file << curr->get_RT() << "\t";
-		file << curr->get_TRT() << "\t";
-		file << endl;
+		
+			curr = TRM.dequeue();
+			if (curr){
+			file << curr->get_TT() << "\t";
+			file << curr->get_PID() << "\t";
+			file << curr->get_AT() << "\t";
+			file << curr->get_CT() << "\t";
+			file << curr->get_deadline() << "\t";
+			file << curr->get_toatal_IO_D() << "\t";
+			file << curr->get_WT() << "\t";
+			file << curr->get_RT() << "\t";
+			file << curr->get_TRT() << "\t";
+			file << endl;
+		}
 	}
 	file << "Processes: " << S_ptr->get_total_processes()<<endl;
 

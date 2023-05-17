@@ -36,6 +36,7 @@ public:
 			back->setnext(ptr);
 			back = ptr;
 		}
+		delete ptr; //
 	}
 
 	T dequeue()
